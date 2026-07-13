@@ -62,4 +62,46 @@ export const dragBlankQuestions = [
       'Should Be Equal fails the test when its two arguments differ. It is provided by the automatically available BuiltIn library.',
     reference: robotGuideReference,
   },
+  {
+    id: 'robot-framework.drag.include-tag',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Complete the command so only tests tagged smoke are executed.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: 'robot ',
+      after: ' smoke tests/',
+    },
+    options: [
+      { id: 'include', label: '--include', code: '--include' },
+      { id: 'exclude', label: '--exclude', code: '--exclude' },
+      { id: 'test', label: '--test', code: '--test' },
+      { id: 'variable', label: '--variable', code: '--variable' },
+    ],
+    correctOptionId: 'include',
+    explanation:
+      '--include selects tests whose tags match the given pattern. Here it limits execution to tests tagged smoke.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.drag.test-template',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Choose the setting that turns these rows into data-driven test iterations.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: 'Invalid credentials\n    ',
+      after: '    Login should fail\n    bad-user    valid-pass\n    valid-user    bad-pass',
+    },
+    options: [
+      { id: 'template', label: '[Template]', code: '[Template]' },
+      { id: 'setup', label: '[Setup]', code: '[Setup]' },
+      { id: 'tags', label: '[Tags]', code: '[Tags]' },
+      { id: 'timeout', label: '[Timeout]', code: '[Timeout]' },
+    ],
+    correctOptionId: 'template',
+    explanation:
+      '[Template] names the keyword that each following data row invokes, making repeated input combinations concise.',
+    reference: robotGuideReference,
+  },
 ] as const satisfies readonly DragBlankQuestion[]

@@ -33,7 +33,7 @@ describe('routed application', () => {
   it('renders the quiz as a focus route without the topic cheatsheet', async () => {
     renderRoute('/topics/robot-framework/quiz')
 
-    expect(await screen.findByText(/Question 1 \/ 12/)).toBeInTheDocument()
+    expect(await screen.findByText(/Question 1 \/ 20/)).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /cheatsheet/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /cheatsheet/i })).not.toBeInTheDocument()
     expect(screen.queryByText('Quick reference')).not.toBeInTheDocument()

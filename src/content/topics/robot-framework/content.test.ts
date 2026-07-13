@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import robotFrameworkTopic from '.'
 
 describe('Robot Framework topic content', () => {
-  it('contains three valid questions of each supported kind', () => {
-    expect(robotFrameworkTopic.questions).toHaveLength(12)
+  it('contains five valid questions of each supported kind', () => {
+    expect(robotFrameworkTopic.questions).toHaveLength(20)
     for (const kind of ['multiple-choice', 'text-blank', 'drag-blank', 'sequence'] as const) {
       expect(
         robotFrameworkTopic.questions.filter((question) => question.kind === kind),
-      ).toHaveLength(3)
+      ).toHaveLength(5)
     }
   })
 

@@ -9,8 +9,8 @@ export const robotFrameworkMetadata = {
   description:
     'Learn the structure, variables, settings, and control flow behind maintainable Robot Framework suites.',
   difficulty: 'Beginner → intermediate',
-  estimatedMinutes: 10,
-  questionCount: 12,
-  contentVersion: 1,
+  estimatedMinutes: 16,
+  questionCount: 20,
+  contentVersion: 2,
   lastReviewed: '2026-07-13',
 } as const satisfies TopicMetadata

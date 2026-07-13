@@ -53,4 +53,38 @@ export const multipleChoiceQuestions = [
       'The Keywords section defines reusable, higher-level user keywords that can combine library keywords and other user keywords.',
     reference: robotGuideReference,
   },
+  {
+    id: 'robot-framework.mcq.dictionary-expansion',
+    topicId: 'robot-framework',
+    kind: 'multiple-choice',
+    prompt: 'Which syntax expands the dictionary variable config as named arguments?',
+    instruction: 'Choose one answer.',
+    choices: [
+      { id: 'scalar', label: '${config}' },
+      { id: 'list', label: '@{config}' },
+      { id: 'dictionary', label: '&{config}' },
+      { id: 'environment', label: '%{config}' },
+    ],
+    correctChoiceId: 'dictionary',
+    explanation:
+      '&{config} expands a dictionary into named arguments. ${config} passes the dictionary as one value, while @{config} is list syntax.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.mcq.continuation-marker',
+    topicId: 'robot-framework',
+    kind: 'multiple-choice',
+    prompt: 'Which marker starts a continuation row in Robot Framework data?',
+    instruction: 'Choose one answer.',
+    choices: [
+      { id: 'ellipsis', label: '...' },
+      { id: 'backslash', label: '\\' },
+      { id: 'plus', label: '+' },
+      { id: 'arrow', label: '->' },
+    ],
+    correctChoiceId: 'ellipsis',
+    explanation:
+      'An ellipsis in the first cell marks a continuation row, allowing a long setting, keyword call, or variable definition to span multiple rows.',
+    reference: robotGuideReference,
+  },
 ] as const satisfies readonly MultipleChoiceQuestion[]

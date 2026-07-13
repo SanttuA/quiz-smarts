@@ -59,7 +59,7 @@ async function answerCorrectly(page: Page, question: QuizQuestion) {
 
 test('completes a seeded shuffled quiz and persists only the best score', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/robot-framework/quiz')
-  await expect(page.getByText('Question 1 / 12')).toBeVisible()
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
   await expect(page.getByRole('link', { name: /cheatsheet/i })).toHaveCount(0)
 
   for (const [index, question] of preparedQuestions.entries()) {
@@ -72,16 +72,16 @@ test('completes a seeded shuffled quiz and persists only the best score', async 
   }
 
   await expect(page.getByRole('heading', { name: 'Strong signal.' })).toBeVisible()
-  await expect(page.getByLabel('Score 12 out of 12')).toBeVisible()
-  await expect(page.getByText('◆ Best score: 12/12')).toBeVisible()
+  await expect(page.getByLabel('Score 20 out of 20')).toBeVisible()
+  await expect(page.getByText('◆ Best score: 20/20')).toBeVisible()
 
   const storedScore = await page.evaluate(() =>
     window.localStorage.getItem('quiz-smarts:best-scores:v1'),
   )
-  expect(storedScore).toContain('"correct":12')
+  expect(storedScore).toContain('"correct":20')
 
   await page.reload()
-  await expect(page.getByText('Question 1 / 12')).toBeVisible()
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Strong signal.' })).toHaveCount(0)
   expect(await page.evaluate(() => window.localStorage.getItem('quiz-smarts:best-scores:v1'))).toBe(
     storedScore,
@@ -119,12 +119,15 @@ test('uses the OS theme until a persistent preference is selected', async ({ pag
 test('reorders a sequence with the keyboard without submitting it', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/robot-framework/quiz')
 
-  for (const question of preparedQuestions.slice(0, 2)) {
+  const sequenceIndex = preparedQuestions.findIndex((question) => question.kind === 'sequence')
+  expect(sequenceIndex).toBeGreaterThanOrEqual(0)
+
+  for (const question of preparedQuestions.slice(0, sequenceIndex)) {
     await answerCorrectly(page, question)
     await page.getByRole('button', { name: 'Next question' }).click()
   }
 
-  const sequenceQuestion = preparedQuestions[2]!
+  const sequenceQuestion = preparedQuestions[sequenceIndex]!
   expect(sequenceQuestion.kind).toBe('sequence')
   await expect(page.getByRole('heading', { name: sequenceQuestion.prompt })).toBeVisible()
 

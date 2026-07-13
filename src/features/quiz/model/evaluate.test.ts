@@ -20,6 +20,14 @@ describe('answer evaluation', () => {
     expect(evaluateResponse(question, { kind: 'text-blank', answer: 'robot runner' })).toBe(false)
   })
 
+  it('accepts spaces or underscores in the automatic test name variable', () => {
+    const question = questionById('robot-framework.text.test-name-variable')
+
+    expect(evaluateResponse(question, { kind: 'text-blank', answer: '${TEST_NAME}' })).toBe(true)
+    expect(evaluateResponse(question, { kind: 'text-blank', answer: '${TEST NAME}' })).toBe(true)
+    expect(evaluateResponse(question, { kind: 'text-blank', answer: '${SUITE_NAME}' })).toBe(false)
+  })
+
   it('evaluates every question kind', () => {
     expect(
       evaluateResponse(questionById('robot-framework.mcq.token-separation'), {
