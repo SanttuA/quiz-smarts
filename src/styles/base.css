@@ -70,7 +70,7 @@ pre {
   left: 0.75rem;
   padding: 0.7rem 1rem;
   color: var(--on-accent);
-  background: var(--purple-dark);
+  background: var(--skip-link-background);
   border-radius: var(--radius-sm);
   transform: translateY(-150%);
 }

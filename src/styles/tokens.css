@@ -40,6 +40,7 @@
   --warning: #8a5700;
   --on-accent: #ffffff;
   --on-lime: #17152a;
+  --skip-link-background: #4b2b99;
   --header-background: rgb(247 245 251 / 85%);
   --header-line: rgb(185 178 208 / 65%);
   --body-purple-glow: rgb(105 65 198 / 13%);
@@ -102,6 +103,7 @@
   --danger-soft: #35191d;
   --danger-line: #8f4849;
   --warning: #ffd27a;
+  --skip-link-background: #6941c6;
   --header-background: rgb(17 16 26 / 88%);
   --header-line: rgb(93 84 115 / 75%);
   --body-purple-glow: rgb(105 65 198 / 20%);
