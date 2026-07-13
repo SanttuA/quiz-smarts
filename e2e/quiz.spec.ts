@@ -97,6 +97,25 @@ test('serves landing and topic routes from the GitHub Pages base path', async ({
   await expect(page.getByRole('heading', { name: 'Robot Framework cheatsheet' })).toBeVisible()
 })
 
+test('uses the OS theme until a persistent preference is selected', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.goto('/quiz-smarts/#/')
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  const lightModeButton = page.getByRole('button', { name: 'Switch to light mode' })
+  await expect(lightModeButton).toContainText('Light')
+  await lightModeButton.click()
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem('quiz-smarts:theme:v1')))
+    .toBe('light')
+
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await expect(page.getByRole('button', { name: 'Switch to dark mode' })).toContainText('Dark')
+})
+
 test('reorders a sequence with the keyboard without submitting it', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/robot-framework/quiz')
 
