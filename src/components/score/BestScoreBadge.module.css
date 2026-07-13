@@ -1,0 +1,27 @@
+.badge,
+.compact,
+.empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  color: var(--purple-dark);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.badge {
+  padding: 0.5rem 0.75rem;
+  background: var(--purple-soft);
+  border: 1px solid rgb(105 65 198 / 18%);
+  border-radius: 999px;
+}
+
+.compact {
+  font-size: 0.8rem;
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-weight: 650;
+}

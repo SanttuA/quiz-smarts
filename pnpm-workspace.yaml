@@ -1,0 +1,11 @@
+packages:
+  - .
+
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude: []
+minimumReleaseAgeIgnoreMissingTime: false
+minimumReleaseAgeStrict: true
+trustLockfile: false
+saveExact: true
+onlyBuiltDependencies:
+  - esbuild

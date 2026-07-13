@@ -1,0 +1,22 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--ink-strong);
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.mark {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  color: var(--lime);
+  background: var(--ink-strong);
+  border: 2px solid var(--ink-strong);
+  border-radius: 0.7rem 0.7rem 0.7rem 0.2rem;
+  box-shadow: 3px 3px 0 var(--purple);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}

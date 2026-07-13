@@ -1,0 +1,31 @@
+.notFound {
+  display: flex;
+  width: min(calc(100% - 2rem), 44rem);
+  min-height: 65vh;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 auto;
+  padding-block: 6rem;
+  flex-direction: column;
+}
+
+.notFound > span {
+  color: var(--purple-dark);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.notFound h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.065em;
+}
+
+.notFound p {
+  margin: 0 0 1rem;
+  color: var(--ink);
+  font-size: 1.1rem;
+}
