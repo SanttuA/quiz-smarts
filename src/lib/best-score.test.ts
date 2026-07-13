@@ -10,7 +10,7 @@ describe('best score storage', () => {
 
     expect(getBestScore(robotFrameworkMetadata, localStorage)).toMatchObject({
       correct: 10,
-      total: 12,
+      total: 20,
       completedAt: '2026-07-13T12:00:00.000Z',
     })
   })
@@ -21,7 +21,7 @@ describe('best score storage', () => {
 
     saveBestScore(robotFrameworkMetadata, 8, localStorage)
     expect(
-      getBestScore({ ...robotFrameworkMetadata, contentVersion: 2 }, localStorage),
+      getBestScore({ ...robotFrameworkMetadata, contentVersion: 3 }, localStorage),
     ).toBeUndefined()
   })
 })

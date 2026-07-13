@@ -53,4 +53,38 @@ export const sequenceQuestions = [
       'The IF body runs first when the condition is true. ELSE introduces the alternative body, and END closes the whole structure.',
     reference: robotGuideReference,
   },
+  {
+    id: 'robot-framework.sequence.try-except',
+    topicId: 'robot-framework',
+    kind: 'sequence',
+    prompt: 'Put the TRY / EXCEPT block lines in executable order.',
+    instruction: 'Drag rows, or use the Move up and Move down buttons.',
+    items: [
+      { id: 'try', code: 'TRY' },
+      { id: 'try-body', code: '    Process response' },
+      { id: 'except', code: 'EXCEPT    Invalid response' },
+      { id: 'except-body', code: '    Log    Response was invalid' },
+      { id: 'end', code: 'END' },
+    ],
+    correctOrder: ['try', 'try-body', 'except', 'except-body', 'end'],
+    explanation:
+      'TRY starts the protected body, EXCEPT introduces the matching error handler, and END closes the structure.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.sequence.test-lifecycle',
+    topicId: 'robot-framework',
+    kind: 'sequence',
+    prompt: 'Arrange this test setup, body, and teardown in conventional source order.',
+    instruction: 'Drag rows, or use the Move up and Move down buttons.',
+    items: [
+      { id: 'setup', code: '    [Setup]    Open application' },
+      { id: 'body', code: '    Dashboard should be visible' },
+      { id: 'teardown', code: '    [Teardown]    Close application' },
+    ],
+    correctOrder: ['setup', 'body', 'teardown'],
+    explanation:
+      'A test setup prepares the test before its body runs. The teardown performs cleanup afterward and runs even when the test fails.',
+    reference: robotGuideReference,
+  },
 ] as const satisfies readonly SequenceQuestion[]

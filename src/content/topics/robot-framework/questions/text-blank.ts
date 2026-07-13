@@ -50,4 +50,37 @@ export const textBlankQuestions = [
       'The robot command runs suites and directories. Python installations can also invoke the same runner with python -m robot.',
     reference: robotGuideReference,
   },
+  {
+    id: 'robot-framework.text.return-statement',
+    topicId: 'robot-framework',
+    kind: 'text-blank',
+    prompt: 'Complete the statement that returns a value from this user keyword.',
+    instruction: 'Type the missing Robot Framework syntax.',
+    template: {
+      before:
+        'Build greeting\n    [Arguments]    ${name}\n    ${message}=    Catenate    Hello    ${name}\n    ',
+      after: '    ${message}',
+    },
+    canonicalAnswer: 'RETURN',
+    acceptedAnswers: ['RETURN'],
+    explanation:
+      'The RETURN statement returns values from a user keyword. It can return one value, multiple values, or no value.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.text.test-name-variable',
+    topicId: 'robot-framework',
+    kind: 'text-blank',
+    prompt: 'Complete the keyword call with the automatic variable for the current test name.',
+    instruction: 'Type the variable, including its sigil and braces.',
+    template: {
+      before: 'Log    ',
+      after: '',
+    },
+    canonicalAnswer: '${TEST_NAME}',
+    acceptedAnswers: ['${TEST_NAME}', '${TEST NAME}'],
+    explanation:
+      '${TEST_NAME} contains the current test case name. Robot Framework treats spaces and underscores in variable names equivalently.',
+    reference: robotGuideReference,
+  },
 ] as const satisfies readonly TextBlankQuestion[]

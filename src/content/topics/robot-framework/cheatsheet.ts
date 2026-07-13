@@ -45,6 +45,11 @@ export const robotFrameworkCheatSheet = [
         detail:
           'Use ${SPACE}, ${EMPTY}, or a backslash when whitespace is data rather than a separator.',
       },
+      {
+        term: 'Continuation rows',
+        detail: 'Start the first cell with ... to continue a long row on the next line.',
+        code: 'Log Many    first    second\n...         third    fourth',
+      },
     ],
   },
   {
@@ -60,6 +65,11 @@ export const robotFrameworkCheatSheet = [
         detail:
           'Prefer local values; suite and global variables have wider effects and should be used deliberately.',
         code: 'VAR    ${message}    Hello    scope=LOCAL',
+      },
+      {
+        term: 'Automatic test name',
+        detail: '${TEST_NAME} contains the name of the currently executing test case.',
+        code: 'Log    Running ${TEST_NAME}',
       },
     ],
   },
@@ -94,6 +104,17 @@ export const robotFrameworkCheatSheet = [
         term: 'Assertions',
         detail: 'BuiltIn is always available and includes Should Be Equal and many other checks.',
         code: 'Should Be Equal    ${actual}    ${expected}',
+      },
+      {
+        term: 'Templates',
+        detail: '[Template] applies one keyword to each following row of test data.',
+        code: '[Template]    Login should fail\nbad-user      valid-pass\nvalid-user    bad-pass',
+      },
+      {
+        term: 'Test lifecycle',
+        detail:
+          '[Setup] runs before the test body. [Teardown] runs afterward, even if the test fails.',
+        code: '[Setup]       Open application\nCheck dashboard\n[Teardown]    Close application',
       },
     ],
   },
