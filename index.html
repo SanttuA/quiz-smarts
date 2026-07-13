@@ -8,6 +8,33 @@
       content="Sharpen your technical knowledge with focused, interactive quizzes."
     />
     <meta name="theme-color" content="#f5f3ff" />
+    <script>
+      ;(() => {
+        const storageKey = 'quiz-smarts:theme:v1'
+        let theme
+
+        try {
+          const storedTheme = window.localStorage.getItem(storageKey)
+          if (storedTheme === 'light' || storedTheme === 'dark') theme = storedTheme
+        } catch {
+          // Storage can be unavailable in privacy-restricted contexts.
+        }
+
+        if (!theme) {
+          try {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          } catch {
+            theme = 'light'
+          }
+        }
+
+        document.documentElement.dataset.theme = theme
+        document.documentElement.style.colorScheme = theme
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', theme === 'dark' ? '#11101a' : '#f5f3ff')
+      })()
+    </script>
     <title>Quiz Smarts</title>
   </head>
   <body>

@@ -51,7 +51,7 @@
 }
 
 .choice:has(input:focus-visible) {
-  outline: 3px solid rgb(105 65 198 / 35%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -77,7 +77,7 @@
 }
 
 .selectedChoice .choiceKey {
-  color: white;
+  color: var(--on-accent);
   background: var(--purple);
   border-color: var(--purple-dark);
 }
@@ -99,9 +99,9 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: clamp(1rem, 4vw, 2rem);
-  color: #f4f1ff;
-  background: var(--ink-strong);
-  border: 1px solid #3f3a5b;
+  color: var(--code-ink);
+  background: var(--code-surface);
+  border: 1px solid var(--code-line);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: clamp(0.78rem, 2vw, 0.95rem);
@@ -115,14 +115,14 @@
   padding: 0.55rem 0.75rem;
   margin-inline: 0.45rem;
   color: var(--ink-strong);
-  background: #fff;
-  border: 2px solid #9d87df;
+  background: var(--input-surface);
+  border: 2px solid var(--code-input-border);
   border-radius: 0.55rem;
   font-family: var(--font-mono);
 }
 
 .codeTemplate input::placeholder {
-  color: #7b7590;
+  color: var(--code-placeholder);
 }
 
 .inputHint {
@@ -135,9 +135,9 @@
   min-height: 2.8rem;
   padding: 0.45rem 0.7rem;
   margin-inline: 0.45rem;
-  color: #cbc4dc;
-  background: rgb(255 255 255 / 7%);
-  border: 2px dashed #81759f;
+  color: var(--code-muted);
+  background: var(--code-drop-surface);
+  border: 2px dashed var(--code-drop-line);
   border-radius: 0.55rem;
   font-family: var(--font-mono);
   cursor: pointer;
@@ -148,7 +148,7 @@
 }
 
 .dropTargetActive {
-  color: var(--ink-strong);
+  color: var(--on-lime);
   background: var(--lime);
   border-color: var(--lime);
 }
@@ -217,7 +217,7 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.5rem 0.65rem;
-  background: white;
+  background: var(--input-surface);
   border: 1px solid var(--line-strong);
   border-radius: 0.65rem;
   cursor: pointer;
@@ -257,9 +257,9 @@
   gap: 0.75rem;
   grid-template-columns: auto minmax(0, 1fr) auto;
   padding: 0.75rem;
-  color: #f4f1ff;
-  background: var(--ink-strong);
-  border: 1px solid #3f3a5b;
+  color: var(--code-ink);
+  background: var(--code-surface);
+  border: 1px solid var(--code-line);
   border-radius: 0.8rem;
 }
 
@@ -274,7 +274,7 @@
   width: 1.8rem;
   height: 1.8rem;
   place-items: center;
-  color: var(--ink-strong);
+  color: var(--on-lime);
   background: var(--lime);
   border-radius: 0.45rem;
   font-family: var(--font-mono);
@@ -299,9 +299,9 @@
   width: 2rem;
   height: 2rem;
   place-items: center;
-  color: #f4f1ff;
-  background: #302d48;
-  border: 1px solid #5d5876;
+  color: var(--code-ink);
+  background: var(--code-surface-soft);
+  border: 1px solid var(--code-line-soft);
   border-radius: 0.45rem;
   cursor: pointer;
 }

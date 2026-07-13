@@ -1,5 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import type { PropsWithChildren } from 'react'
+import { ThemeToggle } from '../../features/theme/ThemeToggle'
 import { BrandMark } from '../brand/BrandMark'
 import styles from './AppShell.module.css'
 
@@ -22,7 +23,10 @@ export function AppShell({ children }: PropsWithChildren) {
               <BrandMark />
             </Link>
           )}
-          {!isQuiz && <span className={styles.status}>learn · test · repeat</span>}
+          <div className={styles.headerControls}>
+            {!isQuiz && <span className={styles.status}>learn · test · repeat</span>}
+            <ThemeToggle />
+          </div>
         </div>
       </header>
       <main id="main-content" className={styles.main}>

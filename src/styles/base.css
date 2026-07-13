@@ -15,8 +15,8 @@ body {
   margin: 0;
   color: var(--ink-strong);
   background:
-    radial-gradient(circle at 12% -10%, rgb(105 65 198 / 13%), transparent 32rem),
-    radial-gradient(circle at 92% 8%, rgb(8 127 140 / 10%), transparent 28rem), var(--canvas);
+    radial-gradient(circle at 12% -10%, var(--body-purple-glow), transparent 32rem),
+    radial-gradient(circle at 92% 8%, var(--body-cyan-glow), transparent 28rem), var(--canvas);
 }
 
 button,
@@ -33,7 +33,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 summary:focus-visible {
-  outline: 3px solid rgb(105 65 198 / 35%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -69,8 +69,8 @@ pre {
   top: 0.75rem;
   left: 0.75rem;
   padding: 0.7rem 1rem;
-  color: white;
-  background: var(--purple-dark);
+  color: var(--on-accent);
+  background: var(--skip-link-background);
   border-radius: var(--radius-sm);
   transform: translateY(-150%);
 }

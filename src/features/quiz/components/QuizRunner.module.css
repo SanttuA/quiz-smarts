@@ -61,7 +61,7 @@
 .questionCard {
   padding: clamp(1.25rem, 5vw, 2.75rem);
   background: var(--surface-raised);
-  border: 2px solid var(--ink-strong);
+  border: 2px solid var(--outline-strong);
   border-radius: var(--radius-lg);
   box-shadow: 7px 7px 0 var(--purple-soft);
 }
@@ -84,9 +84,9 @@
   width: 2.3rem;
   height: 2.3rem;
   place-items: center;
-  color: var(--ink-strong);
+  color: var(--on-lime);
   background: var(--lime);
-  border: 1px solid var(--ink-strong);
+  border: 1px solid var(--outline-strong);
   border-radius: 50%;
   letter-spacing: 0;
 }
@@ -119,9 +119,9 @@
 .secondaryButton {
   min-height: 2.9rem;
   padding: 0.72rem 1.2rem;
-  border: 2px solid var(--ink-strong);
+  border: 2px solid var(--outline-strong);
   border-radius: 0.8rem;
-  box-shadow: 3px 3px 0 var(--ink-strong);
+  box-shadow: 3px 3px 0 var(--outline-strong);
   cursor: pointer;
   font-weight: 800;
   transition:
@@ -130,24 +130,24 @@
 }
 
 .primaryButton {
-  color: white;
+  color: var(--on-accent);
   background: var(--purple);
 }
 
 .secondaryButton {
   color: var(--ink-strong);
-  background: white;
+  background: var(--surface-raised);
 }
 
 .primaryButton:hover:not(:disabled),
 .secondaryButton:hover:not(:disabled) {
-  box-shadow: 1px 1px 0 var(--ink-strong);
+  box-shadow: 1px 1px 0 var(--outline-strong);
   transform: translate(2px, 2px);
 }
 
 .primaryButton:disabled {
-  color: #d4cfe3;
-  background: #8c86a0;
+  color: var(--disabled-ink);
+  background: var(--disabled-surface);
   box-shadow: none;
   cursor: not-allowed;
 }
@@ -164,15 +164,15 @@
 }
 
 .feedbackCorrect {
-  color: #0e5836;
+  color: var(--success-ink);
   background: var(--success-soft);
-  border-color: #76c99b;
+  border-color: var(--success-line);
 }
 
 .feedbackIncorrect {
-  color: #852018;
+  color: var(--danger-ink);
   background: var(--danger-soft);
-  border-color: #ef9b93;
+  border-color: var(--danger-line);
 }
 
 .feedbackIcon {
@@ -180,14 +180,14 @@
   width: 2rem;
   height: 2rem;
   place-items: center;
-  color: white;
+  color: var(--on-accent);
   background: currentColor;
   border-radius: 50%;
   font-weight: 900;
 }
 
 .feedbackIcon::first-letter {
-  color: white;
+  color: var(--on-accent);
 }
 
 .feedbackCorrect strong,
@@ -233,9 +233,9 @@
   align-content: center;
   gap: 0.2rem;
   margin: 1.5rem 0;
-  color: white;
+  color: var(--on-accent);
   background: var(--purple);
-  border: 3px solid var(--ink-strong);
+  border: 3px solid var(--outline-strong);
   border-radius: 50%;
   box-shadow: 8px 8px 0 var(--lime);
   transform: rotate(-2deg);
@@ -293,7 +293,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.8rem;
-  border-bottom: 2px solid var(--ink-strong);
+  border-bottom: 2px solid var(--outline-strong);
 }
 
 .reviewHeading span {
@@ -346,8 +346,8 @@
   width: 2rem;
   height: 2rem;
   place-items: center;
-  color: white;
-  background: var(--ink-strong);
+  color: var(--code-ink);
+  background: var(--code-surface);
   border-radius: 50%;
   font-weight: 900;
 }

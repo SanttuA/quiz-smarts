@@ -1,0 +1,45 @@
+.toggle {
+  display: inline-flex;
+  min-width: 5.25rem;
+  min-height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  color: var(--ink);
+  background: var(--surface-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  transition:
+    color 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.toggle:hover {
+  color: var(--purple-dark);
+  background: var(--purple-soft);
+  border-color: var(--purple);
+  transform: translateY(-1px);
+}
+
+.toggle svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.toggle svg path:first-child {
+  fill: currentColor;
+  stroke: none;
+}

@@ -5,6 +5,8 @@ import { cleanup } from '@testing-library/react'
 afterEach(() => {
   cleanup()
   window.localStorage.clear()
+  document.documentElement.removeAttribute('data-theme')
+  document.documentElement.style.removeProperty('color-scheme')
   vi.restoreAllMocks()
 })
 

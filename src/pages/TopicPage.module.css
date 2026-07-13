@@ -55,7 +55,7 @@
   gap: 1rem;
   padding: 1.5rem;
   background: var(--surface-raised);
-  border: 2px solid var(--ink-strong);
+  border: 2px solid var(--outline-strong);
   border-radius: var(--radius-lg);
   box-shadow: 6px 6px 0 var(--lime);
   flex-direction: column;
@@ -136,7 +136,7 @@
   position: absolute;
   top: 0.6rem;
   right: 1rem;
-  color: rgb(105 65 198 / 10%);
+  color: var(--purple-watermark);
   font-family: var(--font-mono);
   font-size: 4rem;
   font-weight: 900;
@@ -183,8 +183,8 @@
 .sheetItem pre {
   margin: 0.75rem 0 0;
   padding: 0.85rem;
-  color: #f4f1ff;
-  background: var(--ink-strong);
+  color: var(--code-ink);
+  background: var(--code-surface);
   border-radius: var(--radius-sm);
   font-size: 0.75rem;
   line-height: 1.6;

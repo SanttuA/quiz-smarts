@@ -5,9 +5,9 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.72rem 1.1rem;
-  border: 2px solid var(--ink-strong);
+  border: 2px solid var(--outline-strong);
   border-radius: 0.8rem;
-  box-shadow: 3px 3px 0 var(--ink-strong);
+  box-shadow: 3px 3px 0 var(--outline-strong);
   font-weight: 800;
   text-decoration: none;
   transition:
@@ -16,12 +16,12 @@
 }
 
 .button:hover {
-  box-shadow: 1px 1px 0 var(--ink-strong);
+  box-shadow: 1px 1px 0 var(--outline-strong);
   transform: translate(2px, 2px);
 }
 
 .primary {
-  color: white;
+  color: var(--on-accent);
   background: var(--purple);
 }
 

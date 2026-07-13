@@ -2,12 +2,18 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { RouterProvider, createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
+import { ThemeProvider } from './features/theme/ThemeProvider'
+import { THEME_STORAGE_KEY } from './features/theme/theme'
 import { createAppRouter } from './router'
 
 function renderRoute(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] })
   const router = createAppRouter(history)
-  return render(<RouterProvider router={router} />)
+  return render(
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>,
+  )
 }
 
 describe('routed application', () => {
@@ -38,5 +44,16 @@ describe('routed application', () => {
     expect(
       await screen.findByRole('heading', { name: 'This path drew a blank.' }),
     ).toBeInTheDocument()
+  })
+
+  it('exposes a persistent theme toggle in the shared header', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    await user.click(await screen.findByRole('button', { name: 'Switch to dark mode' }))
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark')
+    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toHaveTextContent('Light')
   })
 })
