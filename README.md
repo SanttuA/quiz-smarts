@@ -1,6 +1,6 @@
 # Quiz Smarts
 
-A frontend-only technical quiz platform built with React, TypeScript, TanStack Router, and Vite. The first topic teaches Robot Framework through a concise cheatsheet and four interactive question styles.
+A frontend-only technical quiz platform built with React, TypeScript, TanStack Router, and Vite. Its topics teach Robot Framework and web accessibility testing through concise cheatsheets and four interactive question styles.
 
 ## Local development
 
@@ -29,7 +29,7 @@ corepack pnpm build
 ## Architecture
 
 - `src/content` contains the generic topic/question contracts and topic registry.
-- `src/content/topics/robot-framework` owns its metadata, cheatsheet, and small question modules.
+- Each directory under `src/content/topics` owns one topic's metadata, cheatsheet, and small question modules.
 - `src/features/quiz` contains the topic-independent state machine, evaluators, shuffling, and interaction components.
 - `src/routes` contains small file-based TanStack Router entrypoints.
 

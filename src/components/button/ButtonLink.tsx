@@ -10,6 +10,7 @@ interface ButtonLinkProps {
   children: ReactNode
   variant?: 'primary' | 'secondary'
   className?: string
+  ariaLabel?: string
 }
 
 export function ButtonLink({
@@ -19,10 +20,11 @@ export function ButtonLink({
   params,
   search,
   children,
+  ariaLabel,
 }: ButtonLinkProps) {
   const classes = [styles.button, styles[variant], className].filter(Boolean).join(' ')
   return (
-    <Link className={classes} to={to} params={params} search={search}>
+    <Link className={classes} to={to} params={params} search={search} aria-label={ariaLabel}>
       {children}
     </Link>
   )

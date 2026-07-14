@@ -20,7 +20,7 @@ export function TextBlankInput({ question, value, onChange, disabled }: TextBlan
           value={answer}
           onChange={(event) => onChange({ kind: 'text-blank', answer: event.target.value })}
           disabled={disabled}
-          aria-label="Missing Robot Framework syntax"
+          aria-label="Missing answer"
           autoCapitalize="off"
           autoComplete="off"
           spellCheck={false}
