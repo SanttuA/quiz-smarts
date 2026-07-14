@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { SequenceQuestion } from '../../types'
 import accessibilityTestingTopic from '.'
 
 describe('Accessibility Testing topic content', () => {
@@ -30,8 +31,17 @@ describe('Accessibility Testing topic content', () => {
         expect(question.acceptedAnswers).toContain(question.canonicalAnswer)
       }
       if (question.kind === 'sequence') {
-        expect(new Set(question.correctOrder)).toEqual(
-          new Set(question.items.map((item) => item.id)),
+        const itemIds = new Set(question.items.map((item) => item.id))
+        const { acceptedOrders = [] } = question as SequenceQuestion
+        const validOrders = [question.correctOrder, ...acceptedOrders]
+
+        for (const order of validOrders) {
+          expect(order).toHaveLength(question.items.length)
+          expect(new Set(order)).toEqual(itemIds)
+          expect(new Set(order).size).toBe(order.length)
+        }
+        expect(new Set(validOrders.map((order) => JSON.stringify(order))).size).toBe(
+          validOrders.length,
         )
       }
     }

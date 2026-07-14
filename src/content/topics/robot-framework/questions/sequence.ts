@@ -91,7 +91,7 @@ export const sequenceQuestions = [
     id: 'robot-framework.sequence.while-loop',
     topicId: 'robot-framework',
     kind: 'sequence',
-    prompt: 'Put the WHILE loop lines in executable order.',
+    prompt: 'Arrange the WHILE loop so it logs each current attempt before incrementing it.',
     instruction: 'Drag rows, or use the Move up and Move down buttons.',
     items: [
       { id: 'while', code: 'WHILE    ${attempt} < 3' },
@@ -101,7 +101,7 @@ export const sequenceQuestions = [
     ],
     correctOrder: ['while', 'log', 'increment', 'end'],
     explanation:
-      'A WHILE block begins with its condition, executes the indented body in order, and closes with END.',
+      'The loop checks the condition, logs the current attempt, and then increments it so the next iteration advances. END closes the block.',
     reference: robotGuideReference,
   },
   {
@@ -184,8 +184,9 @@ export const sequenceQuestions = [
       { id: 'end', code: 'END' },
     ],
     correctOrder: ['group', 'username', 'password', 'end'],
+    acceptedOrders: [['group', 'password', 'username', 'end']],
     explanation:
-      'GROUP starts a named block of related steps. The indented keywords run in order and END closes the group.',
+      'GROUP starts the block and END closes it. These independent username and password inputs may run in either order inside the group.',
     reference: robotGuideReference,
   },
 ] as const satisfies readonly SequenceQuestion[]

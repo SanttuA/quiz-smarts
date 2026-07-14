@@ -114,6 +114,19 @@ test('opens the Accessibility Testing topic and starts its quick quiz', async ({
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the Python topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Python' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Python topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/python$/)
+  await expect(page.getByRole('heading', { name: 'Python cheatsheet' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/python\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('uses the OS theme until a persistent preference is selected', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
   await page.goto('/quiz-smarts/#/')

@@ -19,21 +19,42 @@ export function fisherYates<T>(items: readonly T[], random: RandomSource = Math.
 
 function isCorrectSequence(
   items: readonly SequenceItem[],
-  correctOrder: readonly string[],
+  validOrders: readonly (readonly string[])[],
 ): boolean {
-  return items.every((item, index) => item.id === correctOrder[index])
+  return validOrders.some(
+    (order) =>
+      items.length === order.length && items.every((item, index) => item.id === order[index]),
+  )
 }
 
 function shuffleSequence(
   items: readonly SequenceItem[],
   correctOrder: readonly string[],
+  acceptedOrders: readonly (readonly string[])[],
   random: RandomSource,
 ): SequenceItem[] {
   const shuffled = fisherYates(items, random)
-  if (shuffled.length > 1 && isCorrectSequence(shuffled, correctOrder)) {
-    const first = shuffled.shift()
-    if (first) shuffled.push(first)
+  const validOrders = [correctOrder, ...acceptedOrders]
+
+  if (shuffled.length > 1 && isCorrectSequence(shuffled, validOrders)) {
+    for (let shift = 1; shift < shuffled.length; shift += 1) {
+      const rotated = [...shuffled.slice(shift), ...shuffled.slice(0, shift)]
+      if (!isCorrectSequence(rotated, validOrders)) return rotated
+    }
+
+    for (let left = 0; left < shuffled.length - 1; left += 1) {
+      for (let right = left + 1; right < shuffled.length; right += 1) {
+        const swapped = [...shuffled]
+        const leftItem = swapped[left]
+        const rightItem = swapped[right]
+        if (!leftItem || !rightItem) continue
+        swapped[left] = rightItem
+        swapped[right] = leftItem
+        if (!isCorrectSequence(swapped, validOrders)) return swapped
+      }
+    }
   }
+
   return shuffled
 }
 
@@ -48,7 +69,12 @@ export function prepareQuestion(question: QuizQuestion, random: RandomSource): Q
     case 'sequence':
       return {
         ...question,
-        items: shuffleSequence(question.items, question.correctOrder, random),
+        items: shuffleSequence(
+          question.items,
+          question.correctOrder,
+          question.acceptedOrders ?? [],
+          random,
+        ),
       }
   }
 }

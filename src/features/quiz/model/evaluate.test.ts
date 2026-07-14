@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { QuizQuestion } from '../../../content/types'
+import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
 import { evaluateResponse, formatCorrectAnswer, normalizeTextAnswer } from './evaluate'
 
@@ -53,5 +54,48 @@ describe('answer evaluation', () => {
     expect(formatCorrectAnswer(questionById('robot-framework.sequence.for-loop'))).toBe(
       'FOR    ${item}    IN    @{ITEMS}\n    Log    ${item}\nEND',
     )
+  })
+
+  it('accepts every declared valid sequence order', () => {
+    const question = pythonQuestions.find(
+      (candidate) => candidate.id === 'python.sequence.running-total',
+    )
+    if (!question || question.kind !== 'sequence') throw new Error('Missing sequence fixture')
+
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['numbers', 'total', 'for', 'add', 'print'],
+      }),
+    ).toBe(true)
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['total', 'numbers', 'for', 'add', 'print'],
+      }),
+    ).toBe(true)
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['total', 'numbers', 'add', 'for', 'print'],
+      }),
+    ).toBe(false)
+  })
+
+  it('rejects a sequence order that changes loop behavior', () => {
+    const question = questionById('robot-framework.sequence.while-loop')
+
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['while', 'log', 'increment', 'end'],
+      }),
+    ).toBe(true)
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['while', 'increment', 'log', 'end'],
+      }),
+    ).toBe(false)
   })
 })

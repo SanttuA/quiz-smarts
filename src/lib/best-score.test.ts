@@ -27,7 +27,11 @@ describe('best score storage', () => {
 
     saveBestScore(robotFrameworkMetadata, 8, 20, localStorage)
     expect(
-      getBestScore({ ...robotFrameworkMetadata, contentVersion: 4 }, 20, localStorage),
+      getBestScore(
+        { ...robotFrameworkMetadata, contentVersion: robotFrameworkMetadata.contentVersion + 1 },
+        20,
+        localStorage,
+      ),
     ).toBeUndefined()
   })
 

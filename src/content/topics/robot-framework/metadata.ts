@@ -12,6 +12,6 @@ export const robotFrameworkMetadata = {
   estimatedMinutes: 32,
   questionCount: 40,
   subsetQuestionCount: 20,
-  contentVersion: 3,
+  contentVersion: 4,
   lastReviewed: '2026-07-14',
 } as const satisfies TopicMetadata
