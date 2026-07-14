@@ -19,12 +19,16 @@ export function evaluateResponse(question: QuizQuestion, response: QuizResponse)
       )
     case 'drag-blank':
       return response.kind === question.kind && response.optionId === question.correctOptionId
-    case 'sequence':
-      return (
-        response.kind === question.kind &&
-        response.itemIds.length === question.correctOrder.length &&
-        response.itemIds.every((itemId, index) => itemId === question.correctOrder[index])
+    case 'sequence': {
+      if (response.kind !== question.kind) return false
+
+      const validOrders = [question.correctOrder, ...(question.acceptedOrders ?? [])]
+      return validOrders.some(
+        (order) =>
+          response.itemIds.length === order.length &&
+          response.itemIds.every((itemId, index) => itemId === order[index]),
       )
+    }
   }
 }
 

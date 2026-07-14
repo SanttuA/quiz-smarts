@@ -100,8 +100,9 @@ export const sequenceQuestions = [
       { id: 'end', code: 'END' },
     ],
     correctOrder: ['while', 'log', 'increment', 'end'],
+    acceptedOrders: [['while', 'increment', 'log', 'end']],
     explanation:
-      'A WHILE block begins with its condition, executes the indented body in order, and closes with END.',
+      'A WHILE block begins with its condition and closes with END. Either independent body step may run first in this example.',
     reference: robotGuideReference,
   },
   {
@@ -184,8 +185,9 @@ export const sequenceQuestions = [
       { id: 'end', code: 'END' },
     ],
     correctOrder: ['group', 'username', 'password', 'end'],
+    acceptedOrders: [['group', 'password', 'username', 'end']],
     explanation:
-      'GROUP starts a named block of related steps. The indented keywords run in order and END closes the group.',
+      'GROUP starts the block and END closes it. These independent username and password inputs may run in either order inside the group.',
     reference: robotGuideReference,
   },
 ] as const satisfies readonly SequenceQuestion[]

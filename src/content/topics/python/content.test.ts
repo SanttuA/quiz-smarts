@@ -1,23 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import type { SequenceQuestion } from '../../types'
-import robotFrameworkTopic from '.'
+import pythonTopic from '.'
 
-describe('Robot Framework topic content', () => {
+describe('Python topic content', () => {
   it('contains ten valid questions of each supported kind', () => {
-    expect(robotFrameworkTopic.questions).toHaveLength(40)
+    expect(pythonTopic.questions).toHaveLength(40)
     for (const kind of ['multiple-choice', 'text-blank', 'drag-blank', 'sequence'] as const) {
-      expect(
-        robotFrameworkTopic.questions.filter((question) => question.kind === kind),
-      ).toHaveLength(10)
+      expect(pythonTopic.questions.filter((question) => question.kind === kind)).toHaveLength(10)
     }
   })
 
-  it('has globally unique IDs and valid answer references', () => {
-    const ids = robotFrameworkTopic.questions.map((question) => question.id)
+  it('has unique IDs and valid answer references', () => {
+    const ids = pythonTopic.questions.map((question) => question.id)
     expect(new Set(ids).size).toBe(ids.length)
 
-    for (const question of robotFrameworkTopic.questions) {
-      expect(question.topicId).toBe(robotFrameworkTopic.id)
+    for (const question of pythonTopic.questions) {
+      expect(question.id).toMatch(/^python\./)
+      expect(question.topicId).toBe(pythonTopic.id)
       expect(question.explanation.length).toBeGreaterThan(20)
       expect(question.reference.url).toMatch(/^https:\/\//)
 
@@ -48,10 +47,10 @@ describe('Robot Framework topic content', () => {
   })
 
   it('keeps metadata and reference material in sync', () => {
-    expect(robotFrameworkTopic.questionCount).toBe(robotFrameworkTopic.questions.length)
-    expect(robotFrameworkTopic.subsetQuestionCount).toBeGreaterThan(0)
-    expect(robotFrameworkTopic.subsetQuestionCount).toBeLessThan(robotFrameworkTopic.questionCount)
-    expect(robotFrameworkTopic.cheatsheet).toHaveLength(6)
-    expect(robotFrameworkTopic.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    expect(pythonTopic.questionCount).toBe(pythonTopic.questions.length)
+    expect(pythonTopic.subsetQuestionCount).toBeGreaterThan(0)
+    expect(pythonTopic.subsetQuestionCount).toBeLessThan(pythonTopic.questionCount)
+    expect(pythonTopic.cheatsheet).toHaveLength(6)
+    expect(pythonTopic.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })
 })

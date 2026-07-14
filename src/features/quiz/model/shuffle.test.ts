@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
 import { createSeededRandom } from './random'
 import { fisherYates, prepareAttempt, prepareQuestion } from './shuffle'
@@ -63,5 +64,20 @@ describe('shuffle preparation', () => {
 
     expect(prepared.items.map((item) => item.id)).not.toEqual(sequence.correctOrder)
     expect(sequence.items.map((item) => item.id)).toEqual(sequence.correctOrder)
+  })
+
+  it('does not present an alternate accepted order as the shuffled starting state', () => {
+    const sequence = pythonQuestions.find(
+      (question) => question.id === 'python.sequence.running-total',
+    )
+    if (!sequence || sequence.kind !== 'sequence') throw new Error('Missing sequence fixture')
+
+    const randomValues = [0.999999, 0.999999, 0.999999, 0]
+    const prepared = prepareQuestion(sequence, () => randomValues.shift() ?? 0.999999)
+    if (prepared.kind !== 'sequence') throw new Error('Question kind changed')
+
+    const preparedOrder = prepared.items.map((item) => item.id)
+    const validOrders = [sequence.correctOrder, ...(sequence.acceptedOrders ?? [])]
+    expect(validOrders).not.toContainEqual(preparedOrder)
   })
 })

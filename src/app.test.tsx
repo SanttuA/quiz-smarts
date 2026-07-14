@@ -22,8 +22,9 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('02 topics')).toBeInTheDocument()
+    expect(screen.getByText('03 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Open Robot Framework topic' }))
 
     expect(
@@ -66,6 +67,17 @@ describe('routed application', () => {
     expect(
       screen.getByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }),
     ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Python topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/python')
+
+    expect(await screen.findByRole('heading', { name: 'Python cheatsheet' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /The Python Tutorial/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()

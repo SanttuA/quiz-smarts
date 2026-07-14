@@ -56,6 +56,7 @@ export interface SequenceQuestion extends QuestionBase {
   kind: 'sequence'
   items: readonly SequenceItem[]
   correctOrder: readonly string[]
+  acceptedOrders?: readonly (readonly string[])[]
 }
 
 export type QuizQuestion =
