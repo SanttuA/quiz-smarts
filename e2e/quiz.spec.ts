@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import pythonTopic from '../src/content/topics/python'
 import robotFrameworkTopic from '../src/content/topics/robot-framework'
 import type { QuizQuestion } from '../src/content/types'
 import { createSeededRandom } from '../src/features/quiz/model/random'
@@ -10,13 +11,19 @@ const preparedSubsetQuestions = prepareAttempt(
   robotFrameworkTopic.subsetQuestionCount,
 )
 
+const preparedPythonQuestions = prepareAttempt(
+  pythonTopic.questions,
+  createSeededRandom('quiz-smarts-e2e'),
+  pythonTopic.questions.length,
+)
+
 async function answerCorrectly(page: Page, question: QuizQuestion) {
   await expect(page.getByRole('heading', { name: question.prompt })).toBeVisible()
 
   switch (question.kind) {
     case 'multiple-choice': {
       const answer = question.choices.find((choice) => choice.id === question.correctChoiceId)!
-      await page.getByRole('radio', { name: answer.label }).check()
+      await page.getByRole('radio', { name: answer.label, exact: true }).check()
       break
     }
     case 'text-blank':
@@ -125,6 +132,67 @@ test('opens the Python topic and starts its quick quiz', async ({ page }) => {
   await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
   await expect(page).toHaveURL(/#\/topics\/python\/quiz\?mode=subset$/)
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
+test('keeps multiline blank templates in source order', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/topics/python/quiz?mode=all')
+
+  const questionIndex = preparedPythonQuestions.findIndex(
+    (question) => question.id === 'python.text-except',
+  )
+  expect(questionIndex).toBeGreaterThanOrEqual(0)
+
+  for (const question of preparedPythonQuestions.slice(0, questionIndex)) {
+    await answerCorrectly(page, question)
+    await page.getByRole('button', { name: 'Next question' }).click()
+  }
+
+  const question = preparedPythonQuestions[questionIndex]!
+  await expect(page.getByRole('heading', { name: question.prompt })).toBeVisible()
+
+  const input = page.getByRole('textbox', { name: 'Missing answer' })
+  const codeFlow = input.locator('xpath=ancestor::code[1]')
+  await expect(codeFlow).toHaveCSS('display', 'block')
+  await expect(codeFlow).toHaveCSS('white-space', 'pre-wrap')
+
+  const layout = await codeFlow.evaluate((element) => {
+    const [before, control, after] = Array.from(element.children)
+    if (!before || !control || !after || !element.parentElement) {
+      throw new Error('Incomplete code flow')
+    }
+
+    const rectTops = (node: Element) => [
+      ...new Set(Array.from(node.getClientRects(), (rect) => Math.round(rect.top))),
+    ]
+    const controlRect = control.getBoundingClientRect()
+    const panelRect = element.parentElement.getBoundingClientRect()
+
+    return {
+      childTags: [before.tagName, control.tagName, after.tagName],
+      beforeTops: rectTops(before),
+      controlTop: controlRect.top,
+      controlBottom: controlRect.bottom,
+      controlLeft: controlRect.left,
+      controlRight: controlRect.right,
+      afterTops: rectTops(after),
+      panelLeft: panelRect.left,
+      panelRight: panelRect.right,
+    }
+  })
+
+  expect(layout.childTags).toEqual(['SPAN', 'INPUT', 'SPAN'])
+  expect(layout.beforeTops).toHaveLength(2)
+  expect(layout.controlTop).toBeGreaterThan(layout.beforeTops.at(-1)!)
+  expect(layout.afterTops[0]).toBeLessThan(layout.controlBottom)
+  expect(layout.afterTops.at(-1)!).toBeGreaterThan(layout.afterTops[0]!)
+  expect(layout.controlLeft).toBeGreaterThanOrEqual(layout.panelLeft)
+  expect(layout.controlRight).toBeLessThanOrEqual(layout.panelRight)
+
+  await input.focus()
+  await expect(input).toBeFocused()
+  await input.fill('except')
+  await page.getByRole('button', { name: 'Check answer' }).click()
+  await expect(page.getByText('That’s right.')).toBeVisible()
 })
 
 test('uses the OS theme until a persistent preference is selected', async ({ page }) => {
