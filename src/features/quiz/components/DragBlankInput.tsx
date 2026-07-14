@@ -63,20 +63,22 @@ function DropTemplate({ question, selectedOption, disabled, onClear }: DropTempl
 
   return (
     <div className={styles.codeTemplate}>
-      <span>{question.template.before}</span>
-      <button
-        ref={setNodeRef}
-        type="button"
-        className={`${styles.dropTarget} ${isOver ? styles.dropTargetActive : ''}`}
-        onClick={onClear}
-        disabled={disabled}
-        aria-label={
-          selectedOption ? `Blank contains ${selectedOption.label}` : 'Empty answer blank'
-        }
-      >
-        {selectedOption?.code ?? selectedOption?.label ?? 'drop here'}
-      </button>
-      <span>{question.template.after}</span>
+      <code className={styles.codeFlow}>
+        <span>{question.template.before}</span>
+        <button
+          ref={setNodeRef}
+          type="button"
+          className={`${styles.dropTarget} ${isOver ? styles.dropTargetActive : ''}`}
+          onClick={onClear}
+          disabled={disabled}
+          aria-label={
+            selectedOption ? `Blank contains ${selectedOption.label}` : 'Empty answer blank'
+          }
+        >
+          {selectedOption?.code ?? selectedOption?.label ?? 'drop here'}
+        </button>
+        <span>{question.template.after}</span>
+      </code>
     </div>
   )
 }

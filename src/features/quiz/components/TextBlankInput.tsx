@@ -15,18 +15,20 @@ export function TextBlankInput({ question, value, onChange, disabled }: TextBlan
   return (
     <div className={styles.textBlank}>
       <div className={styles.codeTemplate}>
-        <span>{question.template.before}</span>
-        <input
-          value={answer}
-          onChange={(event) => onChange({ kind: 'text-blank', answer: event.target.value })}
-          disabled={disabled}
-          aria-label="Missing answer"
-          autoCapitalize="off"
-          autoComplete="off"
-          spellCheck={false}
-          placeholder="type answer"
-        />
-        <span>{question.template.after}</span>
+        <code className={styles.codeFlow}>
+          <span>{question.template.before}</span>
+          <input
+            value={answer}
+            onChange={(event) => onChange({ kind: 'text-blank', answer: event.target.value })}
+            disabled={disabled}
+            aria-label="Missing answer"
+            autoCapitalize="off"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="type answer"
+          />
+          <span>{question.template.after}</span>
+        </code>
       </div>
       <span className={styles.inputHint}>Case and repeated whitespace are normalized.</span>
     </div>
