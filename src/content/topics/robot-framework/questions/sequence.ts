@@ -91,7 +91,7 @@ export const sequenceQuestions = [
     id: 'robot-framework.sequence.while-loop',
     topicId: 'robot-framework',
     kind: 'sequence',
-    prompt: 'Put the WHILE loop lines in executable order.',
+    prompt: 'Arrange the WHILE loop so it logs each current attempt before incrementing it.',
     instruction: 'Drag rows, or use the Move up and Move down buttons.',
     items: [
       { id: 'while', code: 'WHILE    ${attempt} < 3' },
@@ -100,9 +100,8 @@ export const sequenceQuestions = [
       { id: 'end', code: 'END' },
     ],
     correctOrder: ['while', 'log', 'increment', 'end'],
-    acceptedOrders: [['while', 'increment', 'log', 'end']],
     explanation:
-      'A WHILE block begins with its condition and closes with END. Either independent body step may run first in this example.',
+      'The loop checks the condition, logs the current attempt, and then increments it so the next iteration advances. END closes the block.',
     reference: robotGuideReference,
   },
   {

@@ -81,4 +81,21 @@ describe('answer evaluation', () => {
       }),
     ).toBe(false)
   })
+
+  it('rejects a sequence order that changes loop behavior', () => {
+    const question = questionById('robot-framework.sequence.while-loop')
+
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['while', 'log', 'increment', 'end'],
+      }),
+    ).toBe(true)
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['while', 'increment', 'log', 'end'],
+      }),
+    ).toBe(false)
+  })
 })
