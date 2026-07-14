@@ -28,15 +28,26 @@ describe('routed application', () => {
       await screen.findByRole('heading', { name: 'Robot Framework cheatsheet' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Robot Framework User Guide/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Quick quiz · 20' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'All questions · 40' })).toBeInTheDocument()
   })
 
-  it('renders the quiz as a focus route without the topic cheatsheet', async () => {
+  it('defaults direct quiz routes to all questions', async () => {
     renderRoute('/topics/robot-framework/quiz')
 
-    expect(await screen.findByText(/Question 1 \/ 20/)).toBeInTheDocument()
+    expect(await screen.findByText(/Question 1 \/ 40/)).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /cheatsheet/i })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /cheatsheet/i })).not.toBeInTheDocument()
     expect(screen.queryByText('Quick reference')).not.toBeInTheDocument()
+  })
+
+  it('launches the configured subset from the landing page', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    await user.click(await screen.findByRole('link', { name: 'Quick quiz · 20' }))
+
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
   })
 
   it('shows a useful not-found screen for unknown topics', async () => {

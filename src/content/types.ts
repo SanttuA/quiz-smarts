@@ -1,4 +1,5 @@
 export type TopicId = string
+export type QuizMode = 'subset' | 'all'
 
 export interface QuestionReference {
   label: string
@@ -83,6 +84,7 @@ export interface TopicMetadata {
   difficulty: string
   estimatedMinutes: number
   questionCount: number
+  subsetQuestionCount: number
   contentVersion: number
   lastReviewed: string
 }

@@ -23,6 +23,35 @@ describe('shuffle preparation', () => {
     expect(robotFrameworkQuestions.map((question) => question.id)).toEqual(originalIds)
   })
 
+  it('selects a deterministic subset balanced across question kinds', () => {
+    const originalIds = robotFrameworkQuestions.map((question) => question.id)
+    const first = prepareAttempt(robotFrameworkQuestions, createSeededRandom('subset'), 20)
+    const second = prepareAttempt(robotFrameworkQuestions, createSeededRandom('subset'), 20)
+
+    expect(first.map((question) => question.id)).toEqual(second.map((question) => question.id))
+    expect(first).toHaveLength(20)
+    for (const kind of ['multiple-choice', 'text-blank', 'drag-blank', 'sequence'] as const) {
+      expect(first.filter((question) => question.kind === kind)).toHaveLength(5)
+    }
+    expect(robotFrameworkQuestions.map((question) => question.id)).toEqual(originalIds)
+  })
+
+  it('fills a subset when future topics have uneven question-kind counts', () => {
+    const unevenQuestions = [
+      ...robotFrameworkQuestions
+        .filter((question) => question.kind === 'multiple-choice')
+        .slice(0, 3),
+      ...robotFrameworkQuestions.filter((question) => question.kind === 'text-blank').slice(0, 1),
+      ...robotFrameworkQuestions.filter((question) => question.kind === 'drag-blank').slice(0, 1),
+    ]
+    const prepared = prepareAttempt(unevenQuestions, createSeededRandom('uneven'), 4)
+
+    expect(prepared).toHaveLength(4)
+    expect(prepared.filter((question) => question.kind === 'multiple-choice')).toHaveLength(2)
+    expect(prepared.filter((question) => question.kind === 'text-blank')).toHaveLength(1)
+    expect(prepared.filter((question) => question.kind === 'drag-blank')).toHaveLength(1)
+  })
+
   it('rotates a sequence if the random result leaves it already solved', () => {
     const sequence = robotFrameworkQuestions.find(
       (question) => question.id === 'robot-framework.sequence.for-loop',

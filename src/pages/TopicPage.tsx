@@ -1,6 +1,7 @@
 import { ButtonLink } from '../components/button/ButtonLink'
 import { BestScoreBadge } from '../components/score/BestScoreBadge'
 import type { TopicDefinition } from '../content/types'
+import { estimateQuizMinutes } from '../features/quiz/model/duration'
 import styles from './TopicPage.module.css'
 
 interface TopicPageProps {
@@ -8,6 +9,8 @@ interface TopicPageProps {
 }
 
 export function TopicPage({ topic }: TopicPageProps) {
+  const subsetMinutes = estimateQuizMinutes(topic, topic.subsetQuestionCount)
+
   return (
     <div className={styles.page}>
       <section className={styles.intro}>
@@ -24,15 +27,30 @@ export function TopicPage({ topic }: TopicPageProps) {
           </div>
           <aside className={styles.launchCard} aria-label="Quiz overview">
             <span className={styles.launchLabel}>knowledge check</span>
-            <strong>{topic.questionCount} questions</strong>
+            <strong>{topic.questionCount} questions total</strong>
             <div className={styles.stats}>
-              <span>~{topic.estimatedMinutes} min</span>
+              <span>Quick ~{subsetMinutes} min</span>
+              <span>Full ~{topic.estimatedMinutes} min</span>
               <span>{topic.difficulty}</span>
             </div>
             <BestScoreBadge topic={topic} />
-            <ButtonLink to="/topics/$topicId/quiz" params={{ topicId: topic.slug }}>
-              Start quiz <span aria-hidden="true">→</span>
-            </ButtonLink>
+            <div className={styles.quizActions}>
+              <ButtonLink
+                to="/topics/$topicId/quiz"
+                params={{ topicId: topic.slug }}
+                search={{ mode: 'subset' }}
+              >
+                Quick quiz · {topic.subsetQuestionCount}
+              </ButtonLink>
+              <ButtonLink
+                to="/topics/$topicId/quiz"
+                params={{ topicId: topic.slug }}
+                search={{ mode: 'all' }}
+                variant="secondary"
+              >
+                All questions · {topic.questionCount}
+              </ButtonLink>
+            </div>
           </aside>
         </div>
       </section>

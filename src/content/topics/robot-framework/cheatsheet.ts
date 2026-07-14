@@ -25,6 +25,16 @@ export const robotFrameworkCheatSheet = [
         term: 'Keywords',
         detail: 'Builds reusable domain-level actions from lower-level keywords.',
       },
+      {
+        term: 'Comments',
+        detail:
+          'Data in the Comments section is ignored. Use documentation, metadata, or Log when information must appear in outputs.',
+      },
+      {
+        term: 'Directory suites',
+        detail:
+          'Put directory-level suite settings in an initialization file, typically __init__.robot.',
+      },
     ],
   },
   {
@@ -39,6 +49,11 @@ export const robotFrameworkCheatSheet = [
       {
         term: 'File extensions',
         detail: 'Suites normally use .robot; dedicated resource files should use .resource.',
+      },
+      {
+        term: 'reStructuredText',
+        detail:
+          'Robot data can live in reStructuredText code blocks. Files ending in .robot.rst are parsed by default.',
       },
       {
         term: 'Escaping',
@@ -71,6 +86,17 @@ export const robotFrameworkCheatSheet = [
         detail: '${TEST_NAME} contains the name of the currently executing test case.',
         code: 'Log    Running ${TEST_NAME}',
       },
+      {
+        term: 'Environment variables',
+        detail: 'Use percent-curly syntax to read string values from the operating system.',
+        code: 'Log    Home is %{HOME}',
+      },
+      {
+        term: 'Current data directory',
+        detail:
+          '${CURDIR} is the absolute path to the directory containing the current test data file.',
+        code: 'File Should Exist    ${CURDIR}${/}data.json',
+      },
     ],
   },
   {
@@ -88,6 +114,12 @@ export const robotFrameworkCheatSheet = [
         detail: 'Assign a keyword result, or return from a user keyword with RETURN.',
         code: '${value}=    Get value\nRETURN    ${value}',
       },
+      {
+        term: 'Reusable files',
+        detail:
+          'Use Resource to import shared user keywords and Variables to import values from a variable file.',
+        code: 'Resource     shared.resource\nVariables    config.py',
+      },
     ],
   },
   {
@@ -99,6 +131,12 @@ export const robotFrameworkCheatSheet = [
         term: 'Test settings',
         detail: 'Use [Tags], [Setup], [Teardown], [Template], and [Timeout] inside a test.',
         code: '[Tags]    smoke    critical',
+      },
+      {
+        term: 'Documentation and timeout',
+        detail:
+          '[Documentation] describes an individual test in outputs. [Timeout] limits how long it may run.',
+        code: '[Documentation]    Verifies the happy path\n[Timeout]          30 seconds',
       },
       {
         term: 'Assertions',
@@ -129,9 +167,35 @@ export const robotFrameworkCheatSheet = [
         code: 'FOR    ${item}    IN    @{ITEMS}\n    Log    ${item}\nEND',
       },
       {
+        term: 'Loop control',
+        detail: 'CONTINUE skips to the next FOR or WHILE iteration. BREAK exits the loop entirely.',
+      },
+      {
+        term: 'Error handling',
+        detail:
+          'EXCEPT handles matching failures, ELSE runs when no error occurs, and FINALLY always runs cleanup.',
+        code: 'TRY\n    Fetch response\nEXCEPT\n    Log    Failed\nFINALLY\n    Close connection\nEND',
+      },
+      {
+        term: 'Groups',
+        detail: 'GROUP collects related steps under an optional name and closes with END.',
+        code: 'GROUP    Submit credentials\n    Input Username    demo\nEND',
+      },
+      {
         term: 'Run suites',
         detail: 'Pass a file or directory to robot; use --include and --exclude to filter tags.',
         code: 'robot tests/\nrobot --include smoke tests/',
+      },
+      {
+        term: 'Validate and rerun',
+        detail:
+          '--dryrun validates data without running library keywords. --rerunfailed selects failures from an earlier output file.',
+        code: 'robot --dryrun tests/\nrobot --rerunfailed output.xml tests/',
+      },
+      {
+        term: 'Output location',
+        detail: '--outputdir (or -d) selects where generated output files are created.',
+        code: 'robot --outputdir results tests/',
       },
     ],
   },

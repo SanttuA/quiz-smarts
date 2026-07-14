@@ -56,6 +56,39 @@ export function prepareQuestion(question: QuizQuestion, random: RandomSource): Q
 export function prepareAttempt(
   questions: readonly QuizQuestion[],
   random: RandomSource = Math.random,
+  questionCount: number = questions.length,
 ): QuizQuestion[] {
-  return fisherYates(questions, random).map((question) => prepareQuestion(question, random))
+  const targetCount = Math.max(0, Math.min(Math.floor(questionCount), questions.length))
+
+  if (targetCount === questions.length) {
+    return fisherYates(questions, random).map((question) => prepareQuestion(question, random))
+  }
+
+  const questionGroups: QuizQuestion[][] = [
+    questions.filter((question) => question.kind === 'multiple-choice'),
+    questions.filter((question) => question.kind === 'text-blank'),
+    questions.filter((question) => question.kind === 'drag-blank'),
+    questions.filter((question) => question.kind === 'sequence'),
+  ]
+  const groups = fisherYates(
+    questionGroups.filter((group) => group.length > 0),
+    random,
+  ).map((group) => fisherYates(group, random))
+  const selected: QuizQuestion[] = []
+
+  while (selected.length < targetCount) {
+    let selectedInRound = false
+
+    for (const group of groups) {
+      const question = group.shift()
+      if (!question) continue
+      selected.push(question)
+      selectedInRound = true
+      if (selected.length === targetCount) break
+    }
+
+    if (!selectedInRound) break
+  }
+
+  return fisherYates(selected, random).map((question) => prepareQuestion(question, random))
 }

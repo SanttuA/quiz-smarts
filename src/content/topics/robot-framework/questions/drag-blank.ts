@@ -104,4 +104,106 @@ export const dragBlankQuestions = [
       '[Template] names the keyword that each following data row invokes, making repeated input combinations concise.',
     reference: robotGuideReference,
   },
+  {
+    id: 'robot-framework.drag.resource-import',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Complete the Settings section resource-file import.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: '*** Settings ***\n',
+      after: '    shared.resource',
+    },
+    options: [
+      { id: 'resource', label: 'Resource', code: 'Resource' },
+      { id: 'library', label: 'Library', code: 'Library' },
+      { id: 'variables', label: 'Variables', code: 'Variables' },
+    ],
+    correctOptionId: 'resource',
+    explanation:
+      'Resource imports a resource file containing reusable variables and user keywords. Library and Variables load different kinds of extensions.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.drag.variable-file-import',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Complete the Settings section variable-file import.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: '*** Settings ***\n',
+      after: '    config.py',
+    },
+    options: [
+      { id: 'variables', label: 'Variables', code: 'Variables' },
+      { id: 'resource', label: 'Resource', code: 'Resource' },
+      { id: 'library', label: 'Library', code: 'Library' },
+    ],
+    correctOptionId: 'variables',
+    explanation:
+      'Variables imports a variable file, which can create values dynamically using Python or another supported variable-file format.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.drag.test-timeout',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Add a 30-second timeout to this individual test case.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: 'Slow operation\n    ',
+      after: '    30 seconds',
+    },
+    options: [
+      { id: 'timeout', label: '[Timeout]', code: '[Timeout]' },
+      { id: 'setup', label: '[Setup]', code: '[Setup]' },
+      { id: 'documentation', label: '[Documentation]', code: '[Documentation]' },
+      { id: 'tags', label: '[Tags]', code: '[Tags]' },
+    ],
+    correctOptionId: 'timeout',
+    explanation:
+      '[Timeout] limits how long an individual test case may execute. Robot Framework fails the test when its timeout expires.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.drag.exclude-tag',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Complete the command so tests tagged slow are excluded.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: 'robot ',
+      after: ' slow tests/',
+    },
+    options: [
+      { id: 'exclude', label: '--exclude', code: '--exclude' },
+      { id: 'include', label: '--include', code: '--include' },
+      { id: 'settag', label: '--settag', code: '--settag' },
+      { id: 'suite', label: '--suite', code: '--suite' },
+    ],
+    correctOptionId: 'exclude',
+    explanation:
+      '--exclude removes tests with a matching tag from execution. Its short form is -e.',
+    reference: robotGuideReference,
+  },
+  {
+    id: 'robot-framework.drag.continue-loop',
+    topicId: 'robot-framework',
+    kind: 'drag-blank',
+    prompt: 'Skip the remainder of the current loop iteration when the item is empty.',
+    instruction: 'Drag an option to the blank, or select it directly.',
+    template: {
+      before: 'IF    not ${item}\n        ',
+      after: '\n    END',
+    },
+    options: [
+      { id: 'continue', label: 'CONTINUE', code: 'CONTINUE' },
+      { id: 'break', label: 'BREAK', code: 'BREAK' },
+      { id: 'return', label: 'RETURN', code: 'RETURN' },
+    ],
+    correctOptionId: 'continue',
+    explanation:
+      'CONTINUE stops the current FOR or WHILE iteration and proceeds with the next one. BREAK would exit the loop completely.',
+    reference: robotGuideReference,
+  },
 ] as const satisfies readonly DragBlankQuestion[]

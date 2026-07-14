@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import robotFrameworkTopic from '.'
 
 describe('Robot Framework topic content', () => {
-  it('contains five valid questions of each supported kind', () => {
-    expect(robotFrameworkTopic.questions).toHaveLength(20)
+  it('contains ten valid questions of each supported kind', () => {
+    expect(robotFrameworkTopic.questions).toHaveLength(40)
     for (const kind of ['multiple-choice', 'text-blank', 'drag-blank', 'sequence'] as const) {
       expect(
         robotFrameworkTopic.questions.filter((question) => question.kind === kind),
-      ).toHaveLength(5)
+      ).toHaveLength(10)
     }
   })
 
@@ -39,6 +39,8 @@ describe('Robot Framework topic content', () => {
 
   it('keeps metadata and reference material in sync', () => {
     expect(robotFrameworkTopic.questionCount).toBe(robotFrameworkTopic.questions.length)
+    expect(robotFrameworkTopic.subsetQuestionCount).toBeGreaterThan(0)
+    expect(robotFrameworkTopic.subsetQuestionCount).toBeLessThan(robotFrameworkTopic.questionCount)
     expect(robotFrameworkTopic.cheatsheet).toHaveLength(6)
     expect(robotFrameworkTopic.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })

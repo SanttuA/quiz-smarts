@@ -4,9 +4,10 @@ import type { QuizQuestion } from '../src/content/types'
 import { createSeededRandom } from '../src/features/quiz/model/random'
 import { prepareAttempt } from '../src/features/quiz/model/shuffle'
 
-const preparedQuestions = prepareAttempt(
+const preparedSubsetQuestions = prepareAttempt(
   robotFrameworkTopic.questions,
   createSeededRandom('quiz-smarts-e2e'),
+  robotFrameworkTopic.subsetQuestionCount,
 )
 
 async function answerCorrectly(page: Page, question: QuizQuestion) {
@@ -58,34 +59,37 @@ async function answerCorrectly(page: Page, question: QuizQuestion) {
 }
 
 test('completes a seeded shuffled quiz and persists only the best score', async ({ page }) => {
-  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz')
+  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
   await expect(page.getByRole('link', { name: /cheatsheet/i })).toHaveCount(0)
 
-  for (const [index, question] of preparedQuestions.entries()) {
+  for (const [index, question] of preparedSubsetQuestions.entries()) {
     await answerCorrectly(page, question)
     await page
       .getByRole('button', {
-        name: index === preparedQuestions.length - 1 ? 'See results' : 'Next question',
+        name: index === preparedSubsetQuestions.length - 1 ? 'See results' : 'Next question',
       })
       .click()
   }
 
   await expect(page.getByRole('heading', { name: 'Strong signal.' })).toBeVisible()
   await expect(page.getByLabel('Score 20 out of 20')).toBeVisible()
-  await expect(page.getByText('◆ Best score: 20/20')).toBeVisible()
+  await expect(page.getByText('◆ Best quick score: 20/20')).toBeVisible()
 
   const storedScore = await page.evaluate(() =>
-    window.localStorage.getItem('quiz-smarts:best-scores:v1'),
+    window.localStorage.getItem('quiz-smarts:best-scores:v2'),
   )
   expect(storedScore).toContain('"correct":20')
 
   await page.reload()
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Strong signal.' })).toHaveCount(0)
-  expect(await page.evaluate(() => window.localStorage.getItem('quiz-smarts:best-scores:v1'))).toBe(
+  expect(await page.evaluate(() => window.localStorage.getItem('quiz-smarts:best-scores:v2'))).toBe(
     storedScore,
   )
+
+  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=all')
+  await expect(page.getByText('Question 1 / 40')).toBeVisible()
 })
 
 test('serves landing and topic routes from the GitHub Pages base path', async ({ page }) => {
@@ -117,17 +121,19 @@ test('uses the OS theme until a persistent preference is selected', async ({ pag
 })
 
 test('reorders a sequence with the keyboard without submitting it', async ({ page }) => {
-  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz')
+  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
 
-  const sequenceIndex = preparedQuestions.findIndex((question) => question.kind === 'sequence')
+  const sequenceIndex = preparedSubsetQuestions.findIndex(
+    (question) => question.kind === 'sequence',
+  )
   expect(sequenceIndex).toBeGreaterThanOrEqual(0)
 
-  for (const question of preparedQuestions.slice(0, sequenceIndex)) {
+  for (const question of preparedSubsetQuestions.slice(0, sequenceIndex)) {
     await answerCorrectly(page, question)
     await page.getByRole('button', { name: 'Next question' }).click()
   }
 
-  const sequenceQuestion = preparedQuestions[sequenceIndex]!
+  const sequenceQuestion = preparedSubsetQuestions[sequenceIndex]!
   expect(sequenceQuestion.kind).toBe('sequence')
   await expect(page.getByRole('heading', { name: sequenceQuestion.prompt })).toBeVisible()
 
