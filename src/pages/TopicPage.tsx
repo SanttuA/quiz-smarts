@@ -59,7 +59,7 @@ export function TopicPage({ topic }: TopicPageProps) {
         <div className={styles.sheetHeading}>
           <div>
             <span className={styles.kicker}>Quick reference</span>
-            <h2 id="cheatsheet-title">Robot Framework cheatsheet</h2>
+            <h2 id="cheatsheet-title">{topic.title} cheatsheet</h2>
           </div>
           <div className={styles.reviewed}>
             <span>Last reviewed</span>

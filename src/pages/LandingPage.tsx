@@ -5,9 +5,6 @@ import { estimateQuizMinutes } from '../features/quiz/model/duration'
 import styles from './LandingPage.module.css'
 
 export function LandingPage() {
-  const topic = topicCatalog[0]
-  const subsetMinutes = estimateQuizMinutes(topic, topic.subsetQuestionCount)
-
   return (
     <>
       <section className={styles.hero}>
@@ -30,7 +27,7 @@ export function LandingPage() {
             <span />
             <span />
             <span />
-            <code>knowledge-check.robot</code>
+            <code>knowledge-check.quiz</code>
           </div>
           <div className={styles.terminalBody}>
             <code>
@@ -55,51 +52,78 @@ export function LandingPage() {
             <span className={styles.kicker}>Choose your track</span>
             <h2 id="topics-title">Available topics</h2>
           </div>
-          <span className={styles.topicCount}>01 topic</span>
+          <span className={styles.topicCount}>
+            {String(topicCatalog.length).padStart(2, '0')} topics
+          </span>
         </div>
 
-        <article className={styles.topicCard}>
-          <div className={styles.topicNumber} aria-hidden="true">
-            01
-          </div>
-          <div className={styles.topicIcon} aria-hidden="true">
-            <span>RF</span>
-            <i />
-          </div>
-          <div className={styles.topicCopy}>
-            <span className={styles.topicEyebrow}>{topic.eyebrow}</span>
-            <h3>{topic.title}</h3>
-            <p>{topic.description}</p>
-            <div className={styles.metadata}>
-              <span>{topic.questionCount} questions</span>
-              <span>Quick ~{subsetMinutes} min</span>
-              <span>Full ~{topic.estimatedMinutes} min</span>
-              <span>{topic.difficulty}</span>
-            </div>
-            <BestScoreBadge topic={topic} />
-          </div>
-          <div className={styles.actions}>
-            <ButtonLink to="/topics/$topicId" params={{ topicId: topic.slug }}>
-              Open topic <span aria-hidden="true">→</span>
-            </ButtonLink>
-            <ButtonLink
-              to="/topics/$topicId/quiz"
-              params={{ topicId: topic.slug }}
-              variant="secondary"
-              search={{ mode: 'subset' }}
-            >
-              Quick quiz · {topic.subsetQuestionCount}
-            </ButtonLink>
-            <ButtonLink
-              to="/topics/$topicId/quiz"
-              params={{ topicId: topic.slug }}
-              variant="secondary"
-              search={{ mode: 'all' }}
-            >
-              All questions · {topic.questionCount}
-            </ButtonLink>
-          </div>
-        </article>
+        <div className={styles.topicList}>
+          {topicCatalog.map((topic, index) => {
+            const subsetMinutes = estimateQuizMinutes(topic, topic.subsetQuestionCount)
+            const topicNumber = String(index + 1).padStart(2, '0')
+            const initials = topic.title
+              .split(/\s+/)
+              .map((word) => word[0])
+              .join('')
+              .slice(0, 2)
+              .toUpperCase()
+
+            return (
+              <article
+                key={topic.id}
+                className={styles.topicCard}
+                aria-labelledby={`${topic.id}-title`}
+              >
+                <div className={styles.topicNumber} aria-hidden="true">
+                  {topicNumber}
+                </div>
+                <div className={styles.topicIcon} aria-hidden="true">
+                  <span>{initials}</span>
+                  <i />
+                </div>
+                <div className={styles.topicCopy}>
+                  <span className={styles.topicEyebrow}>{topic.eyebrow}</span>
+                  <h3 id={`${topic.id}-title`}>{topic.title}</h3>
+                  <p>{topic.description}</p>
+                  <div className={styles.metadata}>
+                    <span>{topic.questionCount} questions</span>
+                    <span>Quick ~{subsetMinutes} min</span>
+                    <span>Full ~{topic.estimatedMinutes} min</span>
+                    <span>{topic.difficulty}</span>
+                  </div>
+                  <BestScoreBadge topic={topic} />
+                </div>
+                <div className={styles.actions}>
+                  <ButtonLink
+                    to="/topics/$topicId"
+                    params={{ topicId: topic.slug }}
+                    ariaLabel={`Open ${topic.title} topic`}
+                  >
+                    Open topic <span aria-hidden="true">→</span>
+                  </ButtonLink>
+                  <ButtonLink
+                    to="/topics/$topicId/quiz"
+                    params={{ topicId: topic.slug }}
+                    variant="secondary"
+                    search={{ mode: 'subset' }}
+                    ariaLabel={`Start ${topic.title} quick quiz, ${topic.subsetQuestionCount} questions`}
+                  >
+                    Quick quiz · {topic.subsetQuestionCount}
+                  </ButtonLink>
+                  <ButtonLink
+                    to="/topics/$topicId/quiz"
+                    params={{ topicId: topic.slug }}
+                    variant="secondary"
+                    search={{ mode: 'all' }}
+                    ariaLabel={`Start ${topic.title} full quiz, ${topic.questionCount} questions`}
+                  >
+                    All questions · {topic.questionCount}
+                  </ButtonLink>
+                </div>
+              </article>
+            )
+          })}
+        </div>
       </section>
     </>
   )

@@ -178,6 +178,11 @@
   font-size: 0.78rem;
 }
 
+.topicList {
+  display: grid;
+  gap: 1.5rem;
+}
+
 .topicCard {
   position: relative;
   display: grid;

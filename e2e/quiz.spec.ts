@@ -20,9 +20,7 @@ async function answerCorrectly(page: Page, question: QuizQuestion) {
       break
     }
     case 'text-blank':
-      await page
-        .getByRole('textbox', { name: 'Missing Robot Framework syntax' })
-        .fill(question.canonicalAnswer)
+      await page.getByRole('textbox', { name: 'Missing answer' }).fill(question.canonicalAnswer)
       break
     case 'drag-blank': {
       const answer = question.options.find((option) => option.id === question.correctOptionId)!
@@ -96,9 +94,24 @@ test('serves landing and topic routes from the GitHub Pages base path', async ({
   await page.goto('/quiz-smarts/#/')
   await expect(page.getByRole('heading', { name: 'Available topics' })).toBeVisible()
 
-  await page.getByRole('link', { name: /Open topic/ }).click()
+  await page.getByRole('link', { name: 'Open Robot Framework topic' }).click()
   await expect(page).toHaveURL(/#\/topics\/robot-framework$/)
   await expect(page.getByRole('heading', { name: 'Robot Framework cheatsheet' })).toBeVisible()
+})
+
+test('opens the Accessibility Testing topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Accessibility Testing' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Accessibility Testing topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/accessibility-testing$/)
+  await expect(
+    page.getByRole('heading', { name: 'Accessibility Testing cheatsheet' }),
+  ).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/accessibility-testing\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
 test('uses the OS theme until a persistent preference is selected', async ({ page }) => {

@@ -22,7 +22,9 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    await user.click(screen.getByRole('link', { name: /Open topic/ }))
+    expect(screen.getByText('02 topics')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
+    await user.click(screen.getByRole('link', { name: 'Open Robot Framework topic' }))
 
     expect(
       await screen.findByRole('heading', { name: 'Robot Framework cheatsheet' }),
@@ -45,8 +47,27 @@ describe('routed application', () => {
     const user = userEvent.setup()
     renderRoute('/')
 
-    await user.click(await screen.findByRole('link', { name: 'Quick quiz · 20' }))
+    await user.click(
+      await screen.findByRole('link', {
+        name: 'Start Robot Framework quick quiz, 20 questions',
+      }),
+    )
 
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Accessibility Testing topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/accessibility-testing')
+
+    expect(
+      await screen.findByRole('heading', { name: 'Accessibility Testing cheatsheet' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }),
+    ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
   })
 
