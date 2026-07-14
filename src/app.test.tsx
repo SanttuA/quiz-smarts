@@ -22,9 +22,10 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('03 topics')).toBeInTheDocument()
+    expect(screen.getByText('04 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Open Robot Framework topic' }))
 
     expect(
@@ -78,6 +79,19 @@ describe('routed application', () => {
 
     expect(await screen.findByRole('heading', { name: 'Python cheatsheet' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /The Python Tutorial/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the TypeScript topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/typescript')
+
+    expect(
+      await screen.findByRole('heading', { name: 'TypeScript cheatsheet' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /The TypeScript Handbook/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
