@@ -1,10 +1,12 @@
 import { topicCatalog } from '../content/registry'
 import { BestScoreBadge } from '../components/score/BestScoreBadge'
 import { ButtonLink } from '../components/button/ButtonLink'
+import { estimateQuizMinutes } from '../features/quiz/model/duration'
 import styles from './LandingPage.module.css'
 
 export function LandingPage() {
   const topic = topicCatalog[0]
+  const subsetMinutes = estimateQuizMinutes(topic, topic.subsetQuestionCount)
 
   return (
     <>
@@ -70,7 +72,8 @@ export function LandingPage() {
             <p>{topic.description}</p>
             <div className={styles.metadata}>
               <span>{topic.questionCount} questions</span>
-              <span>~{topic.estimatedMinutes} min</span>
+              <span>Quick ~{subsetMinutes} min</span>
+              <span>Full ~{topic.estimatedMinutes} min</span>
               <span>{topic.difficulty}</span>
             </div>
             <BestScoreBadge topic={topic} />
@@ -83,8 +86,17 @@ export function LandingPage() {
               to="/topics/$topicId/quiz"
               params={{ topicId: topic.slug }}
               variant="secondary"
+              search={{ mode: 'subset' }}
             >
-              Start quiz
+              Quick quiz · {topic.subsetQuestionCount}
+            </ButtonLink>
+            <ButtonLink
+              to="/topics/$topicId/quiz"
+              params={{ topicId: topic.slug }}
+              variant="secondary"
+              search={{ mode: 'all' }}
+            >
+              All questions · {topic.questionCount}
             </ButtonLink>
           </div>
         </article>

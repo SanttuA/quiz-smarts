@@ -33,6 +33,9 @@ corepack pnpm build
 - `src/features/quiz` contains the topic-independent state machine, evaluators, shuffling, and interaction components.
 - `src/routes` contains small file-based TanStack Router entrypoints.
 
+Each topic configures its full question count and one shorter subset size. Short attempts sample
+as evenly as possible across the question styles available in that topic.
+
 To add a topic, create a self-contained topic module, give every question a globally unique ID, add a lightweight metadata entry and lazy loader to the registry, and extend the content-integrity tests. The quiz engine does not contain Robot Framework-specific behavior.
 
 ## GitHub Pages

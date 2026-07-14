@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from 'react'
-import type { TopicDefinition } from '../../../content/types'
+import type { QuizMode, TopicDefinition } from '../../../content/types'
 import { getBestScore, saveBestScore, type BestScore } from '../../../lib/best-score'
 import { formatCorrectAnswer, formatResponse } from '../model/evaluate'
 import { getAttemptRandom } from '../model/random'
@@ -11,6 +11,7 @@ import styles from './QuizRunner.module.css'
 
 interface QuizRunnerProps {
   topic: TopicDefinition
+  mode: QuizMode
   onExit: () => void
   onOpenCheatsheet: () => void
 }
@@ -22,13 +23,17 @@ const questionKindLabels = {
   sequence: 'Order the logic',
 } as const
 
-export function QuizRunner({ topic, onExit, onOpenCheatsheet }: QuizRunnerProps) {
+export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunnerProps) {
   const [random] = useState(() => getAttemptRandom())
+  const attemptQuestionCount =
+    mode === 'subset' ? topic.subsetQuestionCount : topic.questions.length
   const [state, dispatch] = useReducer(quizReducer, topic.questions, (questions) =>
-    createQuizState(prepareAttempt(questions, random)),
+    createQuizState(prepareAttempt(questions, random, attemptQuestionCount)),
   )
   const [draft, setDraft] = useState<{ questionId: string; response: QuizResponse }>()
-  const [bestScore, setBestScore] = useState<BestScore | undefined>(() => getBestScore(topic))
+  const [bestScore, setBestScore] = useState<BestScore | undefined>(() =>
+    getBestScore(topic, attemptQuestionCount),
+  )
   const score = getScore(state)
   const currentQuestion = state.questions[state.currentIndex]
   const pendingResponse =
@@ -48,9 +53,9 @@ export function QuizRunner({ topic, onExit, onOpenCheatsheet }: QuizRunnerProps)
 
   useEffect(() => {
     if (state.phase === 'complete') {
-      setBestScore(saveBestScore(topic, score))
+      setBestScore(saveBestScore(topic, score, state.questions.length))
     }
-  }, [score, state.phase, topic])
+  }, [score, state.phase, state.questions.length, topic])
 
   if (!currentQuestion && state.phase !== 'complete') {
     return <p role="alert">This topic does not contain any questions yet.</p>
@@ -68,7 +73,7 @@ export function QuizRunner({ topic, onExit, onOpenCheatsheet }: QuizRunnerProps)
   }
 
   function handleRestart() {
-    const questions = prepareAttempt(topic.questions, random)
+    const questions = prepareAttempt(topic.questions, random, attemptQuestionCount)
     dispatch({ type: 'restart', questions })
     setDraft(undefined)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -112,7 +117,8 @@ export function QuizRunner({ topic, onExit, onOpenCheatsheet }: QuizRunnerProps)
         </p>
         {bestScore && (
           <p className={styles.bestResult}>
-            ◆ Best score: {bestScore.correct}/{bestScore.total}
+            ◆ Best {mode === 'subset' ? 'quick' : 'full'} score: {bestScore.correct}/
+            {bestScore.total}
           </p>
         )}
         <div className={styles.resultActions}>
