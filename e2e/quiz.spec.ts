@@ -162,6 +162,22 @@ test('opens the Playwright topic and starts its quick quiz', async ({ page }) =>
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the JMeter topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Load Testing with JMeter' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Load Testing with JMeter topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/jmeter$/)
+  await expect(
+    page.getByRole('heading', { name: 'Load Testing with JMeter cheatsheet' }),
+  ).toBeVisible()
+  await expect(page.getByRole('link', { name: /Apache JMeter: Getting Started/ })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/jmeter\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('keeps multiline blank templates in source order', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/python/quiz?mode=all')
 
