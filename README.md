@@ -1,6 +1,6 @@
 # Quiz Smarts
 
-A frontend-only technical quiz platform built with React, TypeScript, TanStack Router, and Vite. Its topics teach Robot Framework, web accessibility testing, core Python, core TypeScript, and Playwright through concise cheatsheets and four interactive question styles.
+A frontend-only technical quiz platform built with React, TypeScript, TanStack Router, and Vite. Its topics teach Robot Framework, web accessibility testing, core Python, core TypeScript, Playwright, and Selenium through concise cheatsheets and four interactive question styles.
 
 ## Local development
 
