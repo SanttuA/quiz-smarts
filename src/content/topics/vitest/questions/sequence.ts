@@ -7,6 +7,7 @@ import {
   vitestCoverageReference,
   vitestHooksReference,
   vitestMockFunctionsReference,
+  vitestMockingReference,
   vitestTimersReference,
   vitestWritingTestsReference,
 } from './shared'
@@ -150,26 +151,26 @@ export const sequenceQuestions = [
     reference: vitestMockFunctionsReference,
   },
   {
-    id: 'vitest.sequence-window-spy',
+    id: 'vitest.sequence-match-media-global',
     topicId: 'vitest',
     kind: 'sequence',
-    prompt: 'Arrange a test that controls and restores window.matchMedia.',
+    prompt: 'Arrange a test that stubs and restores window.matchMedia.',
     instruction:
-      'Create the spy, configure its result, render, assert the theme, and restore the method.',
+      'Create a matchMedia mock, stub the missing global, render, assert the theme, and restore globals.',
     items: [
-      { id: 'spy', code: "const matchMedia = vi.spyOn(window, 'matchMedia')" },
       {
-        id: 'result',
-        code: 'matchMedia.mockReturnValue({ matches: true } as MediaQueryList)',
+        id: 'mock',
+        code: "const matchMedia = vi.fn(() => ({\n  matches: true,\n  media: '(prefers-color-scheme: dark)',\n  onchange: null,\n  addListener: vi.fn(),\n  removeListener: vi.fn(),\n  addEventListener: vi.fn(),\n  removeEventListener: vi.fn(),\n  dispatchEvent: vi.fn(),\n}))",
       },
+      { id: 'stub', code: "vi.stubGlobal('matchMedia', matchMedia)" },
       { id: 'render', code: 'render(<ThemeBanner />)' },
       { id: 'assert', code: "expect(screen.getByText('Dark')).toBeInTheDocument()" },
-      { id: 'restore', code: 'matchMedia.mockRestore()' },
+      { id: 'restore', code: 'vi.unstubAllGlobals()' },
     ],
-    correctOrder: ['spy', 'result', 'render', 'assert', 'restore'],
+    correctOrder: ['mock', 'stub', 'render', 'assert', 'restore'],
     explanation:
-      'The spy must be configured before rendering reads matchMedia, and restoring it after the assertion prevents the replacement from leaking.',
-    reference: vitestMockFunctionsReference,
+      'Fresh jsdom environments do not provide matchMedia. stubGlobal installs the mock on window, and unstubAllGlobals restores the original value or absence afterward.',
+    reference: vitestMockingReference,
   },
   {
     id: 'vitest.sequence-fake-timer',
