@@ -22,8 +22,9 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('08 topics')).toBeInTheDocument()
+    expect(screen.getByText('09 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Basic Data Analysis' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Vitest' })).toBeInTheDocument()
@@ -71,6 +72,21 @@ describe('routed application', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }),
+    ).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Basic Data Analysis topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/data-analysis')
+
+    expect(
+      await screen.findByRole('heading', { name: 'Basic Data Analysis cheatsheet' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /NIST\/SEMATECH: Exploratory Data Analysis/ }),
     ).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))

@@ -121,6 +121,22 @@ test('opens the Accessibility Testing topic and starts its quick quiz', async ({
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the Basic Data Analysis topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Basic Data Analysis' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Basic Data Analysis topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/data-analysis$/)
+  await expect(page.getByRole('heading', { name: 'Basic Data Analysis cheatsheet' })).toBeVisible()
+  await expect(
+    page.getByRole('link', { name: /NIST\/SEMATECH: Exploratory Data Analysis/ }),
+  ).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/data-analysis\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('opens the Python topic and starts its quick quiz', async ({ page }) => {
   await page.goto('/quiz-smarts/#/')
   await expect(page.getByRole('heading', { name: 'Python' })).toBeVisible()

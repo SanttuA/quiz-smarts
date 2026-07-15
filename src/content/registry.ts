@@ -1,4 +1,5 @@
 import { accessibilityTestingMetadata } from './topics/accessibility-testing/metadata'
+import { dataAnalysisMetadata } from './topics/data-analysis/metadata'
 import { jmeterMetadata } from './topics/jmeter/metadata'
 import { playwrightMetadata } from './topics/playwright/metadata'
 import { pythonMetadata } from './topics/python/metadata'
@@ -11,6 +12,7 @@ import type { TopicDefinition, TopicMetadata } from './types'
 export const topicCatalog = [
   robotFrameworkMetadata,
   accessibilityTestingMetadata,
+  dataAnalysisMetadata,
   pythonMetadata,
   typescriptMetadata,
   vitestMetadata,
@@ -22,6 +24,7 @@ export const topicCatalog = [
 const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> = {
   'robot-framework': () => import('./topics/robot-framework'),
   'accessibility-testing': () => import('./topics/accessibility-testing'),
+  'data-analysis': () => import('./topics/data-analysis'),
   python: () => import('./topics/python'),
   typescript: () => import('./topics/typescript'),
   vitest: () => import('./topics/vitest'),
