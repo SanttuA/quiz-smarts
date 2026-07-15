@@ -22,10 +22,11 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('07 topics')).toBeInTheDocument()
+    expect(screen.getByText('08 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Vitest' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Playwright' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Selenium' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Load Testing with JMeter' })).toBeInTheDocument()
@@ -108,6 +109,17 @@ describe('routed application', () => {
       await screen.findByRole('heading', { name: 'Playwright cheatsheet' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Playwright: Writing tests/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Vitest topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/vitest')
+
+    expect(await screen.findByRole('heading', { name: 'Vitest cheatsheet' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Vitest: Getting Started/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
