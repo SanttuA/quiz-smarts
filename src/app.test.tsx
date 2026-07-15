@@ -22,11 +22,12 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('05 topics')).toBeInTheDocument()
+    expect(screen.getByText('06 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Playwright' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Selenium' })).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Open Robot Framework topic' }))
 
     expect(
@@ -106,6 +107,19 @@ describe('routed application', () => {
       await screen.findByRole('heading', { name: 'Playwright cheatsheet' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Playwright: Writing tests/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Selenium topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/selenium')
+
+    expect(await screen.findByRole('heading', { name: 'Selenium cheatsheet' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /Selenium: Write your first script/ }),
+    ).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
