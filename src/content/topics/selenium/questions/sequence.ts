@@ -92,8 +92,14 @@ export const sequenceQuestions = [
       { id: 'assert', code: "assert driver.current_url.endswith('/dashboard')" },
     ],
     correctOrder: ['get', 'email', 'password', 'submit', 'wait', 'condition', 'assert'],
+    acceptedOrders: [
+      ['wait', 'get', 'email', 'password', 'submit', 'condition', 'assert'],
+      ['get', 'wait', 'email', 'password', 'submit', 'condition', 'assert'],
+      ['get', 'email', 'wait', 'password', 'submit', 'condition', 'assert'],
+      ['get', 'email', 'password', 'wait', 'submit', 'condition', 'assert'],
+    ],
     explanation:
-      'Credentials are entered before submission, then an explicit URL condition synchronizes the final assertion with navigation.',
+      'The wait may be initialized at any point before it is used; its URL condition must run after submission and before the final assertion.',
     reference: seleniumWaitsReference,
   },
   {
