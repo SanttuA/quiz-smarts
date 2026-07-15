@@ -1,4 +1,5 @@
 import { accessibilityTestingMetadata } from './topics/accessibility-testing/metadata'
+import { jmeterMetadata } from './topics/jmeter/metadata'
 import { playwrightMetadata } from './topics/playwright/metadata'
 import { pythonMetadata } from './topics/python/metadata'
 import { robotFrameworkMetadata } from './topics/robot-framework/metadata'
@@ -13,6 +14,7 @@ export const topicCatalog = [
   typescriptMetadata,
   playwrightMetadata,
   seleniumMetadata,
+  jmeterMetadata,
 ] as const satisfies readonly TopicMetadata[]
 
 const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> = {
@@ -22,6 +24,7 @@ const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> 
   typescript: () => import('./topics/typescript'),
   playwright: () => import('./topics/playwright'),
   selenium: () => import('./topics/selenium'),
+  jmeter: () => import('./topics/jmeter'),
 }
 
 export function getTopicMetadata(slug: string): TopicMetadata | undefined {
