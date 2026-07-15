@@ -1,4 +1,5 @@
 import { accessibilityTestingMetadata } from './topics/accessibility-testing/metadata'
+import { playwrightMetadata } from './topics/playwright/metadata'
 import { pythonMetadata } from './topics/python/metadata'
 import { robotFrameworkMetadata } from './topics/robot-framework/metadata'
 import { typescriptMetadata } from './topics/typescript/metadata'
@@ -9,6 +10,7 @@ export const topicCatalog = [
   accessibilityTestingMetadata,
   pythonMetadata,
   typescriptMetadata,
+  playwrightMetadata,
 ] as const satisfies readonly TopicMetadata[]
 
 const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> = {
@@ -16,6 +18,7 @@ const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> 
   'accessibility-testing': () => import('./topics/accessibility-testing'),
   python: () => import('./topics/python'),
   typescript: () => import('./topics/typescript'),
+  playwright: () => import('./topics/playwright'),
 }
 
 export function getTopicMetadata(slug: string): TopicMetadata | undefined {

@@ -1,0 +1,150 @@
+import type { TextBlankQuestion } from '../../../types'
+import {
+  playwrightAssertionsReference,
+  playwrightConfigurationReference,
+  playwrightFixturesReference,
+  playwrightLocatorsReference,
+  playwrightProjectsReference,
+  playwrightRunningTestsReference,
+  playwrightWritingTestsReference,
+} from './shared'
+
+export const textBlankQuestions = [
+  {
+    id: 'playwright.text-expect-import',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the import so the test can make Playwright assertions.',
+    instruction: 'Type the missing named export.',
+    template: { before: 'import { test, ', after: " } from '@playwright/test'" },
+    canonicalAnswer: 'expect',
+    acceptedAnswers: ['expect'],
+    explanation:
+      'Playwright Test exports expect alongside test, providing both web-first and generic assertion matchers.',
+    reference: playwrightWritingTestsReference,
+  },
+  {
+    id: 'playwright.text-goto',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the awaited method that navigates the page to a URL.',
+    instruction: 'Type the missing Page method name.',
+    template: { before: 'await page.', after: "('/dashboard')" },
+    canonicalAnswer: 'goto',
+    acceptedAnswers: ['goto'],
+    explanation:
+      'page.goto initiates navigation and waits for the configured load state before its promise resolves.',
+    reference: playwrightWritingTestsReference,
+  },
+  {
+    id: 'playwright.text-role-locator',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the semantic locator for a button with the accessible name Save.',
+    instruction: 'Type the missing locator method.',
+    template: { before: 'page.', after: "('button', { name: 'Save' })" },
+    canonicalAnswer: 'getByRole',
+    acceptedAnswers: ['getByRole'],
+    explanation:
+      'getByRole locates an element through its accessibility role and optionally narrows it by accessible name.',
+    reference: playwrightLocatorsReference,
+  },
+  {
+    id: 'playwright.text-fill-action',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the action that enters an email address in the labeled field.',
+    instruction: 'Type the missing Locator method.',
+    template: { before: "await page.getByLabel('Email').", after: "('ada@example.com')" },
+    canonicalAnswer: 'fill',
+    acceptedAnswers: ['fill'],
+    explanation:
+      'locator.fill focuses an editable control and replaces its current value with the supplied text.',
+    reference: playwrightLocatorsReference,
+  },
+  {
+    id: 'playwright.text-visible-assertion',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the web-first assertion that waits for the status to be visible.',
+    instruction: 'Type the missing assertion matcher.',
+    template: { before: "await expect(page.getByText('Saved')).", after: '()' },
+    canonicalAnswer: 'toBeVisible',
+    acceptedAnswers: ['toBeVisible'],
+    explanation:
+      'toBeVisible retries against the locator until the element is visible or the assertion times out.',
+    reference: playwrightAssertionsReference,
+  },
+  {
+    id: 'playwright.text-before-each',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the hook that runs setup before every test in its scope.',
+    instruction: 'Type the missing test hook name.',
+    template: { before: 'test.', after: "(async ({ page }) => {\n  await page.goto('/')\n})" },
+    canonicalAnswer: 'beforeEach',
+    acceptedAnswers: ['beforeEach'],
+    explanation:
+      'beforeEach repeats the setup for each test, allowing scenarios to begin independently from the same page.',
+    reference: playwrightWritingTestsReference,
+  },
+  {
+    id: 'playwright.text-page-fixture',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Request the built-in fixture used to control a browser tab.',
+    instruction: 'Type the missing fixture name.',
+    template: {
+      before: "test('opens help', async ({ ",
+      after: " }) => {\n  await page.goto('/help')\n})",
+    },
+    canonicalAnswer: 'page',
+    acceptedAnswers: ['page'],
+    explanation:
+      'Destructuring page requests the built-in Page fixture, which Playwright creates and tears down for the test.',
+    reference: playwrightFixturesReference,
+  },
+  {
+    id: 'playwright.text-base-url',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt:
+      'Name the use option that lets page.goto accept paths relative to an application origin.',
+    instruction: 'Type the missing configuration property.',
+    template: { before: 'use: {\n  ', after: ": 'http://127.0.0.1:4173'\n}" },
+    canonicalAnswer: 'baseURL',
+    acceptedAnswers: ['baseURL'],
+    explanation:
+      'The baseURL use option supplies the origin used to resolve relative URLs passed to navigation methods.',
+    reference: playwrightConfigurationReference,
+  },
+  {
+    id: 'playwright.text-projects',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the configuration property containing named browser configurations.',
+    instruction: 'Type the missing top-level property name.',
+    template: {
+      before: 'export default defineConfig({\n  ',
+      after: ": [{ name: 'chromium' }]\n})",
+    },
+    canonicalAnswer: 'projects',
+    acceptedAnswers: ['projects'],
+    explanation:
+      'The projects array declares named configurations that can provide different browsers, devices, or options.',
+    reference: playwrightProjectsReference,
+  },
+  {
+    id: 'playwright.text-ui-flag',
+    topicId: 'playwright',
+    kind: 'text-blank',
+    prompt: 'Complete the command that starts Playwright Test in interactive UI Mode.',
+    instruction: 'Type the missing command-line flag including its two leading hyphens.',
+    template: { before: 'pnpm exec playwright test ', after: '' },
+    canonicalAnswer: '--ui',
+    acceptedAnswers: ['--ui'],
+    explanation:
+      'The --ui flag opens Playwright’s interactive runner for filtering, watching, and inspecting test steps.',
+    reference: playwrightRunningTestsReference,
+  },
+] as const satisfies readonly TextBlankQuestion[]
