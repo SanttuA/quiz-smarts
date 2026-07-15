@@ -209,9 +209,12 @@ export const sequenceQuestions = [
     kind: 'sequence',
     prompt: 'Order the workflow for diagnosing a trace recorded on first retry.',
     instruction:
-      'Configure tracing, run the test, let the first retry be captured, then open and inspect its trace.',
+      'Enable retries and first-retry tracing, run the test, then open and inspect the captured trace.',
     items: [
-      { id: 'configure', code: "Configure use: { trace: 'on-first-retry' }" },
+      {
+        id: 'configure',
+        code: "Configure retries: 1 and use: { trace: 'on-first-retry' }",
+      },
       { id: 'run', code: 'Run the Playwright test suite' },
       { id: 'failure', code: 'A test fails its initial attempt' },
       { id: 'retry', code: 'The first retry records trace data' },
@@ -220,7 +223,7 @@ export const sequenceQuestions = [
     ],
     correctOrder: ['configure', 'run', 'failure', 'retry', 'report', 'inspect'],
     explanation:
-      'Tracing must be configured before execution, and a failed first attempt triggers the traced retry that can then be opened from the report.',
+      'Retries and tracing must be configured before execution; a failed first attempt then triggers the traced retry that can be opened from the report.',
     reference: playwrightTraceViewerReference,
   },
   {
