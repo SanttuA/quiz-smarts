@@ -148,6 +148,20 @@ test('opens the TypeScript topic and starts its quick quiz', async ({ page }) =>
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the Playwright topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Playwright' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Playwright topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/playwright$/)
+  await expect(page.getByRole('heading', { name: 'Playwright cheatsheet' })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Playwright: Writing tests/ })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/playwright\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('keeps multiline blank templates in source order', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/python/quiz?mode=all')
 
