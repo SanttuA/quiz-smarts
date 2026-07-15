@@ -249,8 +249,22 @@ export const sequenceQuestions = [
       'use',
       'assert',
     ],
+    acceptedOrders: [
+      [
+        'class',
+        'locator',
+        'init',
+        'driver',
+        'service',
+        'method',
+        'test',
+        'create',
+        'use',
+        'assert',
+      ],
+    ],
     explanation:
-      'The page object encapsulates its locator and interaction before the test uses that service and owns the behavioral assertion.',
+      'The two independent page-object methods may appear in either order, but both must be defined before the test uses them and owns the assertion.',
     reference: seleniumPageObjectsReference,
   },
   {
