@@ -1,4 +1,12 @@
 import type { CheatSheetSection } from '../../types'
+import {
+  robotControlStructuresReference,
+  robotDataSectionsReference,
+  robotParsingReference,
+  robotTestCasesReference,
+  robotUserKeywordsReference,
+  robotVariablesReference,
+} from './questions/shared'
 
 export const robotFrameworkCheatSheet = [
   {
@@ -36,6 +44,7 @@ export const robotFrameworkCheatSheet = [
           'Put directory-level suite settings in an initialization file, typically __init__.robot.',
       },
     ],
+    references: [robotDataSectionsReference],
   },
   {
     id: 'spacing',
@@ -66,6 +75,7 @@ export const robotFrameworkCheatSheet = [
         code: 'Log Many    first    second\n...         third    fourth',
       },
     ],
+    references: [robotParsingReference],
   },
   {
     id: 'variables',
@@ -98,6 +108,7 @@ export const robotFrameworkCheatSheet = [
         code: 'File Should Exist    ${CURDIR}${/}data.json',
       },
     ],
+    references: [robotVariablesReference],
   },
   {
     id: 'keywords',
@@ -121,6 +132,7 @@ export const robotFrameworkCheatSheet = [
         code: 'Resource     shared.resource\nVariables    config.py',
       },
     ],
+    references: [robotUserKeywordsReference],
   },
   {
     id: 'settings',
@@ -155,6 +167,7 @@ export const robotFrameworkCheatSheet = [
         code: '[Setup]       Open application\nCheck dashboard\n[Teardown]    Close application',
       },
     ],
+    references: [robotTestCasesReference],
   },
   {
     id: 'control-flow',
@@ -198,5 +211,6 @@ export const robotFrameworkCheatSheet = [
         code: 'robot --outputdir results tests/',
       },
     ],
+    references: [robotControlStructuresReference],
   },
 ] as const satisfies readonly CheatSheetSection[]

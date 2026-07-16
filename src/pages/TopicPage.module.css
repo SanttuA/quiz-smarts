@@ -197,6 +197,41 @@
   white-space: pre-wrap;
 }
 
+.sectionSources {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+.sectionSources > span {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sectionSources ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sectionSources a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--purple-dark);
+  font-weight: 700;
+  text-underline-offset: 0.2rem;
+}
+
 .sourceNote {
   margin: 1.5rem 0 0;
   color: var(--ink-muted);

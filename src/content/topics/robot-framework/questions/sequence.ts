@@ -1,5 +1,10 @@
 import type { SequenceQuestion } from '../../../types'
-import { robotGuideReference } from './shared'
+import {
+  robotControlStructuresReference,
+  robotResourceFilesReference,
+  robotTestCasesReference,
+  robotUserKeywordsReference,
+} from './shared'
 
 export const sequenceQuestions = [
   {
@@ -17,7 +22,7 @@ export const sequenceQuestions = [
     correctOrder: ['section', 'name', 'assign', 'assert'],
     explanation:
       'The Test Cases header comes first, followed by an unindented test name and its indented keyword calls in execution order.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.sequence.for-loop',
@@ -33,7 +38,7 @@ export const sequenceQuestions = [
     correctOrder: ['for', 'body', 'end'],
     explanation:
       'A native FOR block starts with FOR, contains an indented body, and closes with END.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.sequence.if-else',
@@ -51,7 +56,7 @@ export const sequenceQuestions = [
     correctOrder: ['if', 'if-body', 'else', 'else-body', 'end'],
     explanation:
       'The IF body runs first when the condition is true. ELSE introduces the alternative body, and END closes the whole structure.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.sequence.try-except',
@@ -69,7 +74,7 @@ export const sequenceQuestions = [
     correctOrder: ['try', 'try-body', 'except', 'except-body', 'end'],
     explanation:
       'TRY starts the protected body, EXCEPT introduces the matching error handler, and END closes the structure.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.sequence.test-lifecycle',
@@ -85,7 +90,7 @@ export const sequenceQuestions = [
     correctOrder: ['setup', 'body', 'teardown'],
     explanation:
       'A test setup prepares the test before its body runs. The teardown performs cleanup afterward and runs even when the test fails.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.sequence.while-loop',
@@ -102,7 +107,7 @@ export const sequenceQuestions = [
     correctOrder: ['while', 'log', 'increment', 'end'],
     explanation:
       'The loop checks the condition, logs the current attempt, and then increments it so the next iteration advances. END closes the block.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.sequence.complete-try',
@@ -134,7 +139,7 @@ export const sequenceQuestions = [
     ],
     explanation:
       'TRY comes first, followed by error handlers. ELSE handles the no-error path, FINALLY always performs cleanup, and END closes the structure.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.sequence.user-keyword',
@@ -151,7 +156,7 @@ export const sequenceQuestions = [
     correctOrder: ['name', 'arguments', 'body', 'return'],
     explanation:
       'A user keyword starts with its name, declares arguments before normal body steps, and can finish by returning the computed value.',
-    reference: robotGuideReference,
+    reference: robotUserKeywordsReference,
   },
   {
     id: 'robot-framework.sequence.resource-file',
@@ -169,7 +174,7 @@ export const sequenceQuestions = [
     correctOrder: ['settings', 'library', 'keywords', 'name', 'body'],
     explanation:
       'Imports belong under Settings. Reusable user keyword names and their indented bodies belong under Keywords.',
-    reference: robotGuideReference,
+    reference: robotResourceFilesReference,
   },
   {
     id: 'robot-framework.sequence.group-block',
@@ -187,6 +192,6 @@ export const sequenceQuestions = [
     acceptedOrders: [['group', 'password', 'username', 'end']],
     explanation:
       'GROUP starts the block and END closes it. These independent username and password inputs may run in either order inside the group.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
 ] as const satisfies readonly SequenceQuestion[]

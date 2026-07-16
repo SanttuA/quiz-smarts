@@ -27,3 +27,13 @@ export const wcagFocusReference = {
   label: 'W3C WAI: Understanding Focus Visible',
   url: 'https://www.w3.org/WAI/WCAG22/Understanding/focus-visible',
 } as const
+
+export const wcagKeyboardTrapReference = {
+  label: 'W3C WAI: Understanding No Keyboard Trap',
+  url: 'https://www.w3.org/WAI/WCAG22/Understanding/no-keyboard-trap.html',
+} as const
+
+export const ariaDialogReference = {
+  label: 'W3C WAI-ARIA APG: Modal Dialog Pattern',
+  url: 'https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/',
+} as const

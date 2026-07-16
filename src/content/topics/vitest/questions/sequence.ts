@@ -20,14 +20,16 @@ export const sequenceQuestions = [
     prompt: 'Arrange a complete Vitest test for a sum function.',
     instruction: 'Import the APIs, declare the test, assert the result, and close the callback.',
     items: [
-      { id: 'import', code: "import { expect, it } from 'vitest'" },
+      { id: 'vitest-import', code: "import { expect, it } from 'vitest'" },
+      { id: 'sum-import', code: "import { sum } from './sum'" },
       { id: 'test', code: "it('adds two numbers', () => {" },
       { id: 'assert', code: '  expect(sum(2, 3)).toBe(5)' },
       { id: 'close', code: '})' },
     ],
-    correctOrder: ['import', 'test', 'assert', 'close'],
+    correctOrder: ['vitest-import', 'sum-import', 'test', 'assert', 'close'],
+    acceptedOrders: [['sum-import', 'vitest-import', 'test', 'assert', 'close']],
     explanation:
-      'The Vitest APIs must be imported before the test is declared, and the assertion belongs inside the test callback before it closes.',
+      'The Vitest APIs and production function may be imported in either order. Both imports must precede the test, whose assertion belongs inside the callback.',
     reference: vitestWritingTestsReference,
   },
   {

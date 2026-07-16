@@ -181,7 +181,7 @@ export const dragBlankQuestions = [
     ],
     correctOptionId: 'transaction',
     explanation:
-      'A Transaction Controller groups its child samplers and can create a sample representing the duration of the complete business operation.',
+      'A Transaction Controller groups child samplers and can create a combined sample. By default that sample excludes timer and pre/post-processor duration unless the include-duration option is enabled.',
     reference: jmeterComponentReference,
   },
   {

@@ -48,8 +48,9 @@ export const sequenceQuestions = [
       { id: 'url', code: "await expect(page).toHaveURL('/dashboard')" },
     ],
     correctOrder: ['goto', 'email', 'password', 'submit', 'url'],
+    acceptedOrders: [['goto', 'password', 'email', 'submit', 'url']],
     explanation:
-      'The page must load before its labeled fields are filled, the credentials precede submission, and the URL is checked after the action.',
+      'The page must load before its labeled fields are filled. Email and password may be entered in either order, but both precede submission and the URL check.',
     reference: playwrightLocatorsReference,
   },
   {
@@ -162,7 +163,7 @@ export const sequenceQuestions = [
     id: 'playwright.sequence-browser-projects',
     topicId: 'playwright',
     kind: 'sequence',
-    prompt: 'Arrange a configuration that runs Chromium before Firefox.',
+    prompt: 'Arrange a configuration that lists Chromium before Firefox.',
     instruction:
       'Import helpers, open the configuration and projects array, add both named projects, then close it.',
     items: [
@@ -181,7 +182,7 @@ export const sequenceQuestions = [
     ],
     correctOrder: ['import', 'config', 'projects', 'chromium', 'firefox', 'close'],
     explanation:
-      'The projects array belongs inside defineConfig and contains the requested Chromium entry before the Firefox entry.',
+      'The projects array belongs inside defineConfig and contains the requested Chromium entry before the Firefox entry. Array position does not guarantee project execution order; use project dependencies when one project must run before another.',
     reference: playwrightProjectsReference,
   },
   {

@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { accessibilityTestingQuestions } from '../../../content/topics/accessibility-testing/questions'
 import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
 import { createSeededRandom } from './random'
+import { isValidSequenceOrder } from './sequence-order'
 import { fisherYates, prepareAttempt, prepareQuestion } from './shuffle'
 
 describe('shuffle preparation', () => {
@@ -79,5 +81,22 @@ describe('shuffle preparation', () => {
     const preparedOrder = prepared.items.map((item) => item.id)
     const validOrders = [sequence.correctOrder, ...(sequence.acceptedOrders ?? [])]
     expect(validOrders).not.toContainEqual(preparedOrder)
+  })
+
+  it('does not present a valid partial-order workflow as the shuffled starting state', () => {
+    const sequence = accessibilityTestingQuestions.find(
+      (question) => question.id === 'accessibility-testing.sequence.form-error',
+    )
+    if (!sequence || sequence.kind !== 'sequence') throw new Error('Missing sequence fixture')
+
+    const prepared = prepareQuestion(sequence, () => 0.999999)
+    if (prepared.kind !== 'sequence') throw new Error('Question kind changed')
+
+    expect(
+      isValidSequenceOrder(
+        prepared.items.map((item) => item.id),
+        sequence,
+      ),
+    ).toBe(false)
   })
 })

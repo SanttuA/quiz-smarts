@@ -1,5 +1,11 @@
 import type { DragBlankQuestion } from '../../../types'
-import { robotGuideReference } from './shared'
+import {
+  robotControlStructuresReference,
+  robotExecutionReference,
+  robotLibrariesReference,
+  robotResourceFilesReference,
+  robotTestCasesReference,
+} from './shared'
 
 export const dragBlankQuestions = [
   {
@@ -20,7 +26,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'library',
     explanation:
       'Library imports a test library. Resource imports a resource file, and Variables imports a variable file.',
-    reference: robotGuideReference,
+    reference: robotLibrariesReference,
   },
   {
     id: 'robot-framework.drag.test-tags',
@@ -40,7 +46,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'tags',
     explanation:
       '[Tags] adds metadata to an individual test. Tags can later be used for selection and reporting.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.drag.assertion',
@@ -60,7 +66,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'equal',
     explanation:
       'Should Be Equal fails the test when its two arguments differ. It is provided by the automatically available BuiltIn library.',
-    reference: robotGuideReference,
+    reference: robotLibrariesReference,
   },
   {
     id: 'robot-framework.drag.include-tag',
@@ -81,7 +87,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'include',
     explanation:
       '--include selects tests whose tags match the given pattern. Here it limits execution to tests tagged smoke.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
   {
     id: 'robot-framework.drag.test-template',
@@ -102,7 +108,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'template',
     explanation:
       '[Template] names the keyword that each following data row invokes, making repeated input combinations concise.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.drag.resource-import',
@@ -122,7 +128,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'resource',
     explanation:
       'Resource imports a resource file containing reusable variables and user keywords. Library and Variables load different kinds of extensions.',
-    reference: robotGuideReference,
+    reference: robotResourceFilesReference,
   },
   {
     id: 'robot-framework.drag.variable-file-import',
@@ -142,7 +148,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'variables',
     explanation:
       'Variables imports a variable file, which can create values dynamically using Python or another supported variable-file format.',
-    reference: robotGuideReference,
+    reference: robotResourceFilesReference,
   },
   {
     id: 'robot-framework.drag.test-timeout',
@@ -163,7 +169,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'timeout',
     explanation:
       '[Timeout] limits how long an individual test case may execute. Robot Framework fails the test when its timeout expires.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.drag.exclude-tag',
@@ -184,7 +190,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'exclude',
     explanation:
       '--exclude removes tests with a matching tag from execution. Its short form is -e.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
   {
     id: 'robot-framework.drag.continue-loop',
@@ -204,6 +210,6 @@ export const dragBlankQuestions = [
     correctOptionId: 'continue',
     explanation:
       'CONTINUE stops the current FOR or WHILE iteration and proceeds with the next one. BREAK would exit the loop completely.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
 ] as const satisfies readonly DragBlankQuestion[]

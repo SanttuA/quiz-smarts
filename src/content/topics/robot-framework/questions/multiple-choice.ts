@@ -1,5 +1,12 @@
 import type { MultipleChoiceQuestion } from '../../../types'
-import { robotGuideReference } from './shared'
+import {
+  robotControlStructuresReference,
+  robotDataSectionsReference,
+  robotExecutionReference,
+  robotParsingReference,
+  robotSuitesReference,
+  robotVariablesReference,
+} from './shared'
 
 export const multipleChoiceQuestions = [
   {
@@ -17,7 +24,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'two-spaces',
     explanation:
       'Robot Framework splits cells on two or more spaces or on tabs. Four spaces are recommended because the separation is easier to see.',
-    reference: robotGuideReference,
+    reference: robotParsingReference,
   },
   {
     id: 'robot-framework.mcq.resource-extension',
@@ -34,7 +41,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'resource',
     explanation:
       'Resource files can use .robot, but .resource is the dedicated and recommended extension.',
-    reference: robotGuideReference,
+    reference: robotParsingReference,
   },
   {
     id: 'robot-framework.mcq.keyword-section',
@@ -51,7 +58,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'user-keywords',
     explanation:
       'The Keywords section defines reusable, higher-level user keywords that can combine library keywords and other user keywords.',
-    reference: robotGuideReference,
+    reference: robotDataSectionsReference,
   },
   {
     id: 'robot-framework.mcq.dictionary-expansion',
@@ -68,7 +75,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'dictionary',
     explanation:
       '&{config} expands a dictionary into named arguments. ${config} passes the dictionary as one value, while @{config} is list syntax.',
-    reference: robotGuideReference,
+    reference: robotVariablesReference,
   },
   {
     id: 'robot-framework.mcq.continuation-marker',
@@ -85,7 +92,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'ellipsis',
     explanation:
       'An ellipsis in the first cell marks a continuation row, allowing a long setting, keyword call, or variable definition to span multiple rows.',
-    reference: robotGuideReference,
+    reference: robotParsingReference,
   },
   {
     id: 'robot-framework.mcq.comments-section',
@@ -102,7 +109,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'ignored',
     explanation:
       'The Comments section is ignored by Robot Framework. Use documentation, metadata, or logging when information must appear in generated outputs.',
-    reference: robotGuideReference,
+    reference: robotDataSectionsReference,
   },
   {
     id: 'robot-framework.mcq.rest-extension',
@@ -120,7 +127,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'robot-rst',
     explanation:
       'Robot Framework parses .robot.rst files by default. Plain .rst and .rest files require explicit parser configuration.',
-    reference: robotGuideReference,
+    reference: robotParsingReference,
   },
   {
     id: 'robot-framework.mcq.suite-init-file',
@@ -137,7 +144,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'init',
     explanation:
       'Directory-suite settings belong in an initialization file named __init__ with a supported extension, typically __init__.robot.',
-    reference: robotGuideReference,
+    reference: robotSuitesReference,
   },
   {
     id: 'robot-framework.mcq.continue-semantics',
@@ -154,7 +161,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'next-iteration',
     explanation:
       'CONTINUE skips the rest of the current FOR or WHILE iteration. BREAK is the statement that exits the whole loop.',
-    reference: robotGuideReference,
+    reference: robotControlStructuresReference,
   },
   {
     id: 'robot-framework.mcq.dry-run',
@@ -171,6 +178,6 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'validate',
     explanation:
       'Dry-run mode processes the test data but does not execute keywords originating from test libraries, making it useful for syntax validation.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
 ] as const satisfies readonly MultipleChoiceQuestion[]

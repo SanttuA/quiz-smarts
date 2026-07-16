@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { QuizQuestion } from '../../../content/types'
+import { accessibilityTestingQuestions } from '../../../content/topics/accessibility-testing/questions'
 import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
 import { evaluateResponse, formatCorrectAnswer, normalizeTextAnswer } from './evaluate'
@@ -95,6 +96,26 @@ describe('answer evaluation', () => {
       evaluateResponse(question, {
         kind: 'sequence',
         itemIds: ['while', 'increment', 'log', 'end'],
+      }),
+    ).toBe(false)
+  })
+
+  it('accepts independent workflow steps that satisfy required precedence', () => {
+    const question = accessibilityTestingQuestions.find(
+      (candidate) => candidate.id === 'accessibility-testing.sequence.form-error',
+    )
+    if (!question || question.kind !== 'sequence') throw new Error('Missing sequence fixture')
+
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['invalid', 'submit', 'association', 'notice', 'correct', 'clear'],
+      }),
+    ).toBe(true)
+    expect(
+      evaluateResponse(question, {
+        kind: 'sequence',
+        itemIds: ['invalid', 'submit', 'correct', 'notice', 'association', 'clear'],
       }),
     ).toBe(false)
   })

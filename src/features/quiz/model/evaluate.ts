@@ -1,5 +1,6 @@
 import type { QuizQuestion } from '../../../content/types'
 import type { QuizResponse } from './responses'
+import { isValidSequenceOrder } from './sequence-order'
 
 export function normalizeTextAnswer(answer: string): string {
   return answer.trim().toLocaleLowerCase('en').replace(/\s+/gu, ' ')
@@ -22,12 +23,7 @@ export function evaluateResponse(question: QuizQuestion, response: QuizResponse)
     case 'sequence': {
       if (response.kind !== question.kind) return false
 
-      const validOrders = [question.correctOrder, ...(question.acceptedOrders ?? [])]
-      return validOrders.some(
-        (order) =>
-          response.itemIds.length === order.length &&
-          response.itemIds.every((itemId, index) => itemId === order[index]),
-      )
+      return isValidSequenceOrder(response.itemIds, question)
     }
   }
 }

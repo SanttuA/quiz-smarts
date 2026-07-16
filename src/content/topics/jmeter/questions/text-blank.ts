@@ -81,9 +81,9 @@ export const textBlankQuestions = [
     instruction: 'Type the missing option including its hyphen.',
     template: { before: 'jmeter ', after: ' -t checkout.jmx -l results.jtl' },
     canonicalAnswer: '-n',
-    acceptedAnswers: ['-n'],
+    acceptedAnswers: ['-n', '--nongui'],
     explanation:
-      'The -n option selects CLI mode, which avoids the graphical interface overhead during an actual load test.',
+      'The -n option, also available as --nongui, selects CLI mode and avoids graphical-interface overhead during an actual load test.',
     reference: jmeterGettingStartedReference,
   },
   {
@@ -94,9 +94,9 @@ export const textBlankQuestions = [
     instruction: 'Type the missing option including its hyphen.',
     template: { before: 'jmeter -n ', after: ' checkout.jmx -l results.jtl' },
     canonicalAnswer: '-t',
-    acceptedAnswers: ['-t'],
+    acceptedAnswers: ['-t', '--testfile'],
     explanation:
-      'The -t option is followed by the path to the JMX file containing the JMeter test plan for the run.',
+      'The -t option, also available as --testfile, is followed by the path to the JMX plan for the run.',
     reference: jmeterGettingStartedReference,
   },
   {
@@ -107,9 +107,9 @@ export const textBlankQuestions = [
     instruction: 'Type the missing option including its hyphen.',
     template: { before: 'jmeter -n -t checkout.jmx ', after: ' results.jtl' },
     canonicalAnswer: '-l',
-    acceptedAnswers: ['-l'],
+    acceptedAnswers: ['-l', '--logfile'],
     explanation:
-      'The -l option names the sample-results log that can later be processed by JMeter reporting and analysis tools.',
+      'The -l option, also available as --logfile, names the sample-results log for later reporting and analysis.',
     reference: jmeterGettingStartedReference,
   },
   {
@@ -136,9 +136,9 @@ export const textBlankQuestions = [
       after: ' -o report',
     },
     canonicalAnswer: '-e',
-    acceptedAnswers: ['-e'],
+    acceptedAnswers: ['-e', '--reportatendofloadtests'],
     explanation:
-      'The -e option generates the dashboard after the run, while -o selects the empty directory that receives the report.',
+      'The -e option, also available as --reportatendofloadtests, generates the dashboard after the run; -o selects its empty output directory.',
     reference: jmeterDashboardReference,
   },
 ] as const satisfies readonly TextBlankQuestion[]

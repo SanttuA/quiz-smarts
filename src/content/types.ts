@@ -57,6 +57,7 @@ export interface SequenceQuestion extends QuestionBase {
   items: readonly SequenceItem[]
   correctOrder: readonly string[]
   acceptedOrders?: readonly (readonly string[])[]
+  requiredOrderPairs?: readonly (readonly [beforeItemId: string, afterItemId: string])[]
 }
 
 export type QuizQuestion =
@@ -73,6 +74,7 @@ export interface CheatSheetSection {
   title: string
   summary: string
   items: readonly CheatSheetItem[]
+  references?: readonly QuestionReference[]
 }
 
 export interface TopicMetadata {
