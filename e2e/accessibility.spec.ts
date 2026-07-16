@@ -79,7 +79,9 @@ test('supports skip links, route focus, route titles, and axe-clean content page
   const skipLink = page.getByRole('link', { name: 'Skip to content' })
   await expect(skipLink).toBeFocused()
   await skipLink.press('Enter')
-  await expect(page.locator('main')).toBeFocused()
+  const landingTitle = page.getByRole('heading', { level: 1 })
+  await expect(landingTitle).toBeFocused()
+  await expect(landingTitle).toHaveCSS('outline-style', 'solid')
   expect(page.url()).toBe(initialUrl)
 
   await page.getByRole('link', { name: 'Open Accessibility Testing topic' }).click()

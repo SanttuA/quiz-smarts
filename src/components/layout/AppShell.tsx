@@ -28,8 +28,9 @@ export function AppShell({ children }: PropsWithChildren) {
 
   function handleSkipLink(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
-    mainRef.current?.focus()
-    mainRef.current?.scrollIntoView?.()
+    const primaryHeading = mainRef.current?.querySelector<HTMLElement>('h1')
+    primaryHeading?.focus()
+    primaryHeading?.scrollIntoView?.({ block: 'start' })
   }
 
   return (
@@ -52,7 +53,7 @@ export function AppShell({ children }: PropsWithChildren) {
           </div>
         </div>
       </header>
-      <main ref={mainRef} id="main-content" className={styles.main} tabIndex={-1}>
+      <main ref={mainRef} id="main-content" className={styles.main}>
         {children}
       </main>
       {!isQuiz && (
