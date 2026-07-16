@@ -17,14 +17,24 @@ The pnpm workspace configuration rejects direct and transitive releases publishe
 
 ## Quality checks
 
+Install the browser binaries once before running browser checks:
+
+```sh
+corepack pnpm exec playwright install chromium firefox
+```
+
 ```sh
 corepack pnpm format:check
 corepack pnpm lint
 corepack pnpm typecheck
 corepack pnpm test:coverage
+corepack pnpm test:a11y
 corepack pnpm e2e
 corepack pnpm build
 ```
+
+The accessibility suite runs axe checks and keyboard/focus regressions in desktop Chromium,
+mobile Chromium, and Firefox.
 
 ## Architecture
 

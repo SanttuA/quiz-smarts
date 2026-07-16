@@ -108,7 +108,7 @@ export function DragBlankInput({ question, value, onChange, disabled }: DragBlan
             if (selectedId && !disabled) onChange({ kind: 'drag-blank', optionId: '' })
           }}
         />
-        <div className={styles.optionBank} aria-label="Draggable answer options">
+        <div className={styles.optionBank} role="group" aria-label="Draggable answer options">
           {question.options.map((option) => (
             <DraggableChip
               key={option.id}

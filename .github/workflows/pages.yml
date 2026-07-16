@@ -47,8 +47,8 @@ jobs:
       - name: Run unit and component tests
         run: corepack pnpm test:coverage
 
-      - name: Install Playwright Chromium
-        run: corepack pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: corepack pnpm exec playwright install --with-deps chromium firefox
 
       - name: Run browser tests
         run: corepack pnpm e2e

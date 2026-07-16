@@ -109,5 +109,6 @@ describe('question inputs', () => {
       kind: 'sequence',
       itemIds: ['end', 'for', 'body'],
     })
+    expect(screen.getByText(/Moved FOR.*to position 2 of 3\./)).toBeInTheDocument()
   })
 })

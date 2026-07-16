@@ -1,6 +1,7 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import type { QuizMode, TopicDefinition } from '../../../content/types'
 import { getBestScore, saveBestScore, type BestScore } from '../../../lib/best-score'
+import { useDocumentTitle } from '../../../lib/use-document-title'
 import { formatCorrectAnswer, formatResponse } from '../model/evaluate'
 import { getAttemptRandom } from '../model/random'
 import { createInitialResponse, hasResponse, type QuizResponse } from '../model/responses'
@@ -34,6 +35,9 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
   const [bestScore, setBestScore] = useState<BestScore | undefined>(() =>
     getBestScore(topic, attemptQuestionCount),
   )
+  const questionTitleRef = useRef<HTMLHeadingElement>(null)
+  const resultsTitleRef = useRef<HTMLHeadingElement>(null)
+  const previousFocusStateRef = useRef(`${state.phase}:${state.currentIndex}`)
   const score = getScore(state)
   const currentQuestion = state.questions[state.currentIndex]
   const pendingResponse =
@@ -51,11 +55,29 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
             100,
         )
 
+  useDocumentTitle(
+    state.phase === 'complete'
+      ? `Quiz results: ${topic.title} | Quiz Smarts`
+      : `${topic.title} ${mode === 'subset' ? 'quick ' : ''}quiz | Quiz Smarts`,
+  )
+
   useEffect(() => {
     if (state.phase === 'complete') {
       setBestScore(saveBestScore(topic, score, state.questions.length))
     }
   }, [score, state.phase, state.questions.length, topic])
+
+  useEffect(() => {
+    const focusState = `${state.phase}:${state.currentIndex}`
+    if (previousFocusStateRef.current === focusState) return
+    previousFocusStateRef.current = focusState
+
+    if (state.phase === 'complete') {
+      resultsTitleRef.current?.focus()
+    } else if (state.phase === 'answering') {
+      questionTitleRef.current?.focus()
+    }
+  }, [state.currentIndex, state.phase])
 
   if (!currentQuestion && state.phase !== 'complete') {
     return <p role="alert">This topic does not contain any questions yet.</p>
@@ -69,14 +91,19 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
 
   function handleContinue() {
     dispatch({ type: 'continue' })
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    scrollToTop()
   }
 
   function handleRestart() {
     const questions = prepareAttempt(topic.questions, random, attemptQuestionCount)
     dispatch({ type: 'restart', questions })
     setDraft(undefined)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    scrollToTop()
+  }
+
+  function scrollToTop() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' })
   }
 
   function handleExit() {
@@ -96,6 +123,7 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
         <span className={styles.resultKicker}>attempt complete</span>
         <div
           className={styles.scoreOrb}
+          role="group"
           aria-label={`Score ${score} out of ${state.questions.length}`}
         >
           <strong>{percent}%</strong>
@@ -103,7 +131,7 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
             {score}/{state.questions.length} correct
           </span>
         </div>
-        <h1 id="results-title">
+        <h1 ref={resultsTitleRef} id="results-title" tabIndex={-1}>
           {percent >= 80
             ? 'Strong signal.'
             : percent >= 50
@@ -153,6 +181,7 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
                 >
                   <div className={styles.reviewStatus}>
                     <span aria-hidden="true">{answer.isCorrect ? '✓' : '×'}</span>
+                    <span className="sr-only">{answer.isCorrect ? 'Correct' : 'Incorrect'}. </span>
                     <small>Question {index + 1}</small>
                   </div>
                   <div>
@@ -202,7 +231,12 @@ export function QuizRunner({ topic, mode, onExit, onOpenCheatsheet }: QuizRunner
           <span>{questionKindLabels[currentQuestion!.kind]}</span>
           <code>{String(state.currentIndex + 1).padStart(2, '0')}</code>
         </div>
-        <h1 id="question-title">{currentQuestion!.prompt}</h1>
+        <h1 ref={questionTitleRef} id="question-title" tabIndex={-1}>
+          <span className="sr-only">
+            Question {state.currentIndex + 1} of {state.questions.length}:{' '}
+          </span>
+          {currentQuestion!.prompt}
+        </h1>
         <p className={styles.instruction}>{currentQuestion!.instruction}</p>
 
         <div className={styles.inputArea}>
