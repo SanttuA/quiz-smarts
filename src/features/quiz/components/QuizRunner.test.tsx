@@ -33,8 +33,11 @@ describe('QuizRunner', () => {
     ).toBeDisabled()
 
     await user.click(screen.getByRole('button', { name: 'See results' }))
-    expect(await screen.findByRole('heading', { name: 'Strong signal.' })).toBeInTheDocument()
+    const resultsTitle = await screen.findByRole('heading', { name: 'Strong signal.' })
+    expect(resultsTitle).toBeInTheDocument()
+    expect(resultsTitle).toHaveFocus()
     expect(screen.getByLabelText('Score 1 out of 1')).toBeInTheDocument()
+    expect(screen.getByRole('listitem')).toHaveTextContent('Correct')
 
     await waitFor(() => expect(getBestScore(topic, 1)?.correct).toBe(1))
 

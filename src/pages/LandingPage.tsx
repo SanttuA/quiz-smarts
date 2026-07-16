@@ -2,15 +2,18 @@ import { topicCatalog } from '../content/registry'
 import { BestScoreBadge } from '../components/score/BestScoreBadge'
 import { ButtonLink } from '../components/button/ButtonLink'
 import { estimateQuizMinutes } from '../features/quiz/model/duration'
+import { useDocumentTitle } from '../lib/use-document-title'
 import styles from './LandingPage.module.css'
 
 export function LandingPage() {
+  useDocumentTitle('Quiz Smarts')
+
   return (
     <>
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.kicker}>Interactive tech practice</span>
-          <h1>
+          <h1 tabIndex={-1}>
             Make knowledge
             <span> click.</span>
           </h1>
@@ -22,7 +25,11 @@ export function LandingPage() {
             Explore topics <span aria-hidden="true">↓</span>
           </a>
         </div>
-        <div className={styles.terminal} aria-label="Quiz interaction preview">
+        <div
+          className={styles.terminal}
+          role="img"
+          aria-label="Quiz interaction preview: read documentation, try it, remember it, and unlock feedback"
+        >
           <div className={styles.terminalBar}>
             <span />
             <span />
@@ -74,7 +81,11 @@ export function LandingPage() {
                 className={styles.topicCard}
                 aria-labelledby={`${topic.id}-title`}
               >
-                <div className={styles.topicNumber} aria-hidden="true">
+                <div
+                  className={styles.topicNumber}
+                  aria-hidden="true"
+                  data-a11y-decorative="watermark"
+                >
                   {topicNumber}
                 </div>
                 <div className={styles.topicIcon} aria-hidden="true">

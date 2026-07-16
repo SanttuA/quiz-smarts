@@ -15,6 +15,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useState } from 'react'
 import type { SequenceItem, SequenceQuestion } from '../../../content/types'
 import type { QuizResponse } from '../model/responses'
 import styles from './QuestionInputs.module.css'
@@ -49,7 +50,7 @@ function SortableRow({ item, index, count, disabled, onMove }: SortableRowProps)
   }
 
   return (
-    <div
+    <li
       ref={setNodeRef}
       className={`${styles.sequenceRow} ${isDragging ? styles.sequenceDragging : ''}`}
       style={{ transform: CSS.Transform.toString(transform), transition }}
@@ -88,11 +89,12 @@ function SortableRow({ item, index, count, disabled, onMove }: SortableRowProps)
           ⠿
         </button>
       </div>
-    </div>
+    </li>
   )
 }
 
 export function SequenceInput({ question, value, onChange, disabled }: SequenceInputProps) {
+  const [announcement, setAnnouncement] = useState('')
   const itemIds =
     value?.kind === 'sequence'
       ? value.itemIds
@@ -102,21 +104,29 @@ export function SequenceInput({ question, value, onChange, disabled }: SequenceI
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
 
-  function updateOrder(nextItemIds: string[]) {
+  function updateOrder(nextItemIds: string[], movedItemId: string, nextIndex: number) {
     onChange({ kind: 'sequence', itemIds: nextItemIds })
+    const movedItem = question.items.find((item) => item.id === movedItemId)
+    if (movedItem) {
+      setAnnouncement(
+        `Moved ${movedItem.code} to position ${nextIndex + 1} of ${nextItemIds.length}.`,
+      )
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
     if (!event.over || event.active.id === event.over.id) return
     const oldIndex = itemIds.indexOf(String(event.active.id))
     const newIndex = itemIds.indexOf(String(event.over.id))
-    if (oldIndex >= 0 && newIndex >= 0) updateOrder(arrayMove(itemIds, oldIndex, newIndex))
+    if (oldIndex >= 0 && newIndex >= 0) {
+      updateOrder(arrayMove(itemIds, oldIndex, newIndex), String(event.active.id), newIndex)
+    }
   }
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
-        <div className={styles.sequenceList} aria-label="Lines to order">
+        <ol className={styles.sequenceList} aria-label="Lines to order">
           {itemIds.map((itemId, index) => {
             const item = question.items.find((candidate) => candidate.id === itemId)
             if (!item) return null
@@ -130,14 +140,17 @@ export function SequenceInput({ question, value, onChange, disabled }: SequenceI
                 onMove={(direction) => {
                   const nextIndex = index + direction
                   if (nextIndex >= 0 && nextIndex < itemIds.length) {
-                    updateOrder(arrayMove(itemIds, index, nextIndex))
+                    updateOrder(arrayMove(itemIds, index, nextIndex), item.id, nextIndex)
                   }
                 }}
               />
             )
           })}
-        </div>
+        </ol>
       </SortableContext>
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </span>
     </DndContext>
   )
 }

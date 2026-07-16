@@ -21,7 +21,7 @@
   --input-surface: #ffffff;
   --canvas: #f7f5fb;
   --line: #dad6e8;
-  --line-strong: #b9b2d0;
+  --line-strong: #8f87a8;
   --purple: #6941c6;
   --purple-dark: #4b2b99;
   --purple-soft: #ece5ff;
@@ -45,7 +45,7 @@
   --header-line: rgb(185 178 208 / 65%);
   --body-purple-glow: rgb(105 65 198 / 13%);
   --body-cyan-glow: rgb(8 127 140 / 10%);
-  --focus-ring: rgb(105 65 198 / 35%);
+  --focus-ring: #087f8c;
   --purple-watermark: rgb(105 65 198 / 10%);
   --purple-border-soft: rgb(105 65 198 / 18%);
   --code-surface: #17152a;
@@ -58,7 +58,7 @@
   --code-line: #3f3a5b;
   --code-line-soft: #5d5876;
   --code-input-border: #9d87df;
-  --code-placeholder: #7b7590;
+  --code-placeholder: #68637f;
   --code-drop-surface: rgb(255 255 255 / 7%);
   --code-drop-line: #81759f;
   --disabled-ink: #d4cfe3;
@@ -86,7 +86,7 @@
   --input-surface: #282335;
   --canvas: #11101a;
   --line: #3d374f;
-  --line-strong: #5d5473;
+  --line-strong: #756b8e;
   --purple: #6941c6;
   --purple-dark: #c9b4ff;
   --purple-soft: #302648;
@@ -108,7 +108,7 @@
   --header-line: rgb(93 84 115 / 75%);
   --body-purple-glow: rgb(105 65 198 / 20%);
   --body-cyan-glow: rgb(76 203 210 / 10%);
-  --focus-ring: rgb(201 180 255 / 48%);
+  --focus-ring: #78e2e2;
   --purple-watermark: rgb(201 180 255 / 11%);
   --purple-border-soft: rgb(201 180 255 / 25%);
   --code-surface: #12101e;

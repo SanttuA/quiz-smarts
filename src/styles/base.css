@@ -37,6 +37,10 @@ summary:focus-visible {
   outline-offset: 3px;
 }
 
+main:focus {
+  outline: none;
+}
+
 a {
   color: inherit;
 }

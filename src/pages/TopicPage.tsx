@@ -2,6 +2,7 @@ import { ButtonLink } from '../components/button/ButtonLink'
 import { BestScoreBadge } from '../components/score/BestScoreBadge'
 import type { TopicDefinition } from '../content/types'
 import { estimateQuizMinutes } from '../features/quiz/model/duration'
+import { useDocumentTitle } from '../lib/use-document-title'
 import styles from './TopicPage.module.css'
 
 interface TopicPageProps {
@@ -10,6 +11,7 @@ interface TopicPageProps {
 
 export function TopicPage({ topic }: TopicPageProps) {
   const subsetMinutes = estimateQuizMinutes(topic, topic.subsetQuestionCount)
+  useDocumentTitle(`${topic.title} | Quiz Smarts`)
 
   return (
     <div className={styles.page}>
@@ -22,7 +24,7 @@ export function TopicPage({ topic }: TopicPageProps) {
         <div className={styles.introGrid}>
           <div>
             <span className={styles.kicker}>{topic.eyebrow}</span>
-            <h1>{topic.title}</h1>
+            <h1 tabIndex={-1}>{topic.title}</h1>
             <p>{topic.description}</p>
           </div>
           <aside className={styles.launchCard} aria-label="Quiz overview">
@@ -55,11 +57,13 @@ export function TopicPage({ topic }: TopicPageProps) {
         </div>
       </section>
 
-      <section className={styles.cheatsheet} aria-labelledby="cheatsheet-title">
+      <section id="cheatsheet" className={styles.cheatsheet} aria-labelledby="cheatsheet-title">
         <div className={styles.sheetHeading}>
           <div>
             <span className={styles.kicker}>Quick reference</span>
-            <h2 id="cheatsheet-title">{topic.title} cheatsheet</h2>
+            <h2 id="cheatsheet-title" tabIndex={-1}>
+              {topic.title} cheatsheet
+            </h2>
           </div>
           <div className={styles.reviewed}>
             <span>Last reviewed</span>
@@ -70,7 +74,11 @@ export function TopicPage({ topic }: TopicPageProps) {
         <div className={styles.sheetGrid}>
           {topic.cheatsheet.map((section, sectionIndex) => (
             <article key={section.id} className={styles.sheetCard} id={section.id}>
-              <span className={styles.sectionNumber} aria-hidden="true">
+              <span
+                className={styles.sectionNumber}
+                aria-hidden="true"
+                data-a11y-decorative="watermark"
+              >
                 {String(sectionIndex + 1).padStart(2, '0')}
               </span>
               <h3>{section.title}</h3>
@@ -79,8 +87,10 @@ export function TopicPage({ topic }: TopicPageProps) {
                 {section.items.map((item) => (
                   <div key={item.term} className={styles.sheetItem}>
                     <dt>{item.term}</dt>
-                    <dd>{item.detail}</dd>
-                    {item.code && <pre>{item.code}</pre>}
+                    <dd>
+                      {item.detail}
+                      {item.code && <pre>{item.code}</pre>}
+                    </dd>
                   </div>
                 ))}
               </dl>

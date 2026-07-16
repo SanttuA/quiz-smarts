@@ -309,6 +309,10 @@
     font-size: clamp(3.3rem, 17vw, 5rem);
   }
 
+  .orbit {
+    right: 0;
+  }
+
   .topics {
     padding-bottom: 4.5rem;
   }
