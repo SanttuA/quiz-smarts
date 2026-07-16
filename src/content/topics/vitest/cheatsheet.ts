@@ -1,4 +1,20 @@
 import type { CheatSheetSection } from '../../types'
+import {
+  testingLibraryAsyncReference,
+  testingLibraryJestDomReference,
+  testingLibraryQueriesReference,
+  testingLibraryReactReference,
+  testingLibraryUserEventReference,
+  vitestConfigReference,
+  vitestCoverageReference,
+  vitestEnvironmentReference,
+  vitestGettingStartedReference,
+  vitestHooksReference,
+  vitestMockFunctionsReference,
+  vitestMockingReference,
+  vitestTimersReference,
+  vitestWritingTestsReference,
+} from './questions/shared'
 
 export const vitestCheatSheet = [
   {
@@ -42,6 +58,7 @@ export const vitestCheatSheet = [
         code: 'pnpm exec vitest\npnpm exec vitest run',
       },
     ],
+    references: [vitestGettingStartedReference, vitestWritingTestsReference],
   },
   {
     id: 'rendering-queries',
@@ -84,6 +101,7 @@ export const vitestCheatSheet = [
         code: "screen.getByTestId('save-state')",
       },
     ],
+    references: [testingLibraryReactReference, testingLibraryQueriesReference],
   },
   {
     id: 'interactions-async',
@@ -126,6 +144,7 @@ export const vitestCheatSheet = [
         code: 'await waitFor(() => expect(save).toHaveBeenCalled())',
       },
     ],
+    references: [testingLibraryUserEventReference, testingLibraryAsyncReference],
   },
   {
     id: 'assertions-lifecycle',
@@ -167,6 +186,7 @@ export const vitestCheatSheet = [
           'Each test should arrange the state it needs instead of relying on another test to run first.',
       },
     ],
+    references: [vitestWritingTestsReference, vitestHooksReference, testingLibraryJestDomReference],
   },
   {
     id: 'mocks-timers',
@@ -210,6 +230,7 @@ export const vitestCheatSheet = [
         code: 'vi.useFakeTimers()\nvi.advanceTimersByTime(1000)\nvi.useRealTimers()',
       },
     ],
+    references: [vitestMockFunctionsReference, vitestMockingReference, vitestTimersReference],
   },
   {
     id: 'configuration-coverage',
@@ -253,5 +274,6 @@ export const vitestCheatSheet = [
         code: 'pnpm exec vitest run --coverage',
       },
     ],
+    references: [vitestConfigReference, vitestEnvironmentReference, vitestCoverageReference],
   },
 ] as const satisfies readonly CheatSheetSection[]

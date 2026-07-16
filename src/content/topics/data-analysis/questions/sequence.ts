@@ -195,8 +195,15 @@ export const sequenceQuestions = [
       { id: 'action', code: 'Connect the result to a decision or next analysis' },
     ],
     correctOrder: ['answer', 'evidence', 'uncertainty', 'limits', 'action'],
+    requiredOrderPairs: [
+      ['answer', 'evidence'],
+      ['evidence', 'uncertainty'],
+      ['evidence', 'limits'],
+      ['uncertainty', 'action'],
+      ['limits', 'action'],
+    ],
     explanation:
-      'Readers need the answer and evidence first, followed by uncertainty and limitations that bound the claim, then a practical implication or next step.',
+      'Readers need the answer and evidence first. Uncertainty and limitations may follow in either order before the practical implication or next step.',
     reference: confidenceIntervalReference,
   },
 ] as const satisfies readonly SequenceQuestion[]

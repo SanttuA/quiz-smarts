@@ -150,7 +150,7 @@ export const jmeterCheatSheet = [
       {
         term: 'Transactions',
         detail:
-          'Group related requests under a Transaction Controller to observe the duration of a complete business action.',
+          'Group related requests under a Transaction Controller. Its generated sample excludes timer and pre/post-processor duration by default; enable the include-duration option when those delays belong in the business action.',
       },
       {
         term: 'Controlled comparisons',

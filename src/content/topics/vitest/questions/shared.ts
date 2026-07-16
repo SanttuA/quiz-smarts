@@ -8,11 +8,6 @@ export const vitestWritingTestsReference = {
   url: 'https://vitest.dev/guide/learn/writing-tests',
 } as const
 
-export const vitestAssertionsReference = {
-  label: 'Vitest: Assertions',
-  url: 'https://vitest.dev/guide/learn/common-errors.html#incorrect-expect-usage',
-} as const
-
 export const vitestAsyncReference = {
   label: 'Vitest: Testing Asynchronous Code',
   url: 'https://vitest.dev/guide/learn/async',

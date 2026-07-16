@@ -12,6 +12,6 @@ export const vitestMetadata = {
   estimatedMinutes: 34,
   questionCount: 40,
   subsetQuestionCount: 20,
-  contentVersion: 1,
-  lastReviewed: '2026-07-15',
+  contentVersion: 2,
+  lastReviewed: '2026-07-16',
 } as const satisfies TopicMetadata

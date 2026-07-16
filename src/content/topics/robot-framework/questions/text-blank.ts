@@ -1,5 +1,10 @@
 import type { TextBlankQuestion } from '../../../types'
-import { robotGuideReference } from './shared'
+import {
+  robotExecutionReference,
+  robotTestCasesReference,
+  robotUserKeywordsReference,
+  robotVariablesReference,
+} from './shared'
 
 export const textBlankQuestions = [
   {
@@ -16,7 +21,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['${BROWSER}'],
     explanation:
       'Scalar variables use dollar-curly syntax. Variable names are case-insensitive, so ${browser} is equivalent here.',
-    reference: robotGuideReference,
+    reference: robotVariablesReference,
   },
   {
     id: 'robot-framework.text.keyword-arguments',
@@ -32,7 +37,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['[Arguments]'],
     explanation:
       '[Arguments] declares a user keyword’s accepted arguments. Defaults use the same name=value style as normal keyword calls.',
-    reference: robotGuideReference,
+    reference: robotUserKeywordsReference,
   },
   {
     id: 'robot-framework.text.cli-command',
@@ -48,7 +53,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['robot', 'python -m robot'],
     explanation:
       'The robot command runs suites and directories. Python installations can also invoke the same runner with python -m robot.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
   {
     id: 'robot-framework.text.return-statement',
@@ -65,7 +70,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['RETURN'],
     explanation:
       'The RETURN statement returns values from a user keyword. It can return one value, multiple values, or no value.',
-    reference: robotGuideReference,
+    reference: robotUserKeywordsReference,
   },
   {
     id: 'robot-framework.text.test-name-variable',
@@ -81,7 +86,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['${TEST_NAME}', '${TEST NAME}'],
     explanation:
       '${TEST_NAME} contains the current test case name. Robot Framework treats spaces and underscores in variable names equivalently.',
-    reference: robotGuideReference,
+    reference: robotVariablesReference,
   },
   {
     id: 'robot-framework.text.environment-variable',
@@ -97,7 +102,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['%{HOME}'],
     explanation:
       'Environment variables use percent-curly syntax. They expose string values from the operating-system environment to Robot Framework data.',
-    reference: robotGuideReference,
+    reference: robotVariablesReference,
   },
   {
     id: 'robot-framework.text-current-directory',
@@ -113,7 +118,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['${CURDIR}'],
     explanation:
       '${CURDIR} is a case-sensitive built-in variable containing the absolute path to the directory where the current test data file is located.',
-    reference: robotGuideReference,
+    reference: robotVariablesReference,
   },
   {
     id: 'robot-framework.text.test-documentation',
@@ -129,7 +134,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['[Documentation]'],
     explanation:
       '[Documentation] adds free-form documentation to an individual test case and includes it in generated logs and reports.',
-    reference: robotGuideReference,
+    reference: robotTestCasesReference,
   },
   {
     id: 'robot-framework.text.output-directory',
@@ -145,7 +150,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['--outputdir', '-d'],
     explanation:
       '--outputdir, or its short form -d, changes the directory where Robot Framework creates its output files.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
   {
     id: 'robot-framework.text.rerun-failed',
@@ -161,6 +166,6 @@ export const textBlankQuestions = [
     acceptedAnswers: ['--rerunfailed', '-R'],
     explanation:
       '--rerunfailed, or -R, selects failed tests from a previous output file so they can be executed again.',
-    reference: robotGuideReference,
+    reference: robotExecutionReference,
   },
 ] as const satisfies readonly TextBlankQuestion[]

@@ -6,6 +6,7 @@ import {
   waveReference,
   wcagContrastReference,
   wcagFocusReference,
+  wcagKeyboardTrapReference,
 } from './shared'
 
 export const dragBlankQuestions = [
@@ -149,7 +150,7 @@ export const dragBlankQuestions = [
     correctOptionId: 'shift-tab',
     explanation:
       'Shift+Tab normally reverses sequential focus navigation. Testing forward and backward movement can expose illogical order and focus traps.',
-    reference: wcagFocusReference,
+    reference: wcagKeyboardTrapReference,
   },
   {
     id: 'accessibility-testing.drag.large-contrast',

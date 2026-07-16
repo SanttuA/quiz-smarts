@@ -54,4 +54,14 @@ describe('Robot Framework topic content', () => {
     expect(robotFrameworkTopic.cheatsheet).toHaveLength(6)
     expect(robotFrameworkTopic.lastReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })
+
+  it('links every cheat-sheet section to focused guide material', () => {
+    for (const section of robotFrameworkTopic.cheatsheet) {
+      expect(section.references).toHaveLength(1)
+      expect(section.references?.[0]?.url).toContain('#')
+    }
+    for (const question of robotFrameworkTopic.questions) {
+      expect(question.reference.url).toContain('#')
+    }
+  })
 })

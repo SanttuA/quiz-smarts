@@ -1,5 +1,6 @@
 import type { QuizQuestion, SequenceItem } from '../../../content/types'
 import type { RandomSource } from './random'
+import { isValidSequenceOrder } from './sequence-order'
 
 export function fisherYates<T>(items: readonly T[], random: RandomSource = Math.random): T[] {
   const shuffled = [...items]
@@ -19,11 +20,13 @@ export function fisherYates<T>(items: readonly T[], random: RandomSource = Math.
 
 function isCorrectSequence(
   items: readonly SequenceItem[],
-  validOrders: readonly (readonly string[])[],
+  correctOrder: readonly string[],
+  acceptedOrders: readonly (readonly string[])[],
+  requiredOrderPairs: readonly (readonly [string, string])[],
 ): boolean {
-  return validOrders.some(
-    (order) =>
-      items.length === order.length && items.every((item, index) => item.id === order[index]),
+  return isValidSequenceOrder(
+    items.map((item) => item.id),
+    { acceptedOrders, correctOrder, requiredOrderPairs },
   )
 }
 
@@ -31,15 +34,20 @@ function shuffleSequence(
   items: readonly SequenceItem[],
   correctOrder: readonly string[],
   acceptedOrders: readonly (readonly string[])[],
+  requiredOrderPairs: readonly (readonly [string, string])[],
   random: RandomSource,
 ): SequenceItem[] {
   const shuffled = fisherYates(items, random)
-  const validOrders = [correctOrder, ...acceptedOrders]
 
-  if (shuffled.length > 1 && isCorrectSequence(shuffled, validOrders)) {
+  if (
+    shuffled.length > 1 &&
+    isCorrectSequence(shuffled, correctOrder, acceptedOrders, requiredOrderPairs)
+  ) {
     for (let shift = 1; shift < shuffled.length; shift += 1) {
       const rotated = [...shuffled.slice(shift), ...shuffled.slice(0, shift)]
-      if (!isCorrectSequence(rotated, validOrders)) return rotated
+      if (!isCorrectSequence(rotated, correctOrder, acceptedOrders, requiredOrderPairs)) {
+        return rotated
+      }
     }
 
     for (let left = 0; left < shuffled.length - 1; left += 1) {
@@ -50,7 +58,9 @@ function shuffleSequence(
         if (!leftItem || !rightItem) continue
         swapped[left] = rightItem
         swapped[right] = leftItem
-        if (!isCorrectSequence(swapped, validOrders)) return swapped
+        if (!isCorrectSequence(swapped, correctOrder, acceptedOrders, requiredOrderPairs)) {
+          return swapped
+        }
       }
     }
   }
@@ -73,6 +83,7 @@ export function prepareQuestion(question: QuizQuestion, random: RandomSource): Q
           question.items,
           question.correctOrder,
           question.acceptedOrders ?? [],
+          question.requiredOrderPairs ?? [],
           random,
         ),
       }

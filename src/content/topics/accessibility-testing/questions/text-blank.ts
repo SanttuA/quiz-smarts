@@ -4,6 +4,7 @@ import {
   axeReference,
   wcagContrastReference,
   wcagFocusReference,
+  wcagKeyboardTrapReference,
 } from './shared'
 
 export const textBlankQuestions = [
@@ -133,7 +134,7 @@ export const textBlankQuestions = [
     acceptedAnswers: ['Tab', 'Tab key'],
     explanation:
       'Tab normally advances keyboard focus, while Shift+Tab moves backward. Testing both directions helps reveal missing targets, illogical order, and traps.',
-    reference: wcagFocusReference,
+    reference: wcagKeyboardTrapReference,
   },
   {
     id: 'accessibility-testing.text.normal-contrast',

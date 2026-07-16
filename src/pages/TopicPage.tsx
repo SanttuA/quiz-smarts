@@ -94,6 +94,20 @@ export function TopicPage({ topic }: TopicPageProps) {
                   </div>
                 ))}
               </dl>
+              {section.references && section.references.length > 0 && (
+                <div className={styles.sectionSources}>
+                  <span>Sources</span>
+                  <ul>
+                    {section.references.map((reference) => (
+                      <li key={reference.url}>
+                        <a href={reference.url} target="_blank" rel="noreferrer">
+                          {reference.label} <span aria-hidden="true">↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </article>
           ))}
         </div>

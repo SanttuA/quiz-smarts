@@ -5,7 +5,7 @@ import {
   lighthouseReference,
   waveReference,
   wcagContrastReference,
-  wcagFocusReference,
+  wcagKeyboardTrapReference,
 } from './shared'
 
 export const multipleChoiceQuestions = [
@@ -98,7 +98,7 @@ export const multipleChoiceQuestions = [
     correctChoiceId: 'tab',
     explanation:
       'Moving through the interface with Tab and Shift+Tab reveals whether focus can reach, operate, and leave interactive components in both directions.',
-    reference: wcagFocusReference,
+    reference: wcagKeyboardTrapReference,
   },
   {
     id: 'accessibility-testing.mcq.icon-button-name',

@@ -71,7 +71,10 @@ describe('routed application', () => {
       await screen.findByRole('heading', { name: 'Accessibility Testing cheatsheet' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }),
+      screen.getAllByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }).length,
+    ).toBeGreaterThanOrEqual(2)
+    expect(
+      screen.getByRole('link', { name: /W3C WAI-ARIA APG: Modal Dialog Pattern/ }),
     ).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
@@ -135,7 +138,9 @@ describe('routed application', () => {
     renderRoute('/topics/vitest')
 
     expect(await screen.findByRole('heading', { name: 'Vitest cheatsheet' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Vitest: Getting Started/ })).toBeInTheDocument()
+    expect(
+      screen.getAllByRole('link', { name: /Vitest: Getting Started/ }).length,
+    ).toBeGreaterThanOrEqual(2)
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()

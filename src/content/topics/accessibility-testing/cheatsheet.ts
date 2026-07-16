@@ -1,4 +1,14 @@
 import type { CheatSheetSection } from '../../types'
+import {
+  accessibilityEvaluationReference,
+  ariaDialogReference,
+  axeReference,
+  lighthouseReference,
+  waveReference,
+  wcagContrastReference,
+  wcagFocusReference,
+  wcagKeyboardTrapReference,
+} from './questions/shared'
 
 export const accessibilityTestingCheatSheet = [
   {
@@ -32,6 +42,7 @@ export const accessibilityTestingCheatSheet = [
           'A clean automated report or perfect score does not prove that a page conforms to WCAG or is usable.',
       },
     ],
+    references: [accessibilityEvaluationReference],
   },
   {
     id: 'lighthouse',
@@ -64,6 +75,7 @@ export const accessibilityTestingCheatSheet = [
           'Audit authenticated pages and important UI states, not only the public landing page.',
       },
     ],
+    references: [lighthouseReference],
   },
   {
     id: 'axe',
@@ -96,6 +108,7 @@ export const accessibilityTestingCheatSheet = [
           'Prefer correcting semantic HTML and component behavior over suppressing a rule without evidence.',
       },
     ],
+    references: [axeReference],
   },
   {
     id: 'wave',
@@ -128,6 +141,7 @@ export const accessibilityTestingCheatSheet = [
           'Turn off styles and inspect headings, landmarks, labels, alternatives, and reading order in context.',
       },
     ],
+    references: [waveReference],
   },
   {
     id: 'keyboard-focus',
@@ -160,6 +174,7 @@ export const accessibilityTestingCheatSheet = [
           'After dialogs, errors, or route changes, place focus where the user can understand and continue the task.',
       },
     ],
+    references: [wcagFocusReference, wcagKeyboardTrapReference, ariaDialogReference],
   },
   {
     id: 'semantics-perception',
@@ -193,5 +208,6 @@ export const accessibilityTestingCheatSheet = [
           'Test zoom, narrow viewports, high contrast or forced colors, reduced motion, and text spacing where relevant.',
       },
     ],
+    references: [accessibilityEvaluationReference, wcagContrastReference],
   },
 ] as const satisfies readonly CheatSheetSection[]

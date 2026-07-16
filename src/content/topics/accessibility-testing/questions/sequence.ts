@@ -1,10 +1,11 @@
 import type { SequenceQuestion } from '../../../types'
 import {
   accessibilityEvaluationReference,
+  ariaDialogReference,
   axeReference,
   lighthouseReference,
   waveReference,
-  wcagFocusReference,
+  wcagKeyboardTrapReference,
 } from './shared'
 
 export const sequenceQuestions = [
@@ -23,8 +24,16 @@ export const sequenceQuestions = [
       { id: 'retest', code: 'Fix root causes, retest, and preserve regression coverage' },
     ],
     correctOrder: ['scope', 'render', 'scan', 'triage', 'manual', 'retest'],
+    requiredOrderPairs: [
+      ['scope', 'render'],
+      ['render', 'scan'],
+      ['scan', 'triage'],
+      ['render', 'manual'],
+      ['triage', 'retest'],
+      ['manual', 'retest'],
+    ],
     explanation:
-      'A useful evaluation starts with a defined scope, combines automation with human checks, and ends by verifying fixes and retaining repeatable regression coverage.',
+      'A useful evaluation starts with a defined scope, combines automation with human checks in either order once the target state exists, and ends by verifying fixes and retaining regression coverage.',
     reference: accessibilityEvaluationReference,
   },
   {
@@ -61,8 +70,17 @@ export const sequenceQuestions = [
       { id: 'record', code: 'Record confirmed barriers with evidence and scope' },
     ],
     correctOrder: ['state', 'run', 'errors', 'alerts', 'structure', 'record'],
+    requiredOrderPairs: [
+      ['state', 'run'],
+      ['run', 'errors'],
+      ['run', 'alerts'],
+      ['run', 'structure'],
+      ['errors', 'record'],
+      ['alerts', 'record'],
+      ['structure', 'record'],
+    ],
     explanation:
-      'WAVE overlays information on the rendered interface. Its value comes from inspecting errors, alerts, features, and structure in context before recording findings.',
+      'WAVE overlays information on the rendered interface. Errors, alerts, features, and structure may be reviewed in any order before confirmed findings are recorded.',
     reference: waveReference,
   },
   {
@@ -99,9 +117,18 @@ export const sequenceQuestions = [
       { id: 'complete', code: 'Complete the task and verify focus after state changes' },
     ],
     correctOrder: ['start', 'forward', 'operate', 'reverse', 'focus', 'complete'],
+    requiredOrderPairs: [
+      ['start', 'forward'],
+      ['forward', 'operate'],
+      ['forward', 'reverse'],
+      ['forward', 'focus'],
+      ['operate', 'complete'],
+      ['reverse', 'complete'],
+      ['focus', 'complete'],
+    ],
     explanation:
-      'A keyboard smoke test covers reachability, operation, both navigation directions, focus visibility and order, and focus behavior as the interface changes.',
-    reference: wcagFocusReference,
+      'After establishing forward reachability, operation, reverse navigation, and focus checks may be interleaved before completing the task and verifying state changes.',
+    reference: wcagKeyboardTrapReference,
   },
   {
     id: 'accessibility-testing.sequence.dialog-focus',
@@ -120,7 +147,7 @@ export const sequenceQuestions = [
     correctOrder: ['trigger', 'activate', 'inside', 'contain', 'close', 'return'],
     explanation:
       'A modal moves focus inside, contains it only while open, offers a keyboard-accessible close method, and restores focus to a logical point afterward.',
-    reference: wcagFocusReference,
+    reference: ariaDialogReference,
   },
   {
     id: 'accessibility-testing.sequence.form-error',
@@ -140,8 +167,16 @@ export const sequenceQuestions = [
       { id: 'clear', code: 'Verify stale error state and messaging are cleared' },
     ],
     correctOrder: ['invalid', 'submit', 'notice', 'association', 'correct', 'clear'],
+    requiredOrderPairs: [
+      ['invalid', 'submit'],
+      ['submit', 'notice'],
+      ['submit', 'association'],
+      ['notice', 'correct'],
+      ['association', 'correct'],
+      ['correct', 'clear'],
+    ],
     explanation:
-      'Testing the whole error-and-recovery cycle checks discovery, announcement, field association, keyboard correction, and whether obsolete error state is removed.',
+      'After submission, visibility/announcement and field association may be checked in either order before correcting the value and confirming stale errors are removed.',
     reference: accessibilityEvaluationReference,
   },
   {
@@ -159,8 +194,15 @@ export const sequenceQuestions = [
       { id: 'manual', code: 'Confirm the final name in the rendered accessibility tree' },
     ],
     correctOrder: ['locate', 'inspect', 'source', 'fix', 'automated', 'manual'],
+    requiredOrderPairs: [
+      ['locate', 'inspect'],
+      ['inspect', 'source'],
+      ['source', 'fix'],
+      ['fix', 'automated'],
+      ['fix', 'manual'],
+    ],
     explanation:
-      'Tool output begins the investigation. Inspect the computed semantics, fix the actual naming source, then verify with both the rule and the rendered accessibility information.',
+      'Tool output begins the investigation. Inspect and fix the naming source, then verify with both the automated rule and rendered accessibility information in either order.',
     reference: axeReference,
   },
   {
@@ -178,8 +220,17 @@ export const sequenceQuestions = [
       { id: 'verify', code: 'Verify the fix manually and with regression tests' },
     ],
     correctOrder: ['reproduce', 'guidance', 'impact', 'scope', 'repair', 'verify'],
+    requiredOrderPairs: [
+      ['reproduce', 'guidance'],
+      ['reproduce', 'impact'],
+      ['reproduce', 'scope'],
+      ['guidance', 'repair'],
+      ['impact', 'repair'],
+      ['scope', 'repair'],
+      ['repair', 'verify'],
+    ],
     explanation:
-      'Good triage connects a reproducible result to user impact, checks the pattern’s full scope, fixes the source, and verifies rather than merely silencing the report.',
+      'After reproduction, guidance, user impact, and pattern scope may be investigated in any order before repairing the source and verifying the result.',
     reference: accessibilityEvaluationReference,
   },
   {
@@ -200,8 +251,17 @@ export const sequenceQuestions = [
       },
     ],
     correctOrder: ['author', 'component', 'flow', 'manual', 'users', 'monitor'],
+    requiredOrderPairs: [
+      ['author', 'component'],
+      ['author', 'manual'],
+      ['author', 'users'],
+      ['component', 'flow'],
+      ['flow', 'monitor'],
+      ['manual', 'monitor'],
+      ['users', 'monitor'],
+    ],
     explanation:
-      'Accessibility is most effective as a lifecycle: prevent defects in components, detect them at several test layers, learn from users, and feed production findings back into the system.',
+      'Accessibility is most effective as a lifecycle: component and flow checks form a delivery path, while manual and user evaluation can happen alongside it before production learning feeds back into the system.',
     reference: accessibilityEvaluationReference,
   },
 ] as const satisfies readonly SequenceQuestion[]

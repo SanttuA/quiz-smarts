@@ -44,8 +44,16 @@ export const sequenceQuestions = [
       { id: 'load', code: 'Run the approved workload and watch stop conditions' },
     ],
     correctOrder: ['permission', 'goals', 'model', 'prepare', 'validate', 'load'],
+    requiredOrderPairs: [
+      ['permission', 'goals'],
+      ['goals', 'model'],
+      ['goals', 'prepare'],
+      ['model', 'validate'],
+      ['prepare', 'validate'],
+      ['validate', 'load'],
+    ],
     explanation:
-      'Authorization and measurable goals constrain the workload design, which must be prepared and validated before meaningful load is generated.',
+      'Authorization and measurable goals come first. Workload modeling and environment preparation may then proceed in either order before small-run validation and approved load.',
     reference: jmeterBestPracticesReference,
   },
   {
@@ -63,8 +71,14 @@ export const sequenceQuestions = [
       { id: 'small-run', code: 'Run a small validation and confirm different rows are used' },
     ],
     correctOrder: ['file', 'config', 'request', 'assertion', 'small-run'],
+    requiredOrderPairs: [
+      ['file', 'request'],
+      ['config', 'request'],
+      ['request', 'assertion'],
+      ['assertion', 'small-run'],
+    ],
     explanation:
-      'The data file and its variable mapping must exist before a sampler can resolve the credentials, after which validation confirms the flow.',
+      'The data file and variable mapping may be prepared in either order, but both must exist before the sampler runs and the small validation confirms the flow.',
     reference: jmeterComponentReference,
   },
   {
@@ -182,8 +196,18 @@ export const sequenceQuestions = [
       { id: 'criteria', code: 'Compare the valid run with the predefined acceptance criteria' },
     ],
     correctOrder: ['profile', 'generator', 'errors', 'timing', 'target', 'criteria'],
+    requiredOrderPairs: [
+      ['profile', 'generator'],
+      ['profile', 'errors'],
+      ['profile', 'timing'],
+      ['profile', 'target'],
+      ['generator', 'criteria'],
+      ['errors', 'criteria'],
+      ['timing', 'criteria'],
+      ['target', 'criteria'],
+    ],
     explanation:
-      'A run is interpretable only after confirming its workload and generator health, then combining errors, performance distributions, and target telemetry.',
+      'After confirming the load profile, generator health, errors, timing, and target telemetry may be reviewed in any order before the valid run is judged against its criteria.',
     reference: jmeterDashboardReference,
   },
   {
@@ -203,8 +227,18 @@ export const sequenceQuestions = [
       { id: 'monitor', code: 'Monitor generators, network, target health, and stop conditions' },
     ],
     correctOrder: ['validate', 'engines', 'data', 'calculate', 'servers', 'run', 'monitor'],
+    requiredOrderPairs: [
+      ['validate', 'engines'],
+      ['validate', 'calculate'],
+      ['engines', 'data'],
+      ['engines', 'servers'],
+      ['data', 'servers'],
+      ['calculate', 'run'],
+      ['servers', 'run'],
+      ['run', 'monitor'],
+    ],
     explanation:
-      'Distributed load requires a validated plan, equivalent engine dependencies and data, and an explicit total-load calculation before launch.',
+      'Distributed load requires a validated plan, equivalent engines and data, and an explicit total-load calculation. Calculation may occur alongside engine preparation, but all prerequisites precede launch.',
     reference: jmeterRemoteTestingReference,
   },
 ] as const satisfies readonly SequenceQuestion[]
