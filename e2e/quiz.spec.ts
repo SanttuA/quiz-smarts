@@ -171,7 +171,9 @@ test('opens the Vitest topic and starts its quick quiz', async ({ page }) => {
   await page.getByRole('link', { name: 'Open Vitest topic' }).click()
   await expect(page).toHaveURL(/#\/topics\/vitest$/)
   await expect(page.getByRole('heading', { name: 'Vitest cheatsheet' })).toBeVisible()
-  await expect(page.getByRole('link', { name: /Vitest: Getting Started/ })).toBeVisible()
+  const gettingStartedLinks = page.getByRole('link', { name: /Vitest: Getting Started/ })
+  await expect(gettingStartedLinks).toHaveCount(2)
+  await expect(gettingStartedLinks.first()).toBeVisible()
 
   await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
   await expect(page).toHaveURL(/#\/topics\/vitest\/quiz\?mode=subset$/)
