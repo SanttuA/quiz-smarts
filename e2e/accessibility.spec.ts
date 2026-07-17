@@ -32,7 +32,17 @@ async function expectNoHorizontalOverflow(page: Page, state: string) {
     offenders: Array.from(document.querySelectorAll<HTMLElement>('body *'))
       .filter((element) => {
         const rect = element.getBoundingClientRect()
-        return rect.left < 0 || rect.right > document.documentElement.clientWidth
+        const style = window.getComputedStyle(element)
+        const isClipped = style.clip !== 'auto' || style.clipPath !== 'none'
+        const isVisuallyHidden =
+          element.hidden ||
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          (rect.width <= 1 && rect.height <= 1 && style.overflow === 'hidden' && isClipped)
+
+        return (
+          !isVisuallyHidden && (rect.left < 0 || rect.right > document.documentElement.clientWidth)
+        )
       })
       .map((element) => {
         const rect = element.getBoundingClientRect()
@@ -69,6 +79,7 @@ async function expectNoHorizontalOverflow(page: Page, state: string) {
       internalOverflows: overflow.internalOverflows,
     })}`,
   ).toBeLessThanOrEqual(overflow.clientWidth)
+  expect(overflow.offenders, `${state} has off-viewport content`).toEqual([])
 }
 
 async function answerCorrectly(page: Page, question: QuizQuestion) {
