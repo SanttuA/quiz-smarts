@@ -25,6 +25,63 @@ async function expectNoAxeViolations(page: Page, state: string) {
   expect(summary, `${state} has axe violations`).toEqual([])
 }
 
+async function expectNoHorizontalOverflow(page: Page, state: string) {
+  const overflow = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+    offenders: Array.from(document.querySelectorAll<HTMLElement>('body *'))
+      .filter((element) => {
+        const rect = element.getBoundingClientRect()
+        const style = window.getComputedStyle(element)
+        const isClipped = style.clip !== 'auto' || style.clipPath !== 'none'
+        const isVisuallyHidden =
+          element.hidden ||
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          (rect.width <= 1 && rect.height <= 1 && style.overflow === 'hidden' && isClipped)
+
+        return (
+          !isVisuallyHidden && (rect.left < 0 || rect.right > document.documentElement.clientWidth)
+        )
+      })
+      .map((element) => {
+        const rect = element.getBoundingClientRect()
+        const style = window.getComputedStyle(element)
+        return {
+          tag: element.tagName.toLowerCase(),
+          className: element.className,
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          display: style.display,
+          minWidth: style.minWidth,
+          overflowX: style.overflowX,
+          text: element.textContent?.trim().slice(0, 80),
+        }
+      }),
+    internalOverflows: Array.from(document.querySelectorAll<HTMLElement>('body *'))
+      .filter((element) => element.scrollWidth > element.clientWidth)
+      .map((element) => ({
+        tag: element.tagName.toLowerCase(),
+        className: element.className,
+        clientWidth: element.clientWidth,
+        scrollWidth: element.scrollWidth,
+        overflowX: window.getComputedStyle(element).overflowX,
+        text: element.textContent?.trim().slice(0, 80),
+      })),
+  }))
+
+  expect(
+    overflow.scrollWidth,
+    `${state} overflows horizontally: ${JSON.stringify({
+      offenders: overflow.offenders,
+      internalOverflows: overflow.internalOverflows,
+    })}`,
+  ).toBeLessThanOrEqual(overflow.clientWidth)
+  expect(overflow.offenders, `${state} has off-viewport content`).toEqual([])
+}
+
 async function answerCorrectly(page: Page, question: QuizQuestion) {
   switch (question.kind) {
     case 'multiple-choice': {
@@ -99,6 +156,7 @@ test('supports skip links, route focus, route titles, and axe-clean content page
 test('announces quiz changes and keeps every question type and results axe-clean', async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 320, height: 800 })
   await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
   const scannedKinds = new Set<QuizQuestion['kind']>()
   let scannedFeedback = false
@@ -111,6 +169,7 @@ test('announces quiz changes and keeps every question type and results axe-clean
 
     if (!scannedKinds.has(question.kind)) {
       await expectNoAxeViolations(page, `${question.kind} question`)
+      await expectNoHorizontalOverflow(page, `${question.kind} question`)
       scannedKinds.add(question.kind)
     }
 
@@ -127,6 +186,7 @@ test('announces quiz changes and keeps every question type and results axe-clean
     await answerCorrectly(page, question)
     if (!scannedFeedback) {
       await expectNoAxeViolations(page, 'answer feedback')
+      await expectNoHorizontalOverflow(page, 'answer feedback')
       scannedFeedback = true
     }
 
@@ -152,6 +212,7 @@ test('announces quiz changes and keeps every question type and results axe-clean
   await expect(page).toHaveTitle('Quiz results: Robot Framework | Quiz Smarts')
   await expect(page.getByRole('listitem').first()).toContainText('Correct')
   await expectNoAxeViolations(page, 'quiz results')
+  await expectNoHorizontalOverflow(page, 'quiz results')
 
   await page.getByRole('button', { name: 'Open cheatsheet' }).click()
   const cheatsheetTitle = page.getByRole('heading', {
@@ -162,21 +223,15 @@ test('announces quiz changes and keeps every question type and results axe-clean
   await expect(cheatsheetTitle).toBeInViewport()
 })
 
-test('does not create horizontal overflow at 320 CSS pixels', async ({ page }) => {
+test('does not create horizontal overflow on narrow content pages', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 })
   await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Available topics' })).toBeVisible()
+  await expectNoHorizontalOverflow(page, 'landing page')
 
-  const overflow = await page.evaluate(() => ({
-    clientWidth: document.documentElement.clientWidth,
-    scrollWidth: document.documentElement.scrollWidth,
-    offenders: Array.from(document.querySelectorAll<HTMLElement>('body *'))
-      .filter((element) => {
-        const rect = element.getBoundingClientRect()
-        return rect.left < 0 || rect.right > document.documentElement.clientWidth
-      })
-      .map((element) => element.tagName.toLowerCase()),
-  }))
-
-  expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth)
-  expect(overflow.offenders).toEqual([])
+  await page.getByRole('link', { name: 'Open Accessibility Testing topic' }).click()
+  await expect(
+    page.getByRole('heading', { name: 'Accessibility Testing cheatsheet' }),
+  ).toBeVisible()
+  await expectNoHorizontalOverflow(page, 'topic page')
 })

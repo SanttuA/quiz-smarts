@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 import pythonTopic from '../src/content/topics/python'
 import robotFrameworkTopic from '../src/content/topics/robot-framework'
 import type { QuizQuestion } from '../src/content/types'
@@ -63,6 +63,54 @@ async function answerCorrectly(page: Page, question: QuizQuestion) {
   await expect(page.getByText('That’s right.')).toBeVisible()
 }
 
+async function answerIncorrectly(page: Page, question: QuizQuestion) {
+  await expect(page.getByRole('heading', { name: question.prompt })).toBeVisible()
+
+  switch (question.kind) {
+    case 'multiple-choice': {
+      const answer = question.choices.find((choice) => choice.id !== question.correctChoiceId)!
+      await page.getByRole('radio', { name: answer.label, exact: true }).check()
+      break
+    }
+    case 'text-blank':
+      await page.getByRole('textbox', { name: 'Missing answer' }).fill('deliberately incorrect')
+      break
+    case 'drag-blank': {
+      const answer = question.options.find((option) => option.id !== question.correctOptionId)!
+      await page.getByRole('radio', { name: answer.label, exact: true }).check()
+      break
+    }
+    case 'sequence':
+      // Prepared sequence questions always start in an incorrect order.
+      break
+  }
+
+  await page.getByRole('button', { name: 'Check answer' }).click()
+  await expect(page.getByText('Not quite.')).toBeVisible()
+}
+
+async function pointerDrag(page: Page, source: Locator, target: Locator) {
+  await source.scrollIntoViewIfNeeded()
+  const sourceBox = await source.boundingBox()
+  const targetBox = await target.boundingBox()
+  if (!sourceBox || !targetBox) throw new Error('Drag source or target is not visible')
+
+  const sourceCenter = {
+    x: sourceBox.x + sourceBox.width / 2,
+    y: sourceBox.y + sourceBox.height / 2,
+  }
+  const targetCenter = {
+    x: targetBox.x + targetBox.width / 2,
+    y: targetBox.y + targetBox.height / 2,
+  }
+
+  await page.mouse.move(sourceCenter.x, sourceCenter.y)
+  await page.mouse.down()
+  await page.mouse.move(sourceCenter.x + 10, sourceCenter.y, { steps: 5 })
+  await page.mouse.move(targetCenter.x, targetCenter.y, { steps: 20 })
+  await page.mouse.up()
+}
+
 test('completes a seeded shuffled quiz and persists only the best score', async ({ page }) => {
   await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
@@ -89,6 +137,27 @@ test('completes a seeded shuffled quiz and persists only the best score', async 
   await page.reload()
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Strong signal.' })).toHaveCount(0)
+  expect(await page.evaluate(() => window.localStorage.getItem('quiz-smarts:best-scores:v2'))).toBe(
+    storedScore,
+  )
+
+  for (const [index, question] of preparedSubsetQuestions.entries()) {
+    if (index === 0) {
+      await answerIncorrectly(page, question)
+    } else {
+      await answerCorrectly(page, question)
+    }
+    await page
+      .getByRole('button', {
+        name: index === preparedSubsetQuestions.length - 1 ? 'See results' : 'Next question',
+      })
+      .click()
+  }
+
+  await expect(page.getByRole('heading', { name: 'Strong signal.' })).toBeVisible()
+  await expect(page.getByLabel('Score 19 out of 20')).toBeVisible()
+  await expect(page.getByText('◆ Best quick score: 20/20')).toBeVisible()
+  await expect(page.getByRole('listitem').filter({ hasText: 'Incorrect' })).toHaveCount(1)
   expect(await page.evaluate(() => window.localStorage.getItem('quiz-smarts:best-scores:v2'))).toBe(
     storedScore,
   )
@@ -316,6 +385,66 @@ test('reorders a sequence with the keyboard without submitting it', async ({ pag
   await enabledMoveButton.focus()
   await enabledMoveButton.press('Enter')
 
+  await expect
+    .poll(async () => (await sequenceList.locator('code').allTextContents()).join('\n'))
+    .not.toBe(originalOrder.join('\n'))
+  await expect(page.getByRole('button', { name: 'Check answer' })).toBeVisible()
+  await expect(page.getByText('That’s right.')).toHaveCount(0)
+  await expect(page.getByText('Not quite.')).toHaveCount(0)
+})
+
+test('places a blank answer with pointer dragging', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
+  const dragQuestionIndex = preparedSubsetQuestions.findIndex(
+    (question) => question.kind === 'drag-blank',
+  )
+  expect(dragQuestionIndex).toBeGreaterThanOrEqual(0)
+
+  for (const question of preparedSubsetQuestions.slice(0, dragQuestionIndex)) {
+    await answerCorrectly(page, question)
+    await page.getByRole('button', { name: 'Next question' }).click()
+  }
+
+  const question = preparedSubsetQuestions[dragQuestionIndex]!
+  expect(question.kind).toBe('drag-blank')
+  if (question.kind !== 'drag-blank') throw new Error('Missing drag-blank question')
+  await expect(page.getByRole('heading', { name: question.prompt })).toBeVisible()
+
+  const answer = question.options.find((option) => option.id === question.correctOptionId)!
+  const dragOption = page.getByRole('button', {
+    name: `Drag ${answer.label} to the blank`,
+    exact: true,
+  })
+  const blank = page.getByRole('button', { name: 'Empty answer blank' })
+
+  await pointerDrag(page, dragOption, blank)
+  await expect(
+    page.getByRole('button', { name: `Blank contains ${answer.label}`, exact: true }),
+  ).toBeVisible()
+  await expect(page.getByRole('radio', { name: answer.label, exact: true })).toBeChecked()
+  await expect(page.getByRole('button', { name: 'Check answer' })).toBeEnabled()
+})
+
+test('reorders a sequence with pointer dragging', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/topics/robot-framework/quiz?mode=subset')
+  const sequenceIndex = preparedSubsetQuestions.findIndex(
+    (question) => question.kind === 'sequence',
+  )
+  expect(sequenceIndex).toBeGreaterThanOrEqual(0)
+
+  for (const question of preparedSubsetQuestions.slice(0, sequenceIndex)) {
+    await answerCorrectly(page, question)
+    await page.getByRole('button', { name: 'Next question' }).click()
+  }
+
+  const question = preparedSubsetQuestions[sequenceIndex]!
+  expect(question.kind).toBe('sequence')
+  await expect(page.getByRole('heading', { name: question.prompt })).toBeVisible()
+  const sequenceList = page.getByRole('list', { name: 'Lines to order' })
+  const originalOrder = await sequenceList.locator('code').allTextContents()
+  const rows = sequenceList.getByRole('listitem')
+
+  await pointerDrag(page, rows.first().getByRole('button', { name: /^Drag / }), rows.last())
   await expect
     .poll(async () => (await sequenceList.locator('code').allTextContents()).join('\n'))
     .not.toBe(originalOrder.join('\n'))
