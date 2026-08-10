@@ -22,10 +22,11 @@ describe('routed application', () => {
     renderRoute('/')
 
     expect(await screen.findByRole('heading', { name: 'Available topics' })).toBeInTheDocument()
-    expect(screen.getByText('09 topics')).toBeInTheDocument()
+    expect(screen.getByText('10 topics')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Accessibility Testing' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Basic Data Analysis' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Basic C++' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Vitest' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Playwright' })).toBeInTheDocument()
@@ -102,6 +103,17 @@ describe('routed application', () => {
 
     expect(await screen.findByRole('heading', { name: 'Python cheatsheet' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /The Python Tutorial/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
+    expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
+  })
+
+  it('loads the Basic C++ topic and its quiz', async () => {
+    const user = userEvent.setup()
+    renderRoute('/topics/cpp-basics')
+
+    expect(await screen.findByRole('heading', { name: 'Basic C++ cheatsheet' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /cppreference: C\+\+ language/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Quick quiz · 20' }))
     expect(await screen.findByText('Question 1 / 20')).toBeInTheDocument()
