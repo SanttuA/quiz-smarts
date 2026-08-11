@@ -5,6 +5,7 @@ export const cppBasicsMetadata = {
   slug: 'cpp-basics',
   title: 'Basic C++',
   eyebrow: 'Programming · Language fundamentals',
+  categories: ['programming'],
   summary: 'Practice modern C++ syntax and the core building blocks of small programs.',
   description:
     'Learn C++ program structure, values, expressions, control flow, functions, strings, and vectors.',

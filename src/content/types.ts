@@ -1,5 +1,6 @@
 export type TopicId = string
 export type QuizMode = 'subset' | 'all'
+export type TopicCategory = 'programming' | 'test-automation' | 'quality' | 'data'
 
 export interface QuestionReference {
   label: string
@@ -82,6 +83,7 @@ export interface TopicMetadata {
   slug: string
   title: string
   eyebrow: string
+  categories: readonly TopicCategory[]
   summary: string
   description: string
   difficulty: string

@@ -5,6 +5,7 @@ export const jmeterMetadata = {
   slug: 'jmeter',
   title: 'Load Testing with JMeter',
   eyebrow: 'Performance · Load testing',
+  categories: ['test-automation', 'quality'],
   summary:
     'Practice realistic HTTP load tests with deliberate workloads, dynamic data, and evidence-based analysis.',
   description:

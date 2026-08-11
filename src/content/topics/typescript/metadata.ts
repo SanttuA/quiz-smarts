@@ -5,6 +5,7 @@ export const typescriptMetadata = {
   slug: 'typescript',
   title: 'TypeScript',
   eyebrow: 'Programming · Static typing',
+  categories: ['programming'],
   summary: 'Practice TypeScript’s type system and safer patterns for everyday JavaScript.',
   description:
     'Learn inference, unions, narrowing, object types, functions, generics, modules, and strict compiler checks.',

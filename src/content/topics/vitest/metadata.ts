@@ -5,6 +5,7 @@ export const vitestMetadata = {
   slug: 'vitest',
   title: 'Vitest',
   eyebrow: 'Testing · React components',
+  categories: ['test-automation'],
   summary: 'Practice fast React component tests with Vitest and Testing Library.',
   description:
     'Learn Vitest structure, React rendering, semantic queries, user interactions, async assertions, mocks, configuration, and coverage.',

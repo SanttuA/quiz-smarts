@@ -5,6 +5,7 @@ export const pythonMetadata = {
   slug: 'python',
   title: 'Python',
   eyebrow: 'Programming · Core language',
+  categories: ['programming'],
   summary: 'Practice expressive Python syntax and the building blocks of maintainable programs.',
   description:
     'Learn Python 3 values, collections, control flow, functions, exceptions, modules, and classes.',

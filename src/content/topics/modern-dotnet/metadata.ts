@@ -5,6 +5,7 @@ export const modernDotnetMetadata = {
   slug: 'modern-dotnet',
   title: 'Modern .NET',
   eyebrow: 'Development · Application platform',
+  categories: ['programming'],
   summary: 'Practice the tools and runtime concepts behind modern cross-platform .NET apps.',
   description:
     'Learn the .NET 10 SDK, CLI, project system, NuGet, managed runtime, app hosting, testing, and deployment.',

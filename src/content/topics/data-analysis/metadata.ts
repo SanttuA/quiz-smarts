@@ -5,6 +5,7 @@ export const dataAnalysisMetadata = {
   slug: 'data-analysis',
   title: 'Basic Data Analysis',
   eyebrow: 'Data · Analysis fundamentals',
+  categories: ['data'],
   summary:
     'Build confidence turning raw observations into careful summaries, charts, and conclusions.',
   description:

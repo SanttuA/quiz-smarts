@@ -5,6 +5,7 @@ export const playwrightMetadata = {
   slug: 'playwright',
   title: 'Playwright',
   eyebrow: 'Automation · Browser testing',
+  categories: ['test-automation'],
   summary: 'Practice reliable browser tests with resilient locators and web-first assertions.',
   description:
     'Learn Playwright Test structure, locators, actions, assertions, fixtures, projects, and debugging workflows.',
