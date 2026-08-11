@@ -1,5 +1,6 @@
 import { accessibilityTestingMetadata } from './topics/accessibility-testing/metadata'
 import { cppBasicsMetadata } from './topics/cpp-basics/metadata'
+import { csharpBasicsMetadata } from './topics/csharp-basics/metadata'
 import { dataAnalysisMetadata } from './topics/data-analysis/metadata'
 import { jmeterMetadata } from './topics/jmeter/metadata'
 import { playwrightMetadata } from './topics/playwright/metadata'
@@ -16,6 +17,7 @@ export const topicCatalog = [
   dataAnalysisMetadata,
   pythonMetadata,
   cppBasicsMetadata,
+  csharpBasicsMetadata,
   typescriptMetadata,
   vitestMetadata,
   playwrightMetadata,
@@ -29,6 +31,7 @@ const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> 
   'data-analysis': () => import('./topics/data-analysis'),
   python: () => import('./topics/python'),
   'cpp-basics': () => import('./topics/cpp-basics'),
+  'csharp-basics': () => import('./topics/csharp-basics'),
   typescript: () => import('./topics/typescript'),
   vitest: () => import('./topics/vitest'),
   playwright: () => import('./topics/playwright'),
