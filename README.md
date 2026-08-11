@@ -4,11 +4,11 @@ A frontend-only technical quiz platform built with React, TypeScript, TanStack R
 
 ## Local development
 
-Use Node 24 and the package-manager version declared in `package.json`:
+Use Node 24.15.0 or newer (but below Node 25) and the package-manager version declared in `package.json`:
 
 ```sh
 corepack enable
-corepack prepare pnpm@11.12.0 --activate
+corepack prepare pnpm@11.21.0 --activate
 corepack pnpm install
 corepack pnpm dev
 ```
