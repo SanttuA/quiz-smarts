@@ -3,6 +3,7 @@ import { cppBasicsMetadata } from './topics/cpp-basics/metadata'
 import { csharpBasicsMetadata } from './topics/csharp-basics/metadata'
 import { dataAnalysisMetadata } from './topics/data-analysis/metadata'
 import { jmeterMetadata } from './topics/jmeter/metadata'
+import { modernDotnetMetadata } from './topics/modern-dotnet/metadata'
 import { playwrightMetadata } from './topics/playwright/metadata'
 import { pythonMetadata } from './topics/python/metadata'
 import { robotFrameworkMetadata } from './topics/robot-framework/metadata'
@@ -18,6 +19,7 @@ export const topicCatalog = [
   pythonMetadata,
   cppBasicsMetadata,
   csharpBasicsMetadata,
+  modernDotnetMetadata,
   typescriptMetadata,
   vitestMetadata,
   playwrightMetadata,
@@ -32,6 +34,7 @@ const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> 
   python: () => import('./topics/python'),
   'cpp-basics': () => import('./topics/cpp-basics'),
   'csharp-basics': () => import('./topics/csharp-basics'),
+  'modern-dotnet': () => import('./topics/modern-dotnet'),
   typescript: () => import('./topics/typescript'),
   vitest: () => import('./topics/vitest'),
   playwright: () => import('./topics/playwright'),

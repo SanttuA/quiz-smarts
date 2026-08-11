@@ -247,6 +247,24 @@ test('opens the Basic C# topic and starts its quick quiz', async ({ page }) => {
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the Modern .NET topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Modern .NET' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Modern .NET topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/modern-dotnet$/)
+  await expect(page.getByRole('heading', { name: 'Modern .NET cheatsheet' })).toBeVisible()
+  const introductionLinks = page.getByRole('link', {
+    name: /Microsoft Learn: Introduction to \.NET/,
+  })
+  await expect(introductionLinks).toHaveCount(2)
+  await expect(introductionLinks.first()).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/modern-dotnet\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('opens the TypeScript topic and starts its quick quiz', async ({ page }) => {
   await page.goto('/quiz-smarts/#/')
   await expect(page.getByRole('heading', { name: 'TypeScript' })).toBeVisible()
