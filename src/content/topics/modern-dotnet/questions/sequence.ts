@@ -69,7 +69,7 @@ export const sequenceQuestions = [
     instruction: 'Declare the dependency, use its API in source, and verify the project compiles.',
     items: [
       { id: 'add', code: 'dotnet package add Humanizer' },
-      { id: 'use', code: 'string text = "job".Pluralize(2);' },
+      { id: 'use', code: 'string text = "job".Pluralize();' },
       { id: 'build', code: 'dotnet build' },
     ],
     correctOrder: ['add', 'use', 'build'],
