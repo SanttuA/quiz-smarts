@@ -5,6 +5,7 @@ export const accessibilityTestingMetadata = {
   slug: 'accessibility-testing',
   title: 'Accessibility Testing',
   eyebrow: 'Accessibility · Quality assurance',
+  categories: ['test-automation', 'quality'],
   summary: 'Find barriers with automated tools, manual checks, and assistive technology.',
   description:
     'Practice a layered accessibility workflow using Lighthouse, axe, WAVE, keyboard checks, and human evaluation.',

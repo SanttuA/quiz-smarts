@@ -44,6 +44,63 @@ describe('routed application', () => {
     expect(screen.getByRole('link', { name: 'All questions · 40' })).toBeInTheDocument()
   })
 
+  it('filters topics by category and searchable topic copy', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    const search = await screen.findByRole('searchbox', { name: 'Search topics' })
+    const allFilter = screen.getByRole('button', { name: 'All' })
+    const programmingFilter = screen.getByRole('button', { name: 'Programming' })
+    const automationFilter = screen.getByRole('button', { name: 'Test automation' })
+
+    expect(allFilter).toHaveAttribute('aria-pressed', 'true')
+    await user.click(programmingFilter)
+
+    expect(programmingFilter).toHaveFocus()
+    expect(programmingFilter).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('status')).toHaveTextContent('5 of 12 topics')
+    expect(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Robot Framework' })).not.toBeInTheDocument()
+
+    await user.click(allFilter)
+    await user.type(search, 'cross-platform')
+
+    expect(search).toHaveFocus()
+    expect(screen.getByRole('status')).toHaveTextContent('1 of 12 topics')
+    expect(screen.getByRole('heading', { name: 'Modern .NET' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Python' })).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Clear topic search' }))
+    expect(search).toHaveFocus()
+    await user.click(automationFilter)
+    await user.type(search, 'browser')
+
+    expect(screen.getByRole('status')).toHaveTextContent('2 of 12 topics')
+    expect(screen.getByRole('heading', { name: 'Playwright' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Selenium' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Accessibility Testing' })).not.toBeInTheDocument()
+  })
+
+  it('clears search and category filters from the empty state', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+
+    const search = await screen.findByRole('searchbox', { name: 'Search topics' })
+    await user.click(screen.getByRole('button', { name: 'Data' }))
+    await user.type(search, 'browser automation')
+
+    expect(screen.getByRole('status')).toHaveTextContent('0 of 12 topics')
+    expect(screen.getByRole('heading', { name: 'No topics found' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Clear search and filters' }))
+
+    expect(search).toHaveFocus()
+    expect(search).toHaveValue('')
+    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('status')).toHaveTextContent('12 topics')
+    expect(screen.getByRole('heading', { name: 'Basic Data Analysis' })).toBeInTheDocument()
+  })
+
   it('defaults direct quiz routes to all questions', async () => {
     renderRoute('/topics/robot-framework/quiz')
 

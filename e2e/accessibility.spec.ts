@@ -235,3 +235,44 @@ test('does not create horizontal overflow on narrow content pages', async ({ pag
   ).toBeVisible()
   await expectNoHorizontalOverflow(page, 'topic page')
 })
+
+test('keeps topic search and filter states accessible on narrow screens', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 })
+  await page.goto('/quiz-smarts/#/')
+
+  const search = page.getByRole('searchbox', { name: 'Search topics' })
+  const allFilter = page.getByRole('button', { name: 'All' })
+  const qualityFilter = page.getByRole('button', { name: 'Quality' })
+
+  await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
+  await expectNoAxeViolations(page, 'default topic catalog')
+  await expectNoHorizontalOverflow(page, 'default topic catalog')
+
+  await qualityFilter.focus()
+  await page.keyboard.press('Enter')
+
+  await expect(qualityFilter).toBeFocused()
+  await expect(qualityFilter).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('status')).toHaveText('2 of 12 topics')
+  await expect(page.getByRole('heading', { name: 'Accessibility Testing' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Load Testing with JMeter' })).toBeVisible()
+  await expectNoAxeViolations(page, 'filtered topic catalog')
+  await expectNoHorizontalOverflow(page, 'filtered topic catalog')
+
+  await search.fill('no matching topic')
+
+  await expect(search).toBeFocused()
+  await expect(page.getByRole('heading', { name: 'No topics found' })).toBeVisible()
+  await expect(page.getByRole('status')).toHaveText('0 of 12 topics')
+  await expectNoAxeViolations(page, 'empty topic catalog')
+  await expectNoHorizontalOverflow(page, 'empty topic catalog')
+
+  const resetButton = page.getByRole('button', { name: 'Clear search and filters' })
+  await resetButton.focus()
+  await page.keyboard.press('Enter')
+
+  await expect(search).toBeFocused()
+  await expect(search).toHaveValue('')
+  await expect(allFilter).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('status')).toHaveText('12 topics')
+})

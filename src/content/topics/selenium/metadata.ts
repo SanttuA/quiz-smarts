@@ -5,6 +5,7 @@ export const seleniumMetadata = {
   slug: 'selenium',
   title: 'Selenium',
   eyebrow: 'Automation · WebDriver',
+  categories: ['test-automation'],
   summary:
     'Practice dependable browser automation with WebDriver, explicit waits, and maintainable page objects.',
   description:

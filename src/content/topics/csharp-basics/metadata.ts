@@ -5,6 +5,7 @@ export const csharpBasicsMetadata = {
   slug: 'csharp-basics',
   title: 'Basic C#',
   eyebrow: 'Programming · Language fundamentals',
+  categories: ['programming'],
   summary: 'Practice modern C# syntax and the core building blocks of small programs.',
   description:
     'Learn C# console programs, values, expressions, control flow, methods, collections, classes, and properties.',
