@@ -8,7 +8,7 @@ Use Node 24 and the package-manager version declared in `package.json`:
 
 ```sh
 corepack enable
-corepack prepare pnpm@11.12.0 --activate
+corepack prepare pnpm@11.21.0 --activate
 corepack pnpm install
 corepack pnpm dev
 ```
