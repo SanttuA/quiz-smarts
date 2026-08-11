@@ -233,6 +233,20 @@ test('opens the Basic C++ topic and starts its quick quiz', async ({ page }) => 
   await expect(page.getByText('Question 1 / 20')).toBeVisible()
 })
 
+test('opens the Basic C# topic and starts its quick quiz', async ({ page }) => {
+  await page.goto('/quiz-smarts/#/')
+  await expect(page.getByRole('heading', { name: 'Basic C#' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Open Basic C# topic' }).click()
+  await expect(page).toHaveURL(/#\/topics\/csharp-basics$/)
+  await expect(page.getByRole('heading', { name: 'Basic C# cheatsheet' })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Microsoft Learn: A tour of C#/ })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Quick quiz · 20' }).click()
+  await expect(page).toHaveURL(/#\/topics\/csharp-basics\/quiz\?mode=subset$/)
+  await expect(page.getByText('Question 1 / 20')).toBeVisible()
+})
+
 test('opens the TypeScript topic and starts its quick quiz', async ({ page }) => {
   await page.goto('/quiz-smarts/#/')
   await expect(page.getByRole('heading', { name: 'TypeScript' })).toBeVisible()
