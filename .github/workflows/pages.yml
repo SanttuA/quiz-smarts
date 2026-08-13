@@ -47,13 +47,16 @@ jobs:
       - name: Typecheck
         run: corepack pnpm typecheck
 
-      - name: Run unit and component tests
-        run: corepack pnpm test:coverage
-
       - name: Install Playwright browsers
         run: corepack pnpm exec playwright install --with-deps chromium firefox
 
-      - name: Run browser tests
+      - name: Run unit and Chromium component tests with coverage
+        run: corepack pnpm test:coverage
+
+      - name: Run Firefox component tests
+        run: corepack pnpm exec vitest run --project firefox
+
+      - name: Run end-to-end browser tests
         run: corepack pnpm e2e
 
       - name: Create production build
