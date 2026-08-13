@@ -8,11 +8,6 @@ export const vitestWritingTestsReference = {
   url: 'https://vitest.dev/guide/learn/writing-tests',
 } as const
 
-export const vitestAsyncReference = {
-  label: 'Vitest: Testing Asynchronous Code',
-  url: 'https://vitest.dev/guide/learn/async',
-} as const
-
 export const vitestHooksReference = {
   label: 'Vitest: Test Hooks',
   url: 'https://vitest.dev/api/#test-hooks',

@@ -3,11 +3,6 @@ export const seleniumFirstScriptReference = {
   url: 'https://www.selenium.dev/documentation/webdriver/getting_started/first_script/',
 } as const
 
-export const seleniumDriverSessionsReference = {
-  label: 'Selenium: Driver sessions',
-  url: 'https://www.selenium.dev/documentation/webdriver/drivers/',
-} as const
-
 export const seleniumLocatorsReference = {
   label: 'Selenium: Locator strategies',
   url: 'https://www.selenium.dev/documentation/webdriver/elements/locators/',

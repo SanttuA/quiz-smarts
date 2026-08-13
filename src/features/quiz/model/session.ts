@@ -2,9 +2,9 @@ import type { QuizQuestion } from '../../../content/types'
 import { evaluateResponse } from './evaluate'
 import type { QuizResponse } from './responses'
 
-export type QuizPhase = 'answering' | 'feedback' | 'complete'
+type QuizPhase = 'answering' | 'feedback' | 'complete'
 
-export interface AnswerRecord {
+interface AnswerRecord {
   questionId: string
   response: QuizResponse
   isCorrect: boolean

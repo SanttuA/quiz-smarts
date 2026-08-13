@@ -26,6 +26,7 @@ corepack pnpm exec playwright install chromium firefox
 ```sh
 corepack pnpm format:check
 corepack pnpm lint
+corepack pnpm knip
 corepack pnpm typecheck
 corepack pnpm test:coverage
 corepack pnpm test:a11y
