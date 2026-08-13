@@ -28,11 +28,6 @@ export const scatterPlotReference = {
   url: 'https://www.itl.nist.gov/div898/handbook/eda/section3/eda33q.htm',
 } as const
 
-export const outlierReference = {
-  label: 'NIST/SEMATECH: What are outliers in the data?',
-  url: 'https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm',
-} as const
-
 export const confidenceIntervalReference = {
   label: 'NIST/SEMATECH: What are confidence intervals?',
   url: 'https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm',

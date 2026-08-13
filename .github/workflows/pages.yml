@@ -41,6 +41,9 @@ jobs:
       - name: Lint
         run: corepack pnpm lint
 
+      - name: Check for unused code and dependencies
+        run: corepack pnpm knip
+
       - name: Typecheck
         run: corepack pnpm typecheck
 

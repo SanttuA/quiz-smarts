@@ -18,11 +18,6 @@ export const dotnetCliReference = {
   url: 'https://learn.microsoft.com/en-us/dotnet/core/tools/',
 } as const
 
-export const dotnetCommandReference = {
-  label: 'Microsoft Learn: dotnet command',
-  url: 'https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet',
-} as const
-
 export const dotnetProjectSdkReference = {
   label: 'Microsoft Learn: .NET project SDKs',
   url: 'https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview',

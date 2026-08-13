@@ -1,8 +1,8 @@
-export type TopicId = string
+type TopicId = string
 export type QuizMode = 'subset' | 'all'
 export type TopicCategory = 'programming' | 'test-automation' | 'quality' | 'data'
 
-export interface QuestionReference {
+interface QuestionReference {
   label: string
   url: string
 }
@@ -13,7 +13,7 @@ export interface QuestionChoice {
   code?: string
 }
 
-export interface QuestionBase {
+interface QuestionBase {
   id: string
   topicId: TopicId
   prompt: string
@@ -64,7 +64,7 @@ export interface SequenceQuestion extends QuestionBase {
 export type QuizQuestion =
   MultipleChoiceQuestion | TextBlankQuestion | DragBlankQuestion | SequenceQuestion
 
-export interface CheatSheetItem {
+interface CheatSheetItem {
   term: string
   detail: string
   code?: string

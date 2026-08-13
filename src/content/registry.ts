@@ -42,10 +42,6 @@ const topicLoaders: Record<string, () => Promise<{ default: TopicDefinition }>> 
   jmeter: () => import('./topics/jmeter'),
 }
 
-export function getTopicMetadata(slug: string): TopicMetadata | undefined {
-  return topicCatalog.find((topic) => topic.slug === slug)
-}
-
 export async function loadTopic(slug: string): Promise<TopicDefinition | undefined> {
   const loader = topicLoaders[slug]
   return loader ? (await loader()).default : undefined
