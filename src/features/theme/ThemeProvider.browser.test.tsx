@@ -1,5 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render } from 'vitest-browser-react'
 import { describe, expect, it, vi } from 'vitest'
 import { ThemeProvider } from './ThemeProvider'
 import { ThemeToggle } from './ThemeToggle'
@@ -39,41 +38,47 @@ function mockColorScheme(initiallyDark: boolean) {
 describe('ThemeProvider', () => {
   it('follows system changes until the user chooses a persistent override', async () => {
     const colorScheme = mockColorScheme(false)
-    const user = userEvent.setup()
 
-    render(
+    const screen = await render(
       <ThemeProvider>
         <ThemeToggle />
       </ThemeProvider>,
     )
+    const root = document.documentElement
 
-    expect(screen.getByRole('button', { name: 'Switch to dark mode' })).toHaveTextContent('Dark')
-    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    await expect
+      .element(screen.getByRole('button', { name: 'Switch to dark mode' }))
+      .toHaveTextContent('Dark')
+    await expect.element(root).toHaveAttribute('data-theme', 'light')
 
-    act(() => colorScheme.change(true))
-    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toHaveTextContent('Light')
-    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    colorScheme.change(true)
+    await expect
+      .element(screen.getByRole('button', { name: 'Switch to light mode' }))
+      .toHaveTextContent('Light')
+    await expect.element(root).toHaveAttribute('data-theme', 'dark')
 
-    await user.click(screen.getByRole('button', { name: 'Switch to light mode' }))
-    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    await screen.getByRole('button', { name: 'Switch to light mode' }).click()
+    await expect.element(root).toHaveAttribute('data-theme', 'light')
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('light')
 
-    act(() => colorScheme.change(false))
-    act(() => colorScheme.change(true))
-    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    colorScheme.change(false)
+    colorScheme.change(true)
+    await expect.element(root).toHaveAttribute('data-theme', 'light')
   })
 
-  it('prefers a stored choice over the current system preference', () => {
+  it('prefers a stored choice over the current system preference', async () => {
     localStorage.setItem(THEME_STORAGE_KEY, 'dark')
     mockColorScheme(false)
 
-    render(
+    const screen = await render(
       <ThemeProvider>
         <ThemeToggle />
       </ThemeProvider>,
     )
 
-    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
-    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument()
+    await expect.element(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    await expect
+      .element(screen.getByRole('button', { name: 'Switch to light mode' }))
+      .toBeInTheDocument()
   })
 })

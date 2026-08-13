@@ -13,7 +13,9 @@ corepack pnpm install
 corepack pnpm dev
 ```
 
-The pnpm workspace configuration rejects direct and transitive releases published less than 24 hours ago. Dependencies are exact-versioned and the lockfile is committed for reproducible installs.
+The pnpm workspace configuration rejects direct and transitive releases published less than 24
+hours ago and disables automatic peer installation, so required peers are declared explicitly.
+Dependencies are exact-versioned and the lockfile is committed for reproducible installs.
 
 ## Quality checks
 
@@ -28,14 +30,23 @@ corepack pnpm format:check
 corepack pnpm lint
 corepack pnpm knip
 corepack pnpm typecheck
+corepack pnpm test
+corepack pnpm test:unit
+corepack pnpm test:browser
 corepack pnpm test:coverage
 corepack pnpm test:a11y
 corepack pnpm e2e
 corepack pnpm build
 ```
 
-The accessibility suite runs axe checks and keyboard/focus regressions in desktop Chromium,
-mobile Chromium, and Firefox.
+Vitest uses a Node project for pure content and model tests, plus real-browser component projects
+for Chromium and Firefox. `test` runs all three projects, `test:unit` is the fast Node-only loop,
+and `test:browser` runs both browser engines. V8 coverage comes from the Node and Chromium
+projects because Firefox does not expose V8 coverage.
+
+The Playwright accessibility and end-to-end suites remain separate production-build checks. The
+accessibility suite runs axe checks and keyboard/focus regressions in desktop Chromium, mobile
+Chromium, and Firefox.
 
 ## Architecture
 

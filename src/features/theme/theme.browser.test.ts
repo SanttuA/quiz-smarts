@@ -60,11 +60,11 @@ describe('theme helpers', () => {
 
     applyTheme('dark', root, themeColor)
 
-    expect(root).toHaveAttribute('data-theme', 'dark')
+    expect(root.getAttribute('data-theme')).toBe('dark')
     expect(root.style.colorScheme).toBe('dark')
-    expect(themeColor).toHaveAttribute('content', '#11101a')
+    expect(themeColor.getAttribute('content')).toBe('#11101a')
 
     applyTheme('light', root, themeColor)
-    expect(themeColor).toHaveAttribute('content', '#f5f3ff')
+    expect(themeColor.getAttribute('content')).toBe('#f5f3ff')
   })
 })

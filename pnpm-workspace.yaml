@@ -1,6 +1,7 @@
 packages:
   - .
 
+autoInstallPeers: false
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude: []
 minimumReleaseAgeIgnoreMissingTime: false
