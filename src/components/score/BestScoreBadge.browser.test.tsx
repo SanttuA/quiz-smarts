@@ -15,7 +15,7 @@ describe('BestScoreBadge', () => {
       .element(
         screen.getByLabelText('Best scores: Quick 16 out of 20, 80%; Full 36 out of 40, 90%'),
       )
-      .toHaveTextContent('Quick 16/20 · Full 36/40')
+      .toMatchTextContent('Quick 16/20 · Full 36/40')
   })
 
   it('uses a concise empty state before either mode is completed', async () => {

@@ -43,7 +43,7 @@ describe('QuizRunner', () => {
     await expect
       .element(screen.getByRole('group', { name: 'Score 1 out of 1' }))
       .toBeInTheDocument()
-    await expect.element(screen.getByRole('listitem')).toHaveTextContent('Correct')
+    await expect.element(screen.getByRole('listitem')).toMatchTextContent('Correct')
 
     await expect.poll(() => getBestScore(topic, 1)?.correct).toBe(1)
 
@@ -58,18 +58,18 @@ describe('QuizRunner', () => {
     await screen.getByRole('button', { name: 'Check answer' }).click()
 
     const feedback = screen.getByRole('status')
-    await expect.element(feedback).toHaveTextContent('Not quite.')
+    await expect.element(feedback).toMatchTextContent('Not quite.')
     await expect
       .element(feedback)
-      .toHaveTextContent('Correct answer: Two or more spaces, or one or more tabs')
+      .toMatchTextContent('Correct answer: Two or more spaces, or one or more tabs')
 
     await screen.getByRole('button', { name: 'See results' }).click()
     const review = screen.getByRole('listitem')
-    await expect.element(review).toHaveTextContent('Incorrect')
-    await expect.element(review).toHaveTextContent('Your answerExactly one space')
+    await expect.element(review).toMatchTextContent('Incorrect')
+    await expect.element(review).toMatchTextContent('Your answerExactly one space')
     await expect
       .element(review)
-      .toHaveTextContent('Correct answerTwo or more spaces, or one or more tabs')
+      .toMatchTextContent('Correct answerTwo or more spaces, or one or more tabs')
   })
 
   it.each([
