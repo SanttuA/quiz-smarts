@@ -56,8 +56,23 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/features/quiz/**/*.ts', 'src/lib/**/*.ts'],
-      exclude: ['src/**/*.test.{ts,tsx}'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/content/topics/**',
+        'src/test/**',
+        'src/main.tsx',
+        'src/routeTree.gen.ts',
+        'src/vite-env.d.ts',
+      ],
+      thresholds: {
+        statements: 90,
+        branches: 80,
+        functions: 90,
+        lines: 90,
+        'src/features/quiz/model/**': { statements: 95, branches: 85, functions: 100, lines: 95 },
+        'src/lib/**': { statements: 90, branches: 90, functions: 100, lines: 95 },
+      },
     },
   },
 })

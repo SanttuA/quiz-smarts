@@ -16,7 +16,14 @@ export function createInitialResponse(question: QuizQuestion): QuizResponse | un
 
 export function hasResponse(response: QuizResponse | undefined): response is QuizResponse {
   if (!response) return false
-  if (response.kind === 'text-blank') return response.answer.trim().length > 0
-  if (response.kind === 'sequence') return response.itemIds.length > 0
-  return true
+  switch (response.kind) {
+    case 'multiple-choice':
+      return response.choiceId.length > 0
+    case 'text-blank':
+      return response.answer.trim().length > 0
+    case 'drag-blank':
+      return response.optionId.length > 0
+    case 'sequence':
+      return response.itemIds.length > 0
+  }
 }

@@ -17,6 +17,14 @@ interface BestScoreStore {
 
 const emptyStore = (): BestScoreStore => ({ version: 2, scores: {} })
 
+function getLocalStorage(): Storage | undefined {
+  try {
+    return window.localStorage
+  } catch {
+    return undefined
+  }
+}
+
 function isBestScore(value: unknown): value is BestScore {
   if (!value || typeof value !== 'object') return false
   const score = value as Partial<BestScore>
@@ -29,9 +37,9 @@ function isBestScore(value: unknown): value is BestScore {
   )
 }
 
-function readStore(storage: Storage): BestScoreStore {
+function readStore(storage: Storage | undefined): BestScoreStore {
   try {
-    const rawValue = storage.getItem(BEST_SCORE_STORAGE_KEY)
+    const rawValue = storage?.getItem(BEST_SCORE_STORAGE_KEY)
     if (!rawValue) return emptyStore()
     const value = JSON.parse(rawValue) as Partial<BestScoreStore>
     if (value.version !== 2 || !value.scores || typeof value.scores !== 'object') {
@@ -58,7 +66,7 @@ function readStore(storage: Storage): BestScoreStore {
 export function getBestScore(
   topic: TopicMetadata,
   total: number,
-  storage: Storage = window.localStorage,
+  storage: Storage | undefined = getLocalStorage(),
 ): BestScore | undefined {
   const score = readStore(storage).scores[topic.id]?.[String(total)]
   return score?.topicId === topic.id &&
@@ -72,7 +80,7 @@ export function saveBestScore(
   topic: TopicMetadata,
   correct: number,
   total: number,
-  storage: Storage = window.localStorage,
+  storage: Storage | undefined = getLocalStorage(),
   completedAt = new Date().toISOString(),
 ): BestScore {
   const store = readStore(storage)
@@ -97,6 +105,10 @@ export function saveBestScore(
     ...store.scores[topic.id],
     [String(total)]: candidate,
   }
-  storage.setItem(BEST_SCORE_STORAGE_KEY, JSON.stringify(store))
+  try {
+    storage?.setItem(BEST_SCORE_STORAGE_KEY, JSON.stringify(store))
+  } catch {
+    // The score still shows for this attempt when storage is blocked or full.
+  }
   return candidate
 }

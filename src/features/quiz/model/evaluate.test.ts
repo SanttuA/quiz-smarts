@@ -3,7 +3,12 @@ import type { QuizQuestion } from '../../../content/types'
 import { accessibilityTestingQuestions } from '../../../content/topics/accessibility-testing/questions'
 import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
-import { evaluateResponse, formatCorrectAnswer, normalizeTextAnswer } from './evaluate'
+import {
+  evaluateResponse,
+  formatCorrectAnswer,
+  formatResponse,
+  normalizeTextAnswer,
+} from './evaluate'
 
 function questionById(id: string): QuizQuestion {
   const question = robotFrameworkQuestions.find((candidate) => candidate.id === id)
@@ -51,10 +56,72 @@ describe('answer evaluation', () => {
     ).toBe(true)
   })
 
-  it('formats the canonical sequence in the correct order', () => {
+  it('rejects a response of a different kind than the question', () => {
+    expect(
+      evaluateResponse(questionById('robot-framework.mcq.token-separation'), {
+        kind: 'drag-blank',
+        optionId: 'two-spaces',
+      }),
+    ).toBe(false)
+    expect(
+      evaluateResponse(questionById('robot-framework.sequence.for-loop'), {
+        kind: 'text-blank',
+        answer: 'for body end',
+      }),
+    ).toBe(false)
+  })
+
+  it('formats the correct answer for every question kind', () => {
+    expect(formatCorrectAnswer(questionById('robot-framework.mcq.token-separation'))).toBe(
+      'Two or more spaces, or one or more tabs',
+    )
+    expect(formatCorrectAnswer(questionById('robot-framework.text.cli-command'))).toBe('robot')
+    expect(formatCorrectAnswer(questionById('robot-framework.drag.library-import'))).toBe('Library')
     expect(formatCorrectAnswer(questionById('robot-framework.sequence.for-loop'))).toBe(
       'FOR    ${item}    IN    @{ITEMS}\n    Log    ${item}\nEND',
     )
+  })
+
+  it('formats the learner response for every question kind', () => {
+    expect(
+      formatResponse(questionById('robot-framework.mcq.token-separation'), {
+        kind: 'multiple-choice',
+        choiceId: 'comma',
+      }),
+    ).toBe('A comma followed by a space')
+    expect(
+      formatResponse(questionById('robot-framework.text.cli-command'), {
+        kind: 'text-blank',
+        answer: 'robot runner',
+      }),
+    ).toBe('robot runner')
+    expect(
+      formatResponse(questionById('robot-framework.drag.library-import'), {
+        kind: 'drag-blank',
+        optionId: 'resource',
+      }),
+    ).toBe('Resource')
+    expect(
+      formatResponse(questionById('robot-framework.sequence.for-loop'), {
+        kind: 'sequence',
+        itemIds: ['end', 'body', 'for'],
+      }),
+    ).toBe('END\n    Log    ${item}\nFOR    ${item}    IN    @{ITEMS}')
+  })
+
+  it('formats an empty response when it does not match the question', () => {
+    expect(
+      formatResponse(questionById('robot-framework.text.cli-command'), {
+        kind: 'multiple-choice',
+        choiceId: 'comma',
+      }),
+    ).toBe('')
+    expect(
+      formatResponse(questionById('robot-framework.mcq.token-separation'), {
+        kind: 'multiple-choice',
+        choiceId: 'unknown',
+      }),
+    ).toBe('')
   })
 
   it('accepts every declared valid sequence order', () => {

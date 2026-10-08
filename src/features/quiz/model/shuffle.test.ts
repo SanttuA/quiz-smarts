@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { QuizQuestion, SequenceQuestion } from '../../../content/types'
 import { accessibilityTestingQuestions } from '../../../content/topics/accessibility-testing/questions'
 import { pythonQuestions } from '../../../content/topics/python/questions'
 import { robotFrameworkQuestions } from '../../../content/topics/robot-framework/questions'
@@ -21,9 +22,40 @@ describe('shuffle preparation', () => {
     const originalIds = robotFrameworkQuestions.map((question) => question.id)
     const prepared = prepareAttempt(robotFrameworkQuestions, createSeededRandom('attempt'))
 
-    expect(prepared).not.toBe(robotFrameworkQuestions)
     expect(prepared.map((question) => question.id).sort()).toEqual([...originalIds].sort())
+    expect(prepared.map((question) => question.id)).not.toEqual(originalIds)
     expect(robotFrameworkQuestions.map((question) => question.id)).toEqual(originalIds)
+
+    let reorderedOptionBanks = 0
+    for (const preparedQuestion of prepared) {
+      const original = robotFrameworkQuestions.find(
+        (question) => question.id === preparedQuestion.id,
+      )!
+      expect(preparedQuestion).not.toBe(original)
+
+      const optionIds = (question: QuizQuestion) =>
+        question.kind === 'multiple-choice'
+          ? question.choices.map((choice) => choice.id)
+          : question.kind === 'drag-blank'
+            ? question.options.map((option) => option.id)
+            : []
+      const preparedOptionIds = optionIds(preparedQuestion)
+      const originalOptionIds = optionIds(original)
+      expect([...preparedOptionIds].sort()).toEqual([...originalOptionIds].sort())
+      if (preparedOptionIds.join() !== originalOptionIds.join()) reorderedOptionBanks += 1
+    }
+    expect(reorderedOptionBanks).toBeGreaterThan(0)
+  })
+
+  it('clamps the requested question count to the available bank', () => {
+    const random = createSeededRandom('clamp')
+
+    expect(prepareAttempt(robotFrameworkQuestions, random, 0)).toEqual([])
+    expect(prepareAttempt(robotFrameworkQuestions, random, -3)).toEqual([])
+    expect(prepareAttempt(robotFrameworkQuestions, random, 4.9)).toHaveLength(4)
+    expect(prepareAttempt(robotFrameworkQuestions, random, 100)).toHaveLength(
+      robotFrameworkQuestions.length,
+    )
   })
 
   it('selects a deterministic subset balanced across question kinds', () => {
@@ -98,5 +130,30 @@ describe('shuffle preparation', () => {
         sequence,
       ),
     ).toBe(false)
+  })
+
+  it('swaps items when every rotation of the shuffle is also accepted', () => {
+    const sequence: SequenceQuestion = {
+      ...robotFrameworkQuestions.find((question) => question.kind === 'sequence')!,
+      kind: 'sequence',
+      items: [
+        { id: 'a', code: 'a' },
+        { id: 'b', code: 'b' },
+        { id: 'c', code: 'c' },
+      ],
+      correctOrder: ['a', 'b', 'c'],
+      acceptedOrders: [
+        ['b', 'c', 'a'],
+        ['c', 'a', 'b'],
+      ],
+    }
+
+    // Always picking the top index keeps the original, solved order.
+    const prepared = prepareQuestion(sequence, () => 0.999999)
+    if (prepared.kind !== 'sequence') throw new Error('Question kind changed')
+
+    const preparedOrder = prepared.items.map((item) => item.id)
+    expect(preparedOrder).toEqual(['b', 'a', 'c'])
+    expect(isValidSequenceOrder(preparedOrder, sequence)).toBe(false)
   })
 })
