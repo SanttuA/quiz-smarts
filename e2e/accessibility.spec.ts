@@ -2,12 +2,10 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 import robotFrameworkTopic from '../src/content/topics/robot-framework'
 import type { QuizQuestion } from '../src/content/types'
-import { createSeededRandom } from '../src/features/quiz/model/random'
-import { prepareAttempt } from '../src/features/quiz/model/shuffle'
+import { answerCorrectly, prepareSeededAttempt } from './helpers'
 
-const preparedQuestions = prepareAttempt(
-  robotFrameworkTopic.questions,
-  createSeededRandom('quiz-smarts-e2e'),
+const preparedQuestions = prepareSeededAttempt(
+  robotFrameworkTopic,
   robotFrameworkTopic.subsetQuestionCount,
 )
 
@@ -80,48 +78,6 @@ async function expectNoHorizontalOverflow(page: Page, state: string) {
     })}`,
   ).toBeLessThanOrEqual(overflow.clientWidth)
   expect(overflow.offenders, `${state} has off-viewport content`).toEqual([])
-}
-
-async function answerCorrectly(page: Page, question: QuizQuestion) {
-  switch (question.kind) {
-    case 'multiple-choice': {
-      const answer = question.choices.find((choice) => choice.id === question.correctChoiceId)!
-      await page.getByRole('radio', { name: answer.label, exact: true }).check()
-      break
-    }
-    case 'text-blank':
-      await page.getByRole('textbox', { name: 'Missing answer' }).fill(question.canonicalAnswer)
-      break
-    case 'drag-blank': {
-      const answer = question.options.find((option) => option.id === question.correctOptionId)!
-      await page.getByRole('radio', { name: answer.label, exact: true }).check()
-      break
-    }
-    case 'sequence': {
-      const sequenceList = page.getByRole('list', { name: 'Lines to order' })
-      const currentIds = async () => {
-        const codes = await sequenceList.locator('code').allTextContents()
-        return codes.map(
-          (code) => question.items.find((item) => item.code === code)?.id ?? `unknown:${code}`,
-        )
-      }
-
-      for (let targetIndex = 0; targetIndex < question.correctOrder.length; targetIndex += 1) {
-        const targetId = question.correctOrder[targetIndex]!
-        let currentIndex = (await currentIds()).indexOf(targetId)
-        while (currentIndex > targetIndex) {
-          const item = question.items.find((candidate) => candidate.id === targetId)!
-          await page.getByRole('button', { name: `Move ${item.code} up`, exact: true }).click()
-          currentIndex -= 1
-          await expect.poll(async () => (await currentIds()).indexOf(targetId)).toBe(currentIndex)
-        }
-      }
-      break
-    }
-  }
-
-  await page.getByRole('button', { name: 'Check answer' }).click()
-  await expect(page.getByText('That’s right.')).toBeVisible()
 }
 
 test('supports skip links, route focus, route titles, and axe-clean content pages', async ({

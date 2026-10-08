@@ -59,7 +59,6 @@ describe('question inputs', () => {
       'INPUT',
       'SPAN',
     ])
-    expect(codeFlow.children[0]).toHaveTextContent('try: count = int(raw)')
     expect(codeFlow.children[0]?.textContent).toBe('try:\n    count = int(raw)\n')
     expect(codeFlow.children[2]?.textContent).toBe(' ValueError:\n    count = 0')
   })
@@ -127,5 +126,87 @@ describe('question inputs', () => {
       itemIds: ['end', 'for', 'body'],
     })
     await expect.element(screen.getByText(/Moved FOR.*to position 2 of 3\./)).toBeInTheDocument()
+  })
+
+  it('clears a filled blank when it is activated', async () => {
+    const onChange = vi.fn()
+    const question = robotFrameworkQuestions.find(
+      (candidate) => candidate.id === 'robot-framework.drag.library-import',
+    )
+    if (!question || question.kind !== 'drag-blank') throw new Error('Missing drag fixture')
+
+    const screen = await render(
+      <DragBlankInput
+        question={question}
+        onChange={onChange}
+        disabled={false}
+        value={{ kind: 'drag-blank', optionId: 'library' }}
+      />,
+    )
+    await expect.element(screen.getByRole('radio', { name: 'Library' })).toBeChecked()
+    await screen.getByRole('button', { name: 'Blank contains Library' }).click()
+
+    expect(onChange).toHaveBeenCalledWith({ kind: 'drag-blank', optionId: '' })
+  })
+
+  it('disables moves past either end of the sequence', async () => {
+    const question = robotFrameworkQuestions.find(
+      (candidate) => candidate.id === 'robot-framework.sequence.for-loop',
+    )
+    if (!question || question.kind !== 'sequence') throw new Error('Missing sequence fixture')
+
+    const screen = await render(
+      <SequenceInput
+        question={question}
+        value={{ kind: 'sequence', itemIds: ['end', 'body', 'for'] }}
+        onChange={vi.fn()}
+        disabled={false}
+      />,
+    )
+
+    await expect.element(screen.getByRole('button', { name: 'Move END up' })).toBeDisabled()
+    await expect.element(screen.getByRole('button', { name: 'Move END down' })).toBeEnabled()
+    await expect.element(screen.getByRole('button', { name: /^Move FOR.* down$/ })).toBeDisabled()
+    await expect.element(screen.getByRole('button', { name: /^Move FOR.* up$/ })).toBeEnabled()
+  })
+
+  it('locks every control while feedback is shown', async () => {
+    const dragQuestion = robotFrameworkQuestions.find(
+      (candidate) => candidate.id === 'robot-framework.drag.library-import',
+    )
+    const sequenceQuestion = robotFrameworkQuestions.find(
+      (candidate) => candidate.id === 'robot-framework.sequence.for-loop',
+    )
+    const textQuestion = robotFrameworkQuestions.find(
+      (candidate) => candidate.id === 'robot-framework.text.cli-command',
+    )
+    if (
+      dragQuestion?.kind !== 'drag-blank' ||
+      sequenceQuestion?.kind !== 'sequence' ||
+      textQuestion?.kind !== 'text-blank'
+    ) {
+      throw new Error('Missing fixtures')
+    }
+
+    const screen = await render(
+      <>
+        <DragBlankInput
+          question={dragQuestion}
+          onChange={vi.fn()}
+          disabled
+          value={{ kind: 'drag-blank', optionId: 'library' }}
+        />
+        <SequenceInput question={sequenceQuestion} onChange={vi.fn()} disabled />
+        <TextBlankInput question={textQuestion} onChange={vi.fn()} disabled value={undefined} />
+      </>,
+    )
+
+    await expect.element(screen.getByRole('textbox')).toBeDisabled()
+    for (const control of [
+      ...screen.getByRole('button').all(),
+      ...screen.getByRole('radio').all(),
+    ]) {
+      await expect.element(control).toBeDisabled()
+    }
   })
 })

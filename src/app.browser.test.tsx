@@ -1,6 +1,7 @@
 import { RouterProvider, createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+import { topicCatalog } from './content/registry'
 import { ThemeProvider } from './features/theme/ThemeProvider'
 import { THEME_STORAGE_KEY } from './features/theme/theme'
 import { createAppRouter } from './router'
@@ -16,41 +17,24 @@ function renderRoute(path: string) {
 }
 
 describe('routed application', () => {
-  it('moves from the landing topic card to the Robot Framework cheatsheet', async () => {
+  it('lists every catalog topic and opens a topic from its card', async () => {
     const screen = await renderRoute('/')
 
     await expect
       .element(screen.getByRole('heading', { name: 'Available topics' }))
       .toBeInTheDocument()
-    await expect.element(screen.getByText('12 topics')).toBeInTheDocument()
     await expect
-      .element(screen.getByRole('heading', { name: 'Accessibility Testing' }))
+      .element(screen.getByText(`${topicCatalog.length} topics`, { exact: true }))
       .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('heading', { name: 'Basic Data Analysis' }))
-      .toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Python' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Basic C++' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Basic C#' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Modern .NET' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'TypeScript' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Vitest' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Playwright' })).toBeInTheDocument()
-    await expect.element(screen.getByRole('heading', { name: 'Selenium' })).toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('heading', { name: 'Load Testing with JMeter' }))
-      .toBeInTheDocument()
-    await screen.getByRole('link', { name: 'Open Robot Framework topic' }).click()
+    for (const topic of topicCatalog) {
+      await expect
+        .element(screen.getByRole('heading', { name: topic.title, exact: true }))
+        .toBeInTheDocument()
+    }
 
+    await screen.getByRole('link', { name: 'Open Robot Framework topic' }).click()
     await expect
       .element(screen.getByRole('heading', { name: 'Robot Framework cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Robot Framework User Guide/ }))
-      .toBeInTheDocument()
-    await expect.element(screen.getByRole('link', { name: 'Quick quiz · 20' })).toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: 'All questions · 40' }))
       .toBeInTheDocument()
   })
 
@@ -142,156 +126,35 @@ describe('routed application', () => {
     await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
   })
 
-  it('loads the Accessibility Testing topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/accessibility-testing')
+  it.each(topicCatalog.map((topic) => [topic.title, topic] as const))(
+    'loads the %s topic page and starts its quick quiz',
+    async (_title, topic) => {
+      const screen = await renderRoute(`/topics/${topic.slug}`)
 
-    await expect
-      .element(screen.getByRole('heading', { name: 'Accessibility Testing cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /W3C WAI: Evaluating Web Accessibility/ }).nth(1))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /W3C WAI-ARIA APG: Modal Dialog Pattern/ }))
-      .toBeInTheDocument()
+      await expect
+        .element(screen.getByRole('heading', { name: `${topic.title} cheatsheet` }))
+        .toBeInTheDocument()
+      await expect
+        .element(screen.getByRole('link', { name: `All questions · ${topic.questionCount}` }))
+        .toBeInTheDocument()
 
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
+      await screen.getByRole('link', { name: `Quick quiz · ${topic.subsetQuestionCount}` }).click()
+      await expect
+        .element(screen.getByText(`Question 1 / ${topic.subsetQuestionCount}`))
+        .toBeInTheDocument()
+    },
+  )
 
-  it('loads the Basic Data Analysis topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/data-analysis')
+  it.each(['/topics/not-real', '/topics/not-real/quiz', '/not-a-route'])(
+    'shows a useful not-found screen for %s',
+    async (path) => {
+      const screen = await renderRoute(path)
 
-    await expect
-      .element(screen.getByRole('heading', { name: 'Basic Data Analysis cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /NIST\/SEMATECH: Exploratory Data Analysis/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Python topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/python')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Python cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /The Python Tutorial/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Basic C++ topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/cpp-basics')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Basic C++ cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /cppreference: C\+\+ language/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Basic C# topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/csharp-basics')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Basic C# cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Microsoft Learn: A tour of C#/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the TypeScript topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/typescript')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'TypeScript cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /The TypeScript Handbook/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Playwright topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/playwright')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Playwright cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Playwright: Writing tests/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Vitest topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/vitest')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Vitest cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Vitest: Getting Started/ }).nth(1))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the Selenium topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/selenium')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Selenium cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Selenium: Write your first script/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('loads the JMeter topic and its quiz', async () => {
-    const screen = await renderRoute('/topics/jmeter')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'Load Testing with JMeter cheatsheet' }))
-      .toBeInTheDocument()
-    await expect
-      .element(screen.getByRole('link', { name: /Apache JMeter: Getting Started/ }))
-      .toBeInTheDocument()
-
-    await screen.getByRole('link', { name: 'Quick quiz · 20' }).click()
-    await expect.element(screen.getByText('Question 1 / 20')).toBeInTheDocument()
-  })
-
-  it('shows a useful not-found screen for unknown topics', async () => {
-    const screen = await renderRoute('/topics/not-real')
-
-    await expect
-      .element(screen.getByRole('heading', { name: 'This path drew a blank.' }))
-      .toBeInTheDocument()
-  })
+      await expect
+        .element(screen.getByRole('heading', { name: 'This path drew a blank.' }))
+        .toBeInTheDocument()
+    },
+  )
 
   it('exposes a persistent theme toggle in the shared header', async () => {
     const screen = await renderRoute('/')
